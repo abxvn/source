@@ -1,0 +1,10 @@
+.yarn
+node_modules
+
+# Workspaces
+packages/**/node_modules
+packages/**/index.js
+
+# For react only
+# packages/*/react/**
+# packages/*/preact/**

@@ -12,3 +12,7 @@ Copy these files / folders:
 - .editorconfig
 - .gitattributes
 - .gitignore
+
+Enable / install recommended VSCode extensions
+
+Copy `config/ts` folder and `.eslintignore`, `.eslintrc.js`
