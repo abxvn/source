@@ -1,4 +1,5 @@
 {
   "name": "dummy",
-  "private": true
+  "private": true,
+  "main": "cli/index.js"
 }

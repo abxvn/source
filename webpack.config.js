@@ -1,0 +1,70 @@
+const { BannerPlugin } = require('webpack')
+const webpackNodeExternals = require('webpack-node-externals')
+const { WebpackPnpExternals } = require('webpack-pnp-externals')
+const { resolve } = require('path')
+
+const rootPath = __dirname.replace(/\\/g, '/')
+const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
+// const getRelativePath = fullPath => fullPath.replace(/\\/g, '/').replace(rootPath, '')
+
+const envName = process.env.NODE_ENV || 'development'
+
+const entry = {
+  '/packages/dummy/cli/index.ts': {
+    import: resolvePath('packages/dummy/cli/index.ts')
+  }
+}
+
+exports = module.exports = {
+  entry,
+  mode: envName,
+  output: {
+    path: rootPath,
+    filename: data => {
+      return data.chunk.name.replace(/\.tsx?$/, '.js') // change index.ts to index.js
+    }
+  },
+  resolve: {
+    extensions: [
+      '.ts',
+      '.js',
+      '.tsx'
+    ]
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|tsx?)$/,
+        use: [
+          {
+            loader: require.resolve('ts-loader'),
+            options: {
+              configFile: resolvePath('config/ts/tsconfig.packages.json')
+            }
+          }
+        ],
+        exclude: /node_modules|\.yarn/
+      }
+    ]
+  },
+  plugins: [
+    new BannerPlugin({
+      banner ({ filename }) {
+        return filename.includes('/cli/')
+          ? '#!/usr/bin/env node'
+          : ''
+      },
+      raw: true
+    })
+  ],
+  watch: envName === 'development',
+  devtool: false,
+  target: 'node',
+  externals: [
+    webpackNodeExternals(),
+    WebpackPnpExternals()
+  ],
+  externalsPresets: {
+    node: true
+  }
+}
