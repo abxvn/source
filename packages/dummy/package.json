@@ -1,5 +1,8 @@
 {
   "name": "dummy",
   "private": true,
-  "main": "cli/index.js"
+  "main": "cli/index.js",
+  "dependencies": {
+    "@teku/resolve": "workspace:^"
+  }
 }

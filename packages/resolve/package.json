@@ -1,0 +1,45 @@
+{
+  "name": "@teku/resolve",
+  "version": "1.0.1",
+  "description": "Teku's async resolve",
+  "main": "index.js",
+  "bin": "./cli/index.js",
+  "types": "index.d.ts",
+  "dependencies": {
+    "commander": "^10.0.1",
+    "fs-extra": "^11.1.1",
+    "global-dirs": "^3.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^11.0.1",
+    "@types/jest": "^29.5.1",
+    "@types/node": "^18.16.0"
+  },
+  "files": [
+    "README.md",
+    "index.js",
+    "index.d.ts",
+    "cli/index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tekuasia/labs.git",
+    "directory": "packages/resolve"
+  },
+  "keywords": [
+    "teku",
+    "labs",
+    "resolve",
+    "fast",
+    "pnp"
+  ],
+  "author": {
+    "name": "Hung Luu",
+    "email": "hungluu2106@gmail.com"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tekuasia/labs/issues"
+  },
+  "homepage": "https://github.com/tekuasia/labs/tree/main/packages/resolve#readme"
+}
