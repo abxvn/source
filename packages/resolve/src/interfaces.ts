@@ -1,3 +1,14 @@
+export interface IModule {
+  exists: boolean
+  query: string
+  path: string
+  main: string
+  name: string
+  version: string
+  dependencies: string[]
+  error?: Error
+}
+
 export type IResolvedFileType = 'file' | 'directory' | null
 export interface IFsPathType {
   path: string

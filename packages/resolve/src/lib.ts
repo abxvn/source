@@ -3,7 +3,7 @@ import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'
 import type { IFsPathType, IResolvedFileType } from './interfaces'
 
-export { pathExists } from 'fs-extra'
+export { pathExists, readJSON } from 'fs-extra'
 export * from './lib/packages'
 export * from './lib/pnp'
 
@@ -59,13 +59,14 @@ export const getJsonData = async (jsonFilePath: string, key: string) => {
   return null
 }
 
+export const getDirPath = (path: string) => path.replace(/[\\/][^\\/]+$/, '')
 export const getCallerPath = (): string => {
   const callers = getCallers()
   let currentPath = ''
 
   for (let idx = 0; idx < callers.length; idx++) {
     if (callers[idx] !== currentPath && currentPath && callers[idx]) {
-      return callers[idx].replace(/[\\/][^\\/]+$/, '')
+      return getDirPath(callers[idx])
     }
 
     currentPath = callers[idx]

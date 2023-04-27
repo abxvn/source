@@ -61,7 +61,7 @@ describe('resolve#withoutPnp', () => {
     expect(await resolve('indexModule'))
       .toBe(resolveMockPath('mockModuleDirs/indexModule/index.js'))
     expect(await resolve('packageModule'))
-      .toBe(resolveMockPath('mockModuleDirs/packageModule/mockCustomIndex.js'))
+      .toBe(resolveMockPath('mockModuleDirs/packageModule/mockPackageCustomIndex.js'))
   })
 
   it('should resolve using custom modules dirs', async () => {
@@ -72,6 +72,6 @@ describe('resolve#withoutPnp', () => {
     expect(await resolve('indexModule', customOptions))
       .toBe(resolveMockPath('mockModuleCustomDirs/indexModule/index.js'))
     expect(await resolve('packageModule', customOptions))
-      .toBe(resolveMockPath('mockModuleCustomDirs/packageModule/mockCustomIndex.js'))
+      .toBe(resolveMockPath('mockModuleCustomDirs/packageModule/mockPackageCustomIndex.js'))
   })
 })
