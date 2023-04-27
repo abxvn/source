@@ -1,109 +1,109 @@
 const tsConfigPath = require.resolve('./config/ts/tsconfig.eslint.json')
 
 module.exports = {
-  "extends": [
-    "eslint:recommended",
-    "standard",
+  extends: [
+    'eslint:recommended',
+    'standard'
     // for react only
     // "standard-jsx"
   ],
-  "env": {
-    "es6": true
+  env: {
+    es6: true
   },
-  "parserOptions": {
-    "ecmaVersion": 8,
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true
+  parserOptions: {
+    ecmaVersion: 8,
+    ecmaFeatures: {
+      experimentalObjectRestSpread: true
     }
   },
-  "rules": {
-    "no-unused-vars": "warn",
-    "no-var": "error",
-    "consistent-return": "warn",
-    "complexity": [
-      "warn",
+  rules: {
+    'no-unused-vars': 'warn',
+    'no-var': 'error',
+    'consistent-return': 'warn',
+    complexity: [
+      'warn',
       {
-        "max": 15
+        max: 15
       }
     ],
-    "padding-line-between-statements": [
-      "error",
+    'padding-line-between-statements': [
+      'error',
       {
-        "blankLine": "always",
-        "prev": "let",
-        "next": "*"
+        blankLine: 'always',
+        prev: 'let',
+        next: '*'
       },
       {
-        "blankLine": "any",
-        "prev": "let",
-        "next": "let"
+        blankLine: 'any',
+        prev: 'let',
+        next: 'let'
       },
       {
-        "blankLine": "any",
-        "prev": "let",
-        "next": "const"
+        blankLine: 'any',
+        prev: 'let',
+        next: 'const'
       },
       {
-        "blankLine": "always",
-        "prev": "const",
-        "next": "*"
+        blankLine: 'always',
+        prev: 'const',
+        next: '*'
       },
       {
-        "blankLine": "any",
-        "prev": "const",
-        "next": "const"
+        blankLine: 'any',
+        prev: 'const',
+        next: 'const'
       },
       {
-        "blankLine": "any",
-        "prev": "const",
-        "next": "let"
+        blankLine: 'any',
+        prev: 'const',
+        next: 'let'
       },
       {
-        "blankLine": "always",
-        "prev": "*",
-        "next": "return"
+        blankLine: 'always',
+        prev: '*',
+        next: 'return'
       }
     ],
-    "react/prop-types": "off" // Disable prop-types as we use TypeScript for type checking
+    'react/prop-types': 'off' // Disable prop-types as we use TypeScript for type checking
   },
-  "overrides": [
+  overrides: [
     {
-      "files": "*.{ts,tsx}",
-      "extends": [
-        "eslint:recommended",
-        "plugin:@typescript-eslint/eslint-recommended",
-        "plugin:@typescript-eslint/recommended",
-        "standard",
+      files: '*.{ts,tsx}',
+      extends: [
+        'eslint:recommended',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+        'standard',
         // for react only
         // "standard-jsx",
-        "standard-with-typescript"
+        'standard-with-typescript'
       ],
-      "env": {
-        "browser": true,
-        "es6": true
+      env: {
+        browser: true,
+        es6: true
       },
-      "parser": "@typescript-eslint/parser",
-      "parserOptions": {
-        "project": tsConfigPath,
-        "ecmaVersion": 8,
-        "ecmaFeatures": {
-          "experimentalObjectRestSpread": true
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: tsConfigPath,
+        ecmaVersion: 8,
+        ecmaFeatures: {
+          experimentalObjectRestSpread: true
         }
       },
-      "rules": {
-        "@typescript-eslint/no-explicit-any": "off",
-        "@typescript-eslint/explicit-function-return-type": "off",
-        "@typescript-eslint/strict-boolean-expressions": "off",
-        "@typescript-eslint/prefer-nullish-coalescing": "off"
+      rules: {
+        '@typescript-eslint/no-explicit-any': 'off',
+        '@typescript-eslint/explicit-function-return-type': 'off',
+        '@typescript-eslint/strict-boolean-expressions': 'off',
+        '@typescript-eslint/prefer-nullish-coalescing': 'off'
       }
-    }
+    },
     // for jest only
-    // {
-    //   "files": "*.{spec,test}.{ts,tsx,js}",
-    //   "extends": [
-    //     "plugin:jest/recommended",
-    //     "plugin:jest/style"
-    //   ]
-    // }
+    {
+      files: '*.{spec,test}.{ts,tsx,js}',
+      extends: [
+        'plugin:jest/recommended',
+        'plugin:jest/style'
+      ]
+    }
   ]
 }
