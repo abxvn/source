@@ -145,7 +145,7 @@ Run development build
 yarn start
 ```
 
-If you have any other suggestions, you can even open new issues with `enhancement` and `feat/resolve` labels.
+If you have any other suggestions, you can even open new issues with `type: enhancement` and `package: resolve` labels.
 
 -----
 
