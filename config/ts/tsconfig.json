@@ -3,7 +3,8 @@
     // "declaration": true,
     "module": "commonjs",
     "target": "es6",
-    "jsx": "react",
+    // for react only
+    // "jsx": "react",
     "lib": [
       "dom",
       "esnext",

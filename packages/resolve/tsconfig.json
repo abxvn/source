@@ -1,0 +1,3 @@
+// temporarily fix typescript types declaration not loaded
+// for Yarn PnP workspace packages
+// @see https://github.com/yarnpkg/berry/issues/1488#issuecomment-755800672
