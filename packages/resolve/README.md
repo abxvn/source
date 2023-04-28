@@ -14,6 +14,7 @@ Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modu
   - [Resolve modules](#resolve-modules)
   - [Options](#options)
   - [Play with CLI](#play-with-cli)
+  - [Resolve in classic way](#resolve-in-classic-way)
 + [Benchmarks](#benchmarks)
 + [Contribution](#contribution)
 
@@ -100,9 +101,6 @@ All options are optional (We already provided a good configuration for you):
 | callerPath           | string   | Base path to resolve requested modules | current script path (or working directory)                            |
 | moduleDirs | string[] | _(non pnp)_ node_modules paths | resolving up algorithm including global npm or yarn packages |
 
-### Resolves modules using custom file contents filter
-(Coming soon)
-
 ### Play with CLI
 
 You can quickly get any modules or files requirable path by this command:
@@ -115,6 +113,23 @@ if you want CLI to search for module metadata, please call with flag `-m` or `--
 
 ```bash
 resolve @teku/resolve lodash -m
+```
+
+### Resolve in classic way
+You can also `resolve` in classic, I mean synchronously resolving, but with this tool's extra features as mentioned earlier:
+- Custom caller path for starting point of resolving
+- Custom list of node_modules dirs for searching
+
+```ts
+import { resolveSync } from `@teku/resolve`
+
+// Entry point / main to require
+// pnp: <dir>/.yarn/cache/.../packageA/index.js
+// non-pnp: <dir>/node_modules/packageA/index.js
+console.log(resolveSync('packageA'))
+
+// full path <dir>/src/index.js
+console.log(resolveSync('./src/index.js'))
 ```
 
 Benchmarks
