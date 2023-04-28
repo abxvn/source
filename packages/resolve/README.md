@@ -2,9 +2,9 @@
 =====
 Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modules.html#modules_all_together), with **extra features:**
   - ⚡ Blazingly faster comparing to vanilla [require.resolve](https://nodejs.org/api/moduleshtml#modules_require_resolve_request_options) ([bench](#benchmarks)) (Especially when you need to work with large amount of modules)
-  - 📄 Load package.json contents by the time modules are resolved to be used anytime (built-in function only return requireable paths)
+  - 🌟 Supports resolving with [Yarn PnP API](https://yarnpkg.com/features/pnp)
   - 🌇 Supports Yarn and Npm global, symlinks by default (can be disabled if you want)
-  - 🌟 Allow multiple module resolving using wildcard (*)
+  - _Allow multiple module resolving using wildcard (*) (coming soon)_
   - _Allow advanced search using file contents search (coming soon)_
 
 **Table of contents**
@@ -12,7 +12,6 @@ Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modu
 + [Usage](#usage)
   - [Resolves modules in async way](#resolves-modules-in-async-way)
   - [Options](#options)
-  - [Resolves wildcard modules](#resolves-wildcard-modules)
   - [Play with CLI](#play-with-cli)
 + [TekuModule](#tekumodule)
 + [Benchmarks](#benchmarks)
@@ -23,6 +22,10 @@ Installation
 Install using `yarn` or `npm`:
 ```
 yarn add @teku/resolve
+```
+
+```
+npm add @teku/resolve
 ```
 
 Usage
@@ -60,20 +63,6 @@ All options are optional (We already provided a good configuration for you):
 | packageFile           | string   | Package meta file (can be customized)                                                                                                 | 'package.json'                   |
 | extensions            | string[] | Extensions of resolved file (if no extensions provided in the path)                                                                   | ['js']                           |
 | extraNodeModulesPaths | string[] | Extra node_modules paths other than baseDir/node_modules (By default we support both Yarn and Npm global packages)                    | [_yarnGlobal_, _npmGlobal_]      |
-
-### Resolves wildcard modules
-
-> For now we only support resolving wildcard from node_modules (our use cases). If you need extra features please open new issue with `enhancement` label
-
-For example, to resolve all modules belonging to [`@teku`](https://teku.asia) organization
-```js
-// {
-//    '@teku/form': formModule,
-//    '@teku/react': reactModule,
-//    '@teku/firebase': firebaseModule
-// }
-const tekuModules = await resolve('@teku/*')
-```
 
 ### Resolves modules using custom file contents filter
 (Coming soon)

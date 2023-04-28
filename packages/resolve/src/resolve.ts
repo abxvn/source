@@ -1,6 +1,5 @@
 import type { IResolveOptions } from './interfaces'
 import {
-  getFsPathType,
   isLocalMatch,
   listModuleDirs,
   npmGlobalPackageDir,
@@ -8,9 +7,8 @@ import {
   isBuiltin,
   isPnpEnabled,
   pnpApi,
-  pathExists,
-  getJsonData,
-  getCallerPath
+  getCallerPath,
+  resolveFromFsPath
 } from './lib'
 
 export const resolve = async (path: string, options?: IResolveOptions): Promise<string> => {
@@ -47,35 +45,4 @@ export const resolve = async (path: string, options?: IResolveOptions): Promise<
   }
 
   return await resolveFromFsPath(path, callerPath)
-}
-
-export const resolveFromFsPath = async (fsPath: string, callerPath: string): Promise<string> => {
-  try {
-    const { path, type } = await getFsPathType(fsPath, callerPath)
-
-    if (type === null) {
-      return ''
-    } else if (type === 'file') {
-      return path
-    } else {
-      const packageJsonPath = `${path}/package.json`
-      let mainFilePath = `${path}/index.js`
-
-      if (await pathExists(packageJsonPath)) {
-        const mainConfig = await getJsonData(packageJsonPath, 'main')
-
-        if (mainConfig) {
-          mainFilePath = `${path}/${mainConfig}`
-        }
-      }
-
-      if (await pathExists(mainFilePath)) {
-        return mainFilePath
-      }
-
-      return ''
-    }
-  } catch (err) {
-    return ''
-  }
 }

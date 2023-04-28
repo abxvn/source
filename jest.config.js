@@ -1,5 +1,6 @@
 /** @type {import('ts-jest').JestConfigWithTsJest} */
 module.exports = {
+  testRegex: '.+/*\\.(test|spec)\\.(ts|tsx)$',
   preset: 'ts-jest',
   // testEnvironment: 'node'
   transform: {

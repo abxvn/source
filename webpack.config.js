@@ -2,6 +2,7 @@ const { BannerPlugin } = require('webpack')
 const webpackNodeExternals = require('webpack-node-externals')
 const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
+const DtsGeneratorPlugin = require('./config/plugins/DtsGeneratorPlugin')
 
 const rootPath = __dirname.replace(/\\/g, '/')
 const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
@@ -59,7 +60,8 @@ exports = module.exports = {
           : ''
       },
       raw: true
-    })
+    }),
+    new DtsGeneratorPlugin(rootPath)
   ],
   watch: envName === 'development',
   devtool: false,

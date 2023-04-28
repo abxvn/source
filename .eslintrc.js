@@ -16,6 +16,12 @@ module.exports = {
       experimentalObjectRestSpread: true
     }
   },
+  ignorePatterns: [
+    'node_modules',
+    '.yarn',
+    '**/index.js',
+    '**/index.d.ts'
+  ],
   rules: {
     'no-unused-vars': 'warn',
     'no-var': 'error',

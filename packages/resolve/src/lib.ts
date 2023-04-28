@@ -1,4 +1,4 @@
-import { createReadStream, stat, realpath } from 'fs-extra'
+import { createReadStream, stat, realpath, pathExists } from 'fs-extra'
 import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'
 import type { IFsPathType, IResolvedFileType } from './interfaces'
@@ -8,6 +8,37 @@ export * from './lib/packages'
 export * from './lib/pnp'
 
 const RELATIVE_PATH_REGEX = /^\.\.?(\/|\\|$)/
+
+export const resolveFromFsPath = async (fsPath: string, callerPath: string): Promise<string> => {
+  try {
+    const { path, type } = await getFsPathType(fsPath, callerPath)
+
+    if (type === null) {
+      return ''
+    } else if (type === 'file') {
+      return path
+    } else {
+      const packageJsonPath = `${path}/package.json`
+      let mainFilePath = `${path}/index.js`
+
+      if (await pathExists(packageJsonPath)) {
+        const mainConfig = await getJsonData(packageJsonPath, 'main')
+
+        if (mainConfig) {
+          mainFilePath = `${path}/${mainConfig}`
+        }
+      }
+
+      if (await pathExists(mainFilePath)) {
+        return mainFilePath
+      }
+
+      return ''
+    }
+  } catch (err) {
+    return ''
+  }
+}
 
 export const getFsPathType = async (fsPath: string, callerPath: string): Promise<IFsPathType> => {
   const isRelativePath = RELATIVE_PATH_REGEX.test(fsPath)
