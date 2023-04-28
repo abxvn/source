@@ -1,0 +1,46 @@
+{
+  "name": "@teku/builder",
+  "version": "0.0.8",
+  "description": "Build web and game components at Teku",
+  "main": "./cli/index.js",
+  "bin": "./cli/index.js",
+  "dependencies": {
+    "@teku/resolve": "workspace:^",
+    "chalk": "^4",
+    "commander": "^10.0.1",
+    "dotenv": "^16.0.3",
+    "dts-generator": "^3.0.0",
+    "eslint": "^8.36.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-config-standard-jsx": "^11.0.0",
+    "eslint-config-standard-with-typescript": "^34.0.1",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "fast-glob": "^3.2.12",
+    "fs-extra": "^11.1.1",
+    "html-loader": "^4.2.0",
+    "html-webpack-plugin": "^5.5.1",
+    "kind-of": "^6.0.3",
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.2",
+    "webpack": "^5.76.3",
+    "webpack-dev-server": "^4.13.3",
+    "webpack-node-externals": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/dts-generator": "^2.1.7",
+    "@types/fs-extra": "^11.0.1",
+    "@types/kind-of": "^6.0.0",
+    "@types/webpack": "^5.28.0",
+    "@types/webpack-node-externals": "^3.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.57.0"
+  },
+  "files": [
+    "cli/index.js",
+    "config",
+    "README.md"
+  ]
+}

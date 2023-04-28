@@ -1,0 +1,36 @@
+{
+  "compilerOptions": {
+    // "declaration": true,
+    "module": "commonjs",
+    "target": "es6",
+    // for react only
+    // "jsx": "react",
+    "lib": [
+      "dom",
+      "esnext",
+      "WebWorker"
+    ],
+    "removeComments": true,
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    // "types": [
+    // "node",
+    // For react only (next for react v18)
+    // "react/next",
+    // "react-dom/next",
+    // ],
+    "strict": true,
+    // "noEmit": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": false,
+    // "allowJs": true,
+    /* Advanced Options */
+    "skipLibCheck": true, /* Skip type checking of declaration files. */
+    "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
+  },
+  "exclude": [
+    "node_modules",
+    ".yarn"
+  ]
+}

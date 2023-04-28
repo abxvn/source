@@ -5,7 +5,7 @@
     "start": "webpack",
     "build": "webpack --node-env production",
     "test": "jest",
-    "lint": "eslint \"packages/**/*.{ts,tsx}\"",
+    "lint": "eslint \"packages/**/*.{ts,tsx}\" -c .eslintrc.js",
     "resolve": "yarn workspace @teku/resolve"
   },
   "dependencies": {

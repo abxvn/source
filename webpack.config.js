@@ -11,6 +11,9 @@ const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
 const envName = process.env.NODE_ENV || 'development'
 
 const entry = {
+  '/packages/builder/cli/index.ts': {
+    import: resolvePath('packages/builder/cli/index.ts')
+  },
   '/packages/resolve/index.ts': {
     import: resolvePath('packages/resolve/index.ts')
   },
@@ -30,7 +33,9 @@ exports = module.exports = {
     filename: data => {
       return data.chunk.name.replace(/\.tsx?$/, '.js') // change index.ts to index.js
     },
-    libraryTarget: 'commonjs2'
+    library: {
+      type: 'commonjs2'
+    }
   },
   resolve: {
     extensions: [
