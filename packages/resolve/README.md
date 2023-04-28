@@ -3,17 +3,17 @@
 Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modules.html#modules_all_together), with **extra features:**
   - ⚡ Blazingly faster comparing to vanilla [require.resolve](https://nodejs.org/api/moduleshtml#modules_require_resolve_request_options) ([bench](#benchmarks)) (Especially when you need to work with large amount of modules)
   - 🌟 Supports resolving with [Yarn PnP API](https://yarnpkg.com/features/pnp)
-  - 🌇 Supports Yarn and Npm global, symlinks by default (can be disabled if you want)
+  - 🌇 Supports resolving local packages, Yarn and Npm global packages, symlinks, workspaces, directory and files
   - _Allow multiple module resolving using wildcard (*) (coming soon)_
   - _Allow advanced search using file contents search (coming soon)_
 
 **Table of contents**
 + [Installation](#installation)
 + [Usage](#usage)
-  - [Resolves modules in async way](#resolves-modules-in-async-way)
+  - [Resolve in async way](#resolve-in-async-way)
+  - [Resolve modules](#resolve-modules)
   - [Options](#options)
   - [Play with CLI](#play-with-cli)
-+ [TekuModule](#tekumodule)
 + [Benchmarks](#benchmarks)
 + [Contribution](#contribution)
 
@@ -30,84 +30,91 @@ npm add @teku/resolve
 
 Usage
 ----
-### Resolves modules in async way
-The `resolve` function return a Promise with module's entry path and package.json contents, which some other information (as a [TekuModule](#TekuModule))
-```js
-import resolve from `@teku/resolve`
+### Resolve in async way
+The `resolve` supports asynchronously resolving:
+- full path to a file
+- or a module's main (entry) path, to be used with `require`
 
-/** @var ITekuModule */
-const module = await resolve('moduleA')
+```ts
+import { resolve } from `@teku/resolve`
 
-// Package.json contents
-console.log(module.meta) // { name: "moduleA", dependencies ... }
 // Entry point / main to require
-console.log(module.entry) // node_modules/moduleA/index.js
+// pnp: <dir>/.yarn/cache/.../packageA/index.js
+// non-pnp: <dir>/node_modules/packageA/index.js
+console.log(resolve('packageA'))
+
+// full path <dir>/src/index.js
+console.log(resolve('./src/index.js'))
+
+// full path <dir>/packages/workspaceA/main.js
+// (main.js) is defined in workspaceA's package.json
+console.log(resolve('workspaceA'))
+console.log(resolve('../localWorkspaceB'))
+```
+### Resolve modules
+
+The `resolveModule` supports asynchronously resolving module metadata
+
+```ts
+import { resolveModule } from `@teku/resolve`
+
+console.log(resolveModule('packageA')) // => IModule
+console.log(resolveModule('workspaceA')) // => IModule
+console.log(resolveModule('../localWorkspaceB')) // => IModule
+```
+
+The resolved module metadata is:
+```ts
+interface IModule {
+  // whether the module exists or not
+  exists: boolean
+  // input resolve query
+  query: string
+  // module dir path
+  path: string
+  // module main (entry) script
+  main: string
+  // module name
+  name: string
+  // module version
+  version: string
+  // module dependencies
+  dependencies: string[]
+  // error while resolving module
+  error?: Error
+}
 ```
 
 ### Options
 We can pass custom options into the resolver:
 
 ```js
-import resolve, { createResolver } from `@teku/resolve`
+import { resolve } from `@teku/resolve`
 
-resolve('moduleB', options) // pass through resolve function
-createResolver(options) // pass through a shared resolver
+resolve('moduleB', options)
 ```
 
 All options are optional (We already provided a good configuration for you):
 |        **Name**       | **Type** |                                                            **Description**                                                            |            **Default**           |
 |:---------------------:|:--------:|:-------------------------------------------------------------------------------------------------------------------------------------:|:--------------------------------:|
-| types                 | string[] | Supported types of module, whether it's loaded from a file, a directory or a package (node_modules). By default we supports all types | ['file', 'directory', 'package'] |
-| baseDirPath           | string   | Base directory to resolve modules, if it isn't provided, the current working directory will be used                                   | _cwd_                            |
-| baseNodeModulesPath   | string   | Node_modules folder inside base directory                                                                                             | 'node_modules'                   |
-| packageFile           | string   | Package meta file (can be customized)                                                                                                 | 'package.json'                   |
-| extensions            | string[] | Extensions of resolved file (if no extensions provided in the path)                                                                   | ['js']                           |
-| extraNodeModulesPaths | string[] | Extra node_modules paths other than baseDir/node_modules (By default we support both Yarn and Npm global packages)                    | [_yarnGlobal_, _npmGlobal_]      |
+| callerPath           | string   | Base path to resolve requested modules | current script path (or working directory)                            |
+| moduleDirs | string[] | _(non pnp)_ node_modules paths | resolving up algorithm including global npm or yarn packages |
 
 ### Resolves modules using custom file contents filter
 (Coming soon)
 
 ### Play with CLI
 
-You can quickly check any modules' resolved information using command
+You can quickly get any modules or files requirable path by this command:
 
 ```bash
-resolve <module_paths>
+resolve <...paths>
 ```
 
-if you want CLI to show resolved entry paths only, please call with flag `-p` or `--path-only`, for example:
+if you want CLI to search for module metadata, please call with flag `-m` or `--metadata`, for example:
 
 ```bash
-resolve @teku/resolve lodash -p
-```
-
-TekuModule
------
-This class provide simple APIs to gain information about a resolved module, using path.
-
-There are 3 types of modules (file / directory / package), hopefully this interface shows all the APIs you need:
-
-```typescript
-export interface ITekuModule {
-  // Determine where module is loaded from
-  // Where it's from a file, a directory or a package
-  type: ModuleType
-  // posible error during module resolving
-  error?: Error
-  // entry / main path to require module
-  entry?: string
-  // module metadata, mostly loaded from package.json files
-  meta: any
-  // module path (provided path)
-  path: string
-
-  // Check if module is a Yarn global module
-  isYarnGlobal: () => boolean
-  // Check if module is a Npm global module
-  isNpmGlobal: () => boolean
-  // Check if module is a NodeJS core module
-  isCore: () => boolean
-}
+resolve @teku/resolve lodash -m
 ```
 
 Benchmarks
@@ -138,7 +145,7 @@ Run development build
 yarn start
 ```
 
-If you have any other suggestions, you can even open new issues with `enhancement` label.
+If you have any other suggestions, you can even open new issues with `enhancement` and `feat/resolve` labels.
 
 -----
 

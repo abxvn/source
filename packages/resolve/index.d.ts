@@ -71,9 +71,13 @@ declare module '@teku/resolve/.internal/resolveModule' {
 
 }
 declare module '@teku/resolve' {
-	export * from '@teku/resolve/.internal/resolve';
-	export * from '@teku/resolve/.internal/resolveModule';
+	export { resolve } from '@teku/resolve/.internal/resolve';
+	export { resolveModule } from '@teku/resolve/.internal/resolveModule';
 	export type { IModule, IResolveOptions } from '@teku/resolve/.internal/interfaces';
+
+}
+declare module '@teku/resolve/cli' {
+	export {};
 
 }
 declare module '@teku/resolve' {

@@ -14,6 +14,9 @@ const entry = {
   '/packages/resolve/index.ts': {
     import: resolvePath('packages/resolve/index.ts')
   },
+  '/packages/resolve/cli/index.ts': {
+    import: resolvePath('packages/resolve/cli/index.ts')
+  },
   '/packages/dummy/cli/index.ts': {
     import: resolvePath('packages/dummy/cli/index.ts')
   }
@@ -64,6 +67,14 @@ exports = module.exports = {
     new DtsGeneratorPlugin(rootPath)
   ],
   watch: envName === 'development',
+  watchOptions: {
+    ignored: [
+      'node_modules',
+      '.yarn',
+      '**/index.js',
+      '**/index.d.ts'
+    ]
+  },
   devtool: false,
   target: 'node',
   externals: [
