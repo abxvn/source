@@ -47,14 +47,25 @@ declare module '@teku/resolve/.internal/lib/pnp' {
 	export const isPnpEnabled: () => boolean;
 
 }
-declare module '@teku/resolve/.internal/lib' {
+declare module '@teku/resolve/.internal/lib/asyncFs' {
 	import type { IFsPathType } from '@teku/resolve/.internal/interfaces';
-	export { pathExists, readJSON } from 'fs-extra';
-	export * from '@teku/resolve/.internal/lib/packages';
-	export * from '@teku/resolve/.internal/lib/pnp';
 	export const resolveFromFsPath: (fsPath: string, callerPath: string) => Promise<string>;
 	export const getFsPathType: (fsPath: string, callerPath: string) => Promise<IFsPathType>;
 	export const getJsonData: (jsonFilePath: string, key: string) => Promise<string>;
+
+}
+declare module '@teku/resolve/.internal/lib/syncFs' {
+	import type { IFsPathType } from '@teku/resolve/.internal/interfaces';
+	export const resolveFromFsPathSync: (fsPath: string, callerPath: string) => string;
+	export const getFsPathTypeSync: (fsPath: string, callerPath: string) => IFsPathType;
+
+}
+declare module '@teku/resolve/.internal/lib' {
+	export { pathExists, readJSON } from 'fs-extra';
+	export * from '@teku/resolve/.internal/lib/packages';
+	export * from '@teku/resolve/.internal/lib/pnp';
+	export * from '@teku/resolve/.internal/lib/asyncFs';
+	export * from '@teku/resolve/.internal/lib/syncFs';
 	export const getDirPath: (path: string) => string;
 	export const getCallerPath: () => string;
 	export const getCallers: () => string[];
@@ -70,9 +81,15 @@ declare module '@teku/resolve/.internal/resolveModule' {
 	export const resolveModule: (moduleOrDirPath: string, options?: IResolveOptions) => Promise<IModule>;
 
 }
+declare module '@teku/resolve/.internal/resolveSync' {
+	import type { IResolveOptions } from '@teku/resolve/.internal/interfaces';
+	export const resolveSync: (path: string, options?: IResolveOptions) => string;
+
+}
 declare module '@teku/resolve' {
 	export { resolve } from '@teku/resolve/.internal/resolve';
 	export { resolveModule } from '@teku/resolve/.internal/resolveModule';
+	export { resolveSync } from '@teku/resolve/.internal/resolveSync';
 	export type { IModule, IResolveOptions } from '@teku/resolve/.internal/interfaces';
 
 }
