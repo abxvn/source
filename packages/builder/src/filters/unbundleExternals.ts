@@ -4,20 +4,22 @@ import { map } from '../lib/helpers'
 import type { IWebpackConfig, IWebpackConfigs } from '../interfaces'
 
 const unbundleExternals = async (configs: IWebpackConfigs) => {
-  return await map(configs, async (config: IWebpackConfig) => {
-    if (config.target !== 'node') {
-      return config
-    }
+  return {
+    configs: await map(configs, async (config: IWebpackConfig) => {
+      if (config.target !== 'node') {
+        return config
+      }
 
-    return {
-      ...config,
-      externals: [
-        ...(config.externals as any),
-        webpackNodeExternals(),
-        webpackPnpExternals()
-      ]
-    }
-  })
+      return {
+        ...config,
+        externals: [
+          ...(config.externals as any),
+          webpackNodeExternals(),
+          webpackPnpExternals()
+        ]
+      }
+    })
+  }
 }
 
 export default unbundleExternals

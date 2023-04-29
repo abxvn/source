@@ -1,6 +1,8 @@
-import PathResolver from './lib/PathResolver'
-import { getConfig, expandTargetedEntries, map } from './lib/helpers'
-import type { IBuildEnvironment, IFilter, IWebpackConfig } from './interfaces'
+import { PathResolver } from './lib/paths'
+import { expandTargetedEntries } from './lib/helpers'
+import type { IBuildEnvironment, IBuilderOptions, IFilter, IWebpackConfig } from './interfaces'
+
+import initConfigs from './filters/initConfigs'
 import unbundleExternals from './filters/unbundleExternals'
 import replaceVars from './filters/replaceVars'
 import replaceImports from './filters/replaceImports'
@@ -9,6 +11,7 @@ import devServer from './filters/devServer'
 import chalk from 'chalk'
 
 const filters: Record<string, IFilter> = {
+  initConfigs,
   unbundleExternals,
   replaceVars,
   replaceImports,
@@ -22,34 +25,43 @@ const getConfigs = async (
   entryPath = 'packages/*'
 ): Promise<IWebpackConfig[]> => {
   const path = new PathResolver(rootPath)
-  const targetedEntries = await expandTargetedEntries(path, entryPath)
-  const buildOptions = {
+  const targetEntries = await expandTargetedEntries(path, entryPath)
+  const buildOptions: IBuilderOptions = {
+    targetEntries,
     path,
-    envName
+    envName,
+    replacements: [
+      {
+        map: {
+          react: 'preact/compat',
+          'react-dom': 'preact/compat'
+        },
+        pattern: /preact/
+      }
+    ]
   }
 
-  const initConfigs: IFilter = async () => await map(
-    targetedEntries,
-    async (entries, target) =>
-      await getConfig(entries, {
-        ...buildOptions,
-        target: target === 'node' ? 'node' : 'web'
-      })
-  )
   const processes = [
     initConfigs,
     ...Object.values(filters)
   ]
 
   const configs = await processes.reduce<Promise<Record<string, IWebpackConfig>>>(
-    async (chain, filter) =>
-      await chain.then(async newConfigs => await filter(newConfigs, buildOptions)),
+    async (chain, filter) => {
+      const configs = await chain
+      const filterOutput = await filter(configs, buildOptions)
+
+      return filterOutput.configs
+    },
     Promise.resolve({})
   )
 
-  return Object.keys(configs).map(configName => Object.assign(configs[configName], {
-    name: chalk.bold.underline.greenBright(configName)
-  }))
+  return Object.keys(configs).map(configName => {
+    return Object.assign(configs[configName], {
+      name: chalk.bold.underline.greenBright(configName),
+      plugins: configs[configName].plugins.filter(Boolean)
+    })
+  })
 }
 
 export default getConfigs

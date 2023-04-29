@@ -1,10 +1,9 @@
-import { join } from 'path'
 // import { copy } from 'fs-extra'
 import { log, logInfo, logSuccess } from '../lib/logger'
 import chalk from 'chalk'
-import PathResolver from '../lib/PathResolver'
+import { PathResolver, resolver } from '../lib/paths'
 
-const configSourceDir = join(__dirname, '../config').replace(/\\/g, '/')
+const configSourceDir = resolver(__dirname).resolve('../config')
 
 const init = async () => {
   const path = new PathResolver(process.cwd())

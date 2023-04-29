@@ -1,6 +1,6 @@
-const { resolve } = require('@teku/resolve')
+const { resolveSync } = require('@teku/resolve')
 
-module.exports = async () => ({
+module.exports = {
   extends: [
     'eslint:recommended',
     'standard'
@@ -90,7 +90,7 @@ module.exports = async () => ({
       },
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: await resolve('@teku/builder/config/ts/tsconfig.eslint.json'),
+        project: resolveSync('@teku/builder/config/ts/tsconfig.eslint.json'),
         ecmaVersion: 8,
         ecmaFeatures: {
           experimentalObjectRestSpread: true
@@ -112,4 +112,4 @@ module.exports = async () => ({
       ]
     }
   ]
-})
+}

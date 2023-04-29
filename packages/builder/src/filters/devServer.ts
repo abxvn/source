@@ -4,7 +4,9 @@ import type { IBuilderOptions, IWebpackConfig, IWebpackConfigs } from '../interf
 
 const devServer = async (configs: IWebpackConfigs, options: IBuilderOptions) => {
   if (!process.env.WEBPACK_SERVE || options.envName !== 'development') {
-    return await removeUnusedDevEntries(configs)
+    return {
+      configs: await removeUnusedDevEntries(configs)
+    }
   }
 
   const newDevConfigs: Record<string, IWebpackConfig> = {}
@@ -58,7 +60,9 @@ const devServer = async (configs: IWebpackConfigs, options: IBuilderOptions) => 
     return false // remove this config
   })
 
-  return Object.assign({}, filteredConfigs, newDevConfigs)
+  return {
+    configs: Object.assign({}, filteredConfigs, newDevConfigs)
+  }
 }
 
 const removeUnusedDevEntries = async (configs: IWebpackConfigs): Promise<IWebpackConfigs> =>

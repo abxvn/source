@@ -3,10 +3,16 @@ import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, Ex
 export type IBuildEnvironment = 'development' | 'production'
 export type IBuildTarget = 'web' | 'node'
 
+export interface IReplacementOption {
+  pattern?: RegExp | string
+  map: IImportReplacementMap
+}
+
 export interface IBuilderOptions {
+  targetEntries: ITargetedExpandedEntries
   envName: IBuildEnvironment
-  target?: IBuildTarget
   path: IPathResolver
+  replacements?: IReplacementOption[]
 }
 
 export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
@@ -14,7 +20,7 @@ export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
   target?: IBuildTarget
   plugins: WebpackPluginInstance[]
   devServer?: WebpackOptionsNormalized['devServer']
-  externals?: ExternalsPlugin['externals']
+  externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>
 }
 
 export type IWebpackConfigs = Record<string, IWebpackConfig>
@@ -33,8 +39,11 @@ export interface IEntry {
   runtime?: string | (() => string)
 }
 
+export interface IFilterOutput {
+  configs: IWebpackConfigs
+}
 export type IFilter =
-  (configs: IWebpackConfigs, options: IBuilderOptions) => Promise<IWebpackConfigs>
+  (configs: IWebpackConfigs, options: IBuilderOptions) => Promise<IFilterOutput>
 
 export type IImportReplacementMap = Record<string, string>
 export interface IDtsGeneratorModule {
@@ -47,7 +56,4 @@ export interface IPathResolver {
   rootPath: string
   resolve: (...paths: string[]) => string
   relative: (fullPath: string) => string
-  normalize: (path: string) => string
-  dir: (path: string) => string
-  name: (path: string) => string
 }

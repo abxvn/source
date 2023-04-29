@@ -2,8 +2,8 @@ import dtsGenerator from 'dts-generator'
 import { readJSON } from 'fs-extra'
 import { logError, logInfo, logSuccess } from '../lib/logger'
 import type { Compiler } from 'webpack'
-import { resolve as resolvePath } from 'path'
 import type { IPathResolver } from '../interfaces'
+import { getDir, getName, resolvePath } from '../lib/paths'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 
@@ -59,14 +59,14 @@ class DtsPlugin {
             ],
             out: this.path.resolve(p, typesFile),
             resolveModuleId: ({ currentModuleId }) => {
-              const isIndexModule = this.path.name(currentModuleId) === 'index'
+              const isIndexModule = getName(currentModuleId) === 'index'
 
               return isIndexModule
                 ? [packageName, currentModuleId.replace(/\/?index$/, '')].filter(Boolean).join('/')
                 : `${packageName}/.internal/${currentModuleId.replace(/^src\/?/, '')}`
             },
             resolveModuleImport: ({ importedModuleId, isDeclaredExternalModule, currentModuleId }) => {
-              const fullImport = resolvePath(this.path.dir(currentModuleId), importedModuleId)
+              const fullImport = resolvePath(getDir(currentModuleId), importedModuleId)
               const isInternalModule = !isDeclaredExternalModule &&
                 importedModuleId.indexOf('.') === 0
 

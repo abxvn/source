@@ -5,16 +5,18 @@ import fs from 'fs-extra'
 import { parse } from 'dotenv'
 
 const replaceVars = async (configs: IWebpackConfigs) => {
-  return await map(configs, async (config: IWebpackConfig) => ({
-    ...config,
-    plugins: [
-      ...config.plugins,
-      new DefinePlugin({
-        'process.env.NODE_ENV': JSON.stringify(config.mode),
-        ...await defineEnvPerEntries(config.entry)
-      })
-    ]
-  }))
+  return {
+    configs: await map(configs, async (config: IWebpackConfig) => ({
+      ...config,
+      plugins: [
+        ...config.plugins,
+        new DefinePlugin({
+          'process.env.NODE_ENV': JSON.stringify(config.mode),
+          ...await defineEnvPerEntries(config.entry)
+        })
+      ]
+    }))
+  }
 }
 
 export default replaceVars

@@ -1,64 +1,9 @@
 import kindOf from 'kind-of'
 import glob from 'fast-glob'
 import type {
-  IWebpackConfig,
-  IBuilderOptions,
   ITargetedExpandedEntries,
-  IEntries,
   IPathResolver
 } from '../interfaces'
-import { resolve } from '@teku/resolve'
-
-export const getConfig = async (
-  entries: IEntries,
-  options: IBuilderOptions
-): Promise<IWebpackConfig> => {
-  const { envName = 'development', target = 'web' } = options
-  const config: IWebpackConfig = {
-    entry: entries,
-    mode: envName,
-    output: {
-      path: options.path.rootPath,
-      filename: data => {
-        return data.chunk?.name?.replace(/\.tsx?$/, '.js') as string // change index.ts to index.js
-      }
-    },
-    resolve: {
-      extensions: ['.ts', '.js', '.tsx']
-    },
-    module: {
-      rules: [
-        {
-          test: /\.(js|tsx?)$/,
-          use: [
-            {
-              loader: await resolve('ts-loader'),
-              options: {
-                configFile: options.path.resolve('config/ts/tsconfig.packages.json')
-              }
-            }
-          ],
-          exclude: /node_modules|yarn/
-        },
-        {
-          test: /\.html$/i,
-          loader: await resolve('html-loader')
-        }
-      ]
-    },
-    externals: [],
-    plugins: [],
-    stats: {
-      logging: true
-    },
-    watch: envName === 'development',
-    devtool: envName === 'development' && 'inline-source-map'
-  }
-
-  return target === 'node'
-    ? setNodePackageConfig(config)
-    : setWebPackageConfig(config)
-}
 
 export const expandTargetedEntries = async (
   path: IPathResolver,
@@ -85,41 +30,6 @@ export const expandTargetedEntries = async (
     },
     {}
   )
-}
-
-export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => {
-  return {
-    ...config,
-    output: {
-      ...config.output,
-      library: {
-        type: 'commonjs2'
-      }
-    },
-    target: 'node',
-    externalsPresets: {
-      ...config.externalsPresets,
-      node: true
-    }
-  }
-}
-
-// also for devServer
-export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
-  return {
-    ...config,
-    output: {
-      ...config.output,
-      library: {
-        type: 'umd'
-      }
-    },
-    target: 'web',
-    externalsPresets: {
-      ...config.externalsPresets,
-      node: false
-    }
-  }
 }
 
 export const map = async (iterable: any, transform: (item: any, key: number | string) => Promise<any>): Promise<any> => {
@@ -158,6 +68,8 @@ export const filter = (iterable: any, filter: (item: any, key: number | string) 
       throw Error('Please provide object or array input')
   }
 }
+
+export const extractPattern = (regex: RegExp): string => regex.toString().replace(/^\/(.*)\/[a-z]*$/, '$1')
 
 export const extractMatch = (str: string, regex: RegExp): string => {
   const match = str.match(regex)
