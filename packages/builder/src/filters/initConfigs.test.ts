@@ -6,7 +6,7 @@ const webEntries = {
   'web/index.ts': {
     import: 'web/index.ts'
   },
-  'web/dev/.index.ts': {
+  'web/dev/index.ts': {
     import: 'web/dev/index.ts'
   }
 }
@@ -21,8 +21,8 @@ describe('initConfigs#configs', () => {
   let prodConfigs: IWebpackConfigs
 
   beforeAll(async () => {
-    devConfigs = await getMockConfig()
-    prodConfigs = await getMockConfig({ envName: 'production' })
+    devConfigs = await getMockConfig({ envName: 'development' }, {})
+    prodConfigs = await getMockConfig({ envName: 'production' }, {})
   })
 
   it('should add configs for entries per target', () => {

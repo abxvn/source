@@ -1,11 +1,11 @@
 import webpackNodeExternals from 'webpack-node-externals'
 import webpackPnpExternals from '../plugins/webpackPnpExternals'
 import { map } from '../lib/helpers'
-import type { IWebpackConfig, IWebpackConfigs } from '../interfaces'
+import type { IFilter, IWebpackConfig } from '../interfaces'
 
-const unbundleExternals = async (configs: IWebpackConfigs) => {
+const unbundleExternals: IFilter = async ({ editor }) => {
   return {
-    configs: await map(configs, async (config: IWebpackConfig) => {
+    configs: await map(editor.configs, async (config: IWebpackConfig) => {
       if (config.target !== 'node') {
         return config
       }

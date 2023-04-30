@@ -3,16 +3,41 @@ import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, Ex
 export type IBuildEnvironment = 'development' | 'production'
 export type IBuildTarget = 'web' | 'node'
 
+export interface IBuilderOptions {
+  envName: IBuildEnvironment
+  rootPath: string
+  entryPatterns: string[]
+  replacements: IReplacementOption[]
+}
+
+export interface IConfigCustomizer {
+  updateEntries: (entryFilter: IEntryFilter) => void
+  updateOptions: (customOptions: Partial<IBuilderOptions>) => void
+
+  // config filter
+  filter: (filterName: string, filter: IFilter | null) => void
+}
+
+export interface IConfigEditor {
+  readonly path: IPathResolver
+  readonly configs: IWebpackConfigs
+  readonly entries: ITargetedExpandedEntries
+  readonly options: IBuilderOptions
+}
+
+export type IEntryFilter = (targetEntries: ITargetedExpandedEntries) => Promise<ITargetedExpandedEntries>
+
+export interface IFilterOptions {
+  editor: IConfigEditor
+}
+export interface IFilterOutput {
+  configs: IWebpackConfigs
+}
+export type IFilter = (options: IFilterOptions) => Promise<IFilterOutput>
+
 export interface IReplacementOption {
   pattern?: RegExp | string
   map: IImportReplacementMap
-}
-
-export interface IBuilderOptions {
-  targetEntries: ITargetedExpandedEntries
-  envName: IBuildEnvironment
-  path: IPathResolver
-  replacements?: IReplacementOption[]
 }
 
 export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
@@ -38,12 +63,6 @@ export interface IEntry {
   }
   runtime?: string | (() => string)
 }
-
-export interface IFilterOutput {
-  configs: IWebpackConfigs
-}
-export type IFilter =
-  (configs: IWebpackConfigs, options: IBuilderOptions) => Promise<IFilterOutput>
 
 export type IImportReplacementMap = Record<string, string>
 export interface IDtsGeneratorModule {

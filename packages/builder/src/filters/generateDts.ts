@@ -1,14 +1,14 @@
 import { map } from '../lib/helpers'
-import type { IBuilderOptions, IWebpackConfigs } from '../interfaces'
+import type { IFilter } from '../interfaces'
 import DtsPlugin from '../plugins/DtsPlugin'
 
-const generateDts = async (configs: IWebpackConfigs, { envName, path }: IBuilderOptions) => {
+const generateDts: IFilter = async ({ editor }) => {
   return {
-    configs: await map(configs, async config => ({
+    configs: await map(editor.configs, async config => ({
       ...config,
       plugins: [
         ...config.plugins,
-        envName === 'production' && new DtsPlugin(path)
+        editor.options.envName === 'production' && new DtsPlugin(editor.path)
       ]
     }))
   }

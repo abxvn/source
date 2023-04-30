@@ -1,12 +1,11 @@
-import initConfigs from '../../src/filters/initConfigs'
-import type { IWebpackConfig, IFilter, IBuilderOptions } from '../../src/interfaces'
-import { resolver } from '../../src/lib/paths'
+import ConfigEditor from '../../src/ConfigEditor'
+import type { IFilter, IBuilderOptions } from '../../src/interfaces'
 
 const webEntries = {
   'web/index.ts': {
     import: 'web/index.ts'
   },
-  'web/dev/.index.ts': {
+  'web/dev/index.ts': {
     import: 'web/dev/index.ts'
   }
 }
@@ -16,34 +15,26 @@ const nodeEntries = {
   }
 }
 
-export const getMockConfig = async (
-  options?: Partial<IBuilderOptions>,
-  filters: Record<string, IFilter> = {}
-) => {
-  const buildOptions: IBuilderOptions = {
-    envName: 'development',
-    path: resolver(__dirname),
-    targetEntries: {
+class MockConfigEditor extends ConfigEditor {
+  public get entries () {
+    return {
       web: webEntries,
       node: nodeEntries
-    },
-    ...options
+    }
+  }
+}
+
+export const getMockConfig = async (
+  options?: Partial<IBuilderOptions>,
+  filters?: Record<string, IFilter>
+) => {
+  const editor = new MockConfigEditor('development', __dirname, filters)
+
+  if (options) {
+    editor.updateOptions(options)
   }
 
-  const processes = [
-    initConfigs,
-    ...Object.values(filters)
-  ]
+  await editor.init()
 
-  const configs = await processes.reduce<Promise<Record<string, IWebpackConfig>>>(
-    async (chain, filter) => {
-      const configs = await chain
-      const filterOutput = await filter(configs, buildOptions)
-
-      return filterOutput.configs
-    },
-    Promise.resolve({})
-  )
-
-  return configs
+  return editor.configs
 }

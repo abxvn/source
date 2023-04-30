@@ -1,12 +1,12 @@
 import { DefinePlugin } from 'webpack'
 import { map } from '../lib/helpers'
-import type { IEntries, IWebpackConfig, IWebpackConfigs } from '../interfaces'
+import type { IEntries, IFilter, IWebpackConfig } from '../interfaces'
 import fs from 'fs-extra'
 import { parse } from 'dotenv'
 
-const replaceVars = async (configs: IWebpackConfigs) => {
+const replaceVars: IFilter = async ({ editor }) => {
   return {
-    configs: await map(configs, async (config: IWebpackConfig) => ({
+    configs: await map(editor.configs, async (config: IWebpackConfig) => ({
       ...config,
       plugins: [
         ...config.plugins,

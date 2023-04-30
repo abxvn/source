@@ -1,16 +1,16 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { extractMatch, filter, map } from '../lib/helpers'
-import type { IBuilderOptions, IWebpackConfig, IWebpackConfigs } from '../interfaces'
+import type { IFilter, IWebpackConfig, IWebpackConfigs } from '../interfaces'
 
-const devServer = async (configs: IWebpackConfigs, options: IBuilderOptions) => {
-  if (!process.env.WEBPACK_SERVE || options.envName !== 'development') {
+const devServer: IFilter = async ({ editor }) => {
+  if (!process.env.WEBPACK_SERVE || editor.options.envName !== 'development') {
     return {
-      configs: await removeUnusedDevEntries(configs)
+      configs: await removeUnusedDevEntries(editor.configs)
     }
   }
 
   const newDevConfigs: Record<string, IWebpackConfig> = {}
-  const filteredConfigs = filter(configs, (config: IWebpackConfig) => {
+  const filteredConfigs = filter(editor.configs, (config: IWebpackConfig) => {
     if (config.devServer) {
       return true // avoid overriding dev server config
     }
@@ -27,7 +27,7 @@ const devServer = async (configs: IWebpackConfigs, options: IBuilderOptions) => 
         return
       }
 
-      const newConfigName = `${config.target as string}:dev:${options.path.relative(devDirPath)}`
+      const newConfigName = `${config.target as string}:dev:${editor.path.relative(devDirPath)}`
 
       newDevConfigs[newConfigName] = {
         ...config,

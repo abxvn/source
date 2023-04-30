@@ -1,20 +1,20 @@
 import { map } from '../lib/helpers'
-import type { IBuilderOptions, IWebpackConfigs } from '../interfaces'
+import type { IFilter } from '../interfaces'
 import ImportReplacementPlugin from '../plugins/ImportReplacementPlugin'
 
-const replaceImports = async (configs: IWebpackConfigs, { replacements }: IBuilderOptions) => {
-  if (!replacements) {
+const replaceImports: IFilter = async ({ editor }) => {
+  if (!editor.options.replacements) {
     return {
-      configs
+      configs: editor.configs
     }
   }
 
   return {
-    configs: await map(configs, async config => ({
+    configs: await map(editor.configs, async config => ({
       ...config,
       plugins: [
         ...config.plugins,
-        ...replacements.map(({ pattern, map }) =>
+        ...editor.options.replacements.map(({ pattern, map }) =>
           new ImportReplacementPlugin(map, pattern)
         )
       ]

@@ -7,16 +7,15 @@ import type {
 
 export const expandTargetedEntries = async (
   path: IPathResolver,
-  packagePath: string,
-  pattern = '**/index.ts'
+  patterns: string[]
 ): Promise<ITargetedExpandedEntries> => {
-  const files = await glob(`${packagePath}/${pattern}`)
+  const files = await glob(patterns.map(pattern => path.resolve(pattern)))
 
   return files.reduce<ITargetedExpandedEntries>(
     (targetedEntries, f) => {
       const relativePath = path.relative(f)
       const fullPath = path.resolve(f)
-      const target = /\/scripts\/|\/dev\//.test(relativePath) ? 'web' : 'node'
+      const target = /\/(scripts|dev|web)\//.test(relativePath) ? 'web' : 'node'
 
       return {
         ...targetedEntries,
