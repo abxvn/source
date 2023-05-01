@@ -18,7 +18,24 @@ export interface IConfigCustomizer {
   filter: (filterName: string, filter: IFilter | null) => void
 }
 
-export interface IConfigEditor {
+export type IConfigDepVersion = string
+
+export interface IConfigDep {
+  name: string
+  version: IConfigDepVersion
+  dev?: boolean
+}
+
+export interface IConfigDepWithDeps extends IConfigDep {
+  dependencies?: IConfigDep[]
+}
+
+export interface IConfigWithDependencies {
+  getDeps: () => Record<string, IConfigDep>
+  dep: (name: string, version?: IConfigDepVersion) => IConfigDepWithDeps
+}
+
+export interface IConfigEditor extends IConfigWithDependencies {
   readonly path: IPathResolver
   readonly configs: IWebpackConfigs
   readonly entries: ITargetedExpandedEntries

@@ -1,8 +1,8 @@
 import dtsGenerator from 'dts-generator'
-import { readJSON } from 'fs-extra'
+import { pathExists, readJSON } from 'fs-extra'
 import { logError, logInfo, logSuccess } from '../lib/logger'
 import type { Compiler } from 'webpack'
-import type { IPathResolver } from '../interfaces'
+import type { IDtsGeneratorModule, IPathResolver } from '../interfaces'
 import { getDir, getName, resolvePath } from '../lib/paths'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
@@ -33,18 +33,27 @@ class DtsPlugin {
     })
 
     compiler.hooks.afterCompile.tapPromise('[dts] generate definitions', async () => {
-      await Promise.all(builtModulePaths.map(async (p) => {
+      await Promise.all(builtModulePaths.map(async p => {
         try {
           const packageInfo: any = await readJSON(this.path.resolve(p, 'package.json'))
           const typesFile = packageInfo.types
           const packageName: string = packageInfo.name
           const packageMain: string | undefined = packageInfo.main
+          const projectPath = this.path.resolve(p)
+          const typesFilePath = this.path.resolve(p, typesFile)
+          const tsconfigPath = this.path.resolve(p, 'tsconfig.json')
 
           if (!typesFile) {
             return
           }
 
-          logInfo('dts generate:', packageName)
+          if (!await pathExists(tsconfigPath)) {
+            logInfo('[dts]', packageName, ' generation ignored, required tsconfig')
+
+            return
+          }
+
+          logInfo('[dts]', packageName, 'generation started')
 
           const main = '/' + (packageMain?.replace(/^\//, '').replace(/\.js$/, '') || 'index')
 
@@ -53,11 +62,11 @@ class DtsPlugin {
             name: packageName,
             main,
             eol: '\n',
-            project: this.path.resolve(p),
+            project: projectPath,
             exclude: [
               '**/*.{test,spec}.{ts,tsx}'
             ],
-            out: this.path.resolve(p, typesFile),
+            out: typesFilePath,
             resolveModuleId: ({ currentModuleId }) => {
               const isIndexModule = getName(currentModuleId) === 'index'
 
@@ -65,7 +74,7 @@ class DtsPlugin {
                 ? [packageName, currentModuleId.replace(/\/?index$/, '')].filter(Boolean).join('/')
                 : `${packageName}/.internal/${currentModuleId.replace(/^src\/?/, '')}`
             },
-            resolveModuleImport: ({ importedModuleId, isDeclaredExternalModule, currentModuleId }) => {
+            resolveModuleImport: ({ importedModuleId, isDeclaredExternalModule, currentModuleId }: IDtsGeneratorModule) => {
               const fullImport = resolvePath(getDir(currentModuleId), importedModuleId)
               const isInternalModule = !isDeclaredExternalModule &&
                 importedModuleId.indexOf('.') === 0
@@ -76,7 +85,7 @@ class DtsPlugin {
             }
           })
 
-          logSuccess('dts generated:', packageName)
+          logSuccess('[dts]', packageName, 'declaration at', typesFile)
         } catch (err: any) {
           logError(`[dts] ${err.message as string}`)
         }

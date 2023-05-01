@@ -34,7 +34,7 @@ class ImportReplacementPlugin {
             new sources.RawSource(newText)
           )
 
-          logInfo(`[replace] asset ${name}: ${shortenListStr}`)
+          logInfo(`[replace] ${name}: ${shortenListStr}`)
         }
       })
     })

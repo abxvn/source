@@ -5,6 +5,5 @@ export const nodeEnv = new Option('--node-env <env>', 'Specify build environment
   .default('development')
   .env('NODE_ENV')
 
-export const path = new Option('--entry <path>', 'Specify paths to list entry files for compilation')
-  .default('packages/*')
-  .env('ENTRY')
+export const path = new Option('--path <path>', 'Specify root path for compilation')
+  .default(process.cwd())

@@ -2,6 +2,9 @@ import type {
   IBuildEnvironment,
   IBuilderOptions,
   IConfigCustomizer,
+  IConfigDep,
+  IConfigDepVersion,
+  IConfigDepWithDeps,
   IConfigEditor,
   IEntryFilter,
   IFilter,
@@ -31,6 +34,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   private _configs: IWebpackConfigs = {}
   private _entries: ITargetedExpandedEntries = {}
   private _options: IBuilderOptions
+  private readonly dependencies: Record<string, IConfigDepWithDeps> = {}
 
   private readonly entryFilters: IEntryFilter[] = []
 
@@ -104,5 +108,60 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
     const output = await filter({ editor: this })
 
     this._configs = output.configs
+  }
+
+  getDeps () {
+    const deps: Record<string, IConfigDep> = {}
+
+    Object.keys(this.dependencies).forEach(depName => {
+      const { name, version, dev, dependencies } = this.dependencies[depName]
+
+      if (deps[depName]) {
+        deps[depName] = {
+          ...deps[depName],
+          dev,
+          version
+        }
+      }
+
+      if (!version) {
+        return
+      }
+
+      deps[name] = { name, version, dev }
+      dependencies?.forEach(depDep => {
+        if (depDep.version) {
+          deps[depDep.name] = {
+            name: depDep.name,
+            version: depDep.version,
+            dev: depDep.dev || dev
+          }
+        }
+      })
+    })
+
+    return Object.keys(deps).reduce<typeof deps>((pickedDeps, name) => {
+      const version = deps[name].version
+
+      if (version) {
+        pickedDeps[name] = deps[name]
+      }
+
+      return pickedDeps
+    }, {})
+  }
+
+  dep (name: string, version: IConfigDepVersion = '*') {
+    let dependency = this.dependencies[name]
+
+    if (!dependency) {
+      dependency = { name, version }
+
+      this.dependencies[name] = dependency
+    }
+
+    dependency.version = version
+
+    return dependency
   }
 }

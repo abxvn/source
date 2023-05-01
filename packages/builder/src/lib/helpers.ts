@@ -12,7 +12,7 @@ export const expandTargetedEntries = async (
   const files = await glob(patterns.map(pattern => path.resolve(pattern)))
 
   return files.reduce<ITargetedExpandedEntries>(
-    (targetedEntries, f) => {
+    (targetedEntries, f: string) => {
       const relativePath = path.relative(f)
       const fullPath = path.resolve(f)
       const target = /\/(scripts|dev|web)\//.test(relativePath) ? 'web' : 'node'

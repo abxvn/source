@@ -1,7 +1,7 @@
 
 const { basename, resolve: resolvePath, dirname } = require('path')
-const dtsGenerator = require('dts-generator').default
-const { readJSON } = require('fs-extra')
+const { default: dtsGenerator } = require('dts-generator')
+const { readJSON, pathExists } = require('fs-extra')
 
 class DtsGeneratorPlugin {
   constructor (rootPath) {
@@ -42,8 +42,9 @@ class DtsGeneratorPlugin {
           const packageInfo = await readJSON(resolvePath(this.rootPath, `${p}/package.json`))
           const typesFile = packageInfo.types
           const packageName = packageInfo.name
+          const tsconfigExists = await pathExists(resolvePath(this.rootPath, p, 'tsconfig.json'))
 
-          if (!typesFile) {
+          if (!typesFile || !tsconfigExists) {
             return
           }
 

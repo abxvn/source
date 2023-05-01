@@ -1,13 +1,13 @@
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
-import getConfigs from '../getConfigs'
-import { logError, logEntries } from '../lib/logger'
+import createEditor from '../createEditor'
+import { logError, logEntries, log } from '../lib/logger'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
 import { nodeEnv, path } from './options'
 import { type IBuildEnvironment } from '../interfaces'
 
 interface IBuildOptions {
-  entry: string
+  path: string
   nodeEnv: IBuildEnvironment
 }
 
@@ -16,10 +16,11 @@ const build = async (options: IBuildOptions): Promise<void> => {
     process.env.WEBPACK_SERVE = ''
 
     const envName = options.nodeEnv
-    const configs = await getConfigs(process.cwd(), envName, options.entry)
+    const editor = await createEditor(options.path, envName)
+    const configs = Object.values(editor.configs)
 
     if (!configs.length) {
-      throw Error(`No entries found for "${options.entry}"`)
+      throw Error(`No entries found for "${options.path}"`)
     }
 
     logEntries(configs)
@@ -31,7 +32,7 @@ const build = async (options: IBuildOptions): Promise<void> => {
         if (err) {
           reject(err)
         } else {
-          console.log(stats?.toString({
+          log(stats?.toString({
             chunks: false, // Removes chunk information
             colors: true // Enables colorful output
           }))
