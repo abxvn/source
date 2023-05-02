@@ -120,3 +120,6 @@ dist
 **/*.cache
 **/.env
 **/index.js
+
+tmp/
+**/tmp

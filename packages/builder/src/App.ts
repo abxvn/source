@@ -3,7 +3,6 @@ import pkg from '../package.json'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'
-import test from './cmd/test'
 
 interface ICommand {
   description: string
@@ -22,8 +21,7 @@ export default class App extends Command {
     this.registerCommands({
       dev,
       build,
-      init,
-      test
+      init
     })
   }
 

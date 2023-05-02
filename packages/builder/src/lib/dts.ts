@@ -31,29 +31,6 @@ import EventEmitter from 'events'
 const EOL = '\n'
 const DTSLEN = '.d.ts'.length
 
-interface IDtsWriterOptions {
-  main?: string
-  name: string
-
-  references?: []
-  // exclude files
-  excludedPatterns?: string[]
-  // return empty string '' to ignore module
-  resolvedModule?: (resolution: IModuleResolution) => string
-  // return empty string '' to ignore module
-  resolvedImport?: (resolution: IModuleImportResolution) => string
-}
-
-interface IModuleResolution {
-  currentModule: string
-}
-
-interface IModuleImportResolution {
-  currentModule: string
-  importedModule: string
-  isExternal?: boolean
-}
-
 interface IGenerateOptions {
   // name of package
   name: string
@@ -71,6 +48,7 @@ interface IGenerateOptions {
   // if omitted, the full list of files will be loaded
   // from parsed ts configuration
   files?: string[]
+  references?: string[]
 }
 
 export class Dts extends EventEmitter {
@@ -80,7 +58,8 @@ export class Dts extends EventEmitter {
     inputDir,
     projectPath,
     outputPath,
-    files = []
+    files = [],
+    references = []
   }: IGenerateOptions) {
     let compilerOptions: CompilerOptions = {}
     const inDir = resolver(inputDir)
@@ -133,7 +112,8 @@ export class Dts extends EventEmitter {
     await mkdirp(getDir(outputPath))
     const writer = new DtsWriter({
       name,
-      main
+      main,
+      references
     })
 
     writer.on('log', msg => this.emit('log', msg))
@@ -167,6 +147,29 @@ export class Dts extends EventEmitter {
   }
 }
 
+interface IDtsWriterOptions {
+  main?: string
+  name: string
+
+  references?: string[]
+  // exclude files
+  excludedPatterns?: string[]
+  // return empty string '' to ignore module
+  resolvedModule?: (resolution: IModuleResolution) => string
+  // return empty string '' to ignore module
+  resolvedImport?: (resolution: IModuleImportResolution) => string
+}
+
+interface IModuleResolution {
+  currentModule: string
+}
+
+interface IModuleImportResolution {
+  currentModule: string
+  importedModule: string
+  isExternal?: boolean
+}
+
 export class DtsWriter extends EventEmitter {
   private readonly ident = '  '
   private readonly options: IDtsWriterOptions
@@ -179,7 +182,7 @@ export class DtsWriter extends EventEmitter {
     super()
 
     this.options = {
-      main: '/index',
+      main: 'index',
       references: [],
       excludedPatterns: [
         '**/node_modules/**/*.d.ts',
@@ -187,35 +190,40 @@ export class DtsWriter extends EventEmitter {
       ],
       ...options
     }
+
+    if (!this.options.main) {
+      this.options.main = 'index'
+    }
   }
 
   async write (
     inputDir: string,
     outputPath: string,
     compilerOptions: CompilerOptions,
-    filePaths: string[],
-    options?: Partial<IDtsWriterOptions>
+    filePaths: string[]
   ) {
     this.externalModules = []
-
     this.emit('log', '[dtsw] start')
+
     const host = createCompilerHost(compilerOptions)
     const program = createProgram(filePaths, compilerOptions, host)
     const sourceFiles = program.getSourceFiles()
+    const outDir = resolver(outputPath).dir()
+    const inDir = resolver(inputDir)
+    const main = `${this.options.name}/${this.options.main?.replace(/^\/+/, '') || 'index'}`
+    let mainFound = false
+    let mainExportAll = false
+    let mainExportDefault = false
 
     this.listExternals(sourceFiles)
 
-    const outDir = resolver(outputPath).dir()
-
     this.outDir = outDir
     this.output = createWriteStream(outputPath, { mode: parseInt('644', 8) })
-    let mainExportDeclaration = false
-    let mainExportAssignment = false
-    // let mainFound = false
-
-    const inDir = resolver(inputDir)
 
     this.emit('log', '[dtsw] process files')
+
+    this.writeReferences()
+
     sourceFiles.some(sourceFile => {
       const filePath = normalize(sourceFile.fileName)
 
@@ -246,11 +254,12 @@ export class DtsWriter extends EventEmitter {
       })
 
       // We can optionally output the main module if there's something to export.
-      if (options?.main === resolvedModuleId) {
-        // mainFound = true
+      if (main === resolvedModuleId) {
+        mainFound = true
+        this.emit('log:verbose', `[dtsw] main found ${main}`)
         forEachChild(sourceFile, node => {
-          mainExportDeclaration = mainExportDeclaration || NodeKinds.isExportDeclaration(node)
-          mainExportAssignment = mainExportAssignment || NodeKinds.isExportAssignment(node)
+          mainExportAll = mainExportAll || NodeKinds.isExportDeclaration(node)
+          mainExportDefault = mainExportDefault || NodeKinds.isExportAssignment(node)
         })
       }
 
@@ -279,25 +288,12 @@ export class DtsWriter extends EventEmitter {
       return false // continue
     })
 
-    // if (options.main && mainFound) {
-    //   this.writeOutput(`declare module '${options.name}' {`, 1)
-    //   if (compilerOptions.target as ScriptTarget >= ScriptTarget.ES2015) {
-    //     if (mainExportAssignment) {
-    //       this.writeOutput(`export {default} from '${options.main}';`)
-    //     }
-    //     if (mainExportDeclaration) {
-    //       this.writeOutput(`export * from '${options.main}';`)
-    //     }
-    //   } else {
-    //     this.writeOutput(`import main = require('${options.main}');`)
-    //     this.writeOutput('export = main;')
-    //   }
-
-    //   this.writeOutput('}', -1)
-    // }
+    if (mainFound) {
+      this.writeMainDeclaration(compilerOptions.target, mainExportAll, mainExportDefault)
+    }
 
     this.output.close()
-    this.emit('log', '[dts] done')
+    this.emit('log', '[dtsw] done')
   }
 
   private listExternals (declarationFiles: readonly SourceFile[]) {
@@ -326,6 +322,20 @@ export class DtsWriter extends EventEmitter {
     }
   }
 
+  private writeReferences () {
+    const pathRefRegex = /^\./
+
+    this.options.references?.forEach((ref: string) => {
+      if (pathRefRegex.test(ref)) {
+        this.emit('log', `[dtsw] ref.path ${ref}`)
+        this.writeOutput(`/// <reference path="${ref}" />`)
+      } else {
+        this.emit('log', `[dtsw] ref.types ${ref}`)
+        this.writeOutput(`/// <reference types="${ref}" />`)
+      }
+    })
+  }
+
   private writeDeclaration (declarationFile: SourceFile) {
     if (!this.outDir) {
       throw Error('[dtsw] output dir not provided')
@@ -335,7 +345,7 @@ export class DtsWriter extends EventEmitter {
     const currentModule = removeExtension(this.outDir.relative(filePath))
 
     if ((declarationFile as any).externalModuleIndicator) {
-      this.writeExternalModuleDeclaration(declarationFile, currentModule)
+      this.writeExternalDeclaration(declarationFile, currentModule)
     } else {
       if (currentModule === '../tests/mocks/mockScript') {
         console.log(declarationFile.text)
@@ -347,7 +357,32 @@ export class DtsWriter extends EventEmitter {
     }
   }
 
-  private writeExternalModuleDeclaration (declarationFile: SourceFile, currentModule: string) {
+  private writeMainDeclaration (buildTarget?: ScriptTarget, mainExportAll = false, mainExportDefault = false) {
+    const main = `${this.options.name}/${this.options.main as string}`
+
+    this.emit('log', `[dtsw] declare:main ${main}`)
+
+    const declarations: string[] = []
+
+    if (!buildTarget || buildTarget < ScriptTarget.ES2015) {
+      this.emit('log:verbose', '[dtsw] declare:main require')
+      declarations.push(`import main = require('${main}');`)
+      declarations.push('export = main;')
+    } else {
+      if (mainExportDefault) {
+        this.emit('log:verbose', '[dtsw] declare:main export default')
+        declarations.push(`export {default} from '${main}';`)
+      }
+      if (mainExportAll) {
+        this.emit('log:verbose', '[dtsw] declare:main export *')
+        declarations.push(`export * from '${main}';`)
+      }
+    }
+
+    this.writeOutputModule(this.options.name, declarations)
+  }
+
+  private writeExternalDeclaration (declarationFile: SourceFile, currentModule: string) {
     const resolvedModuleId = this.resolveModule({ currentModule })
 
     this.emit('log', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`)
@@ -394,7 +429,7 @@ export class DtsWriter extends EventEmitter {
       .split('\n')
       .filter(line => line && line !== 'export {};')
 
-    this.writeDeclarationOutput(resolvedModuleId, declarationLines)
+    this.writeOutputModule(resolvedModuleId, declarationLines)
     this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} done`)
   }
 
@@ -406,7 +441,7 @@ export class DtsWriter extends EventEmitter {
     this.output.write(message + EOL)
   }
 
-  private writeDeclarationOutput (name: string, lines: string[] = []) {
+  private writeOutputModule (name: string, lines: string[] = []) {
     if (!lines.length) {
       return
     }
