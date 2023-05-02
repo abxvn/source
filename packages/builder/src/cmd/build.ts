@@ -1,6 +1,6 @@
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
-import createEditor from '../createEditor'
+import { getConfigs } from '../configs'
 import { logError, logEntries, log } from '../lib/logger'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
 import { nodeEnv, path } from './options'
@@ -16,8 +16,7 @@ const build = async (options: IBuildOptions): Promise<void> => {
     process.env.WEBPACK_SERVE = ''
 
     const envName = options.nodeEnv
-    const editor = await createEditor(options.path, envName)
-    const configs = Object.values(editor.configs)
+    const { configs } = await getConfigs(options.path, envName)
 
     if (!configs.length) {
       throw Error(`No entries found for "${options.path}"`)

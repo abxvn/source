@@ -1,7 +1,7 @@
-import { log, logError, logInfo, logSuccess } from '../lib/logger'
+import { logError, logInfo } from '../lib/logger'
 import { resolver } from '../lib/paths'
 import { path } from './options'
-import createEditor from '../createEditor'
+import { getConfigs } from '../configs'
 import { type IComponentAnswer, components, type ISdkAnswer, ask, sdk } from './questions'
 import { getYarnVersion, copy, install, installSdk } from '../lib/packages'
 
@@ -19,7 +19,7 @@ interface IInstalls {
 
 const init = async (options: any) => {
   const envName = 'development'
-  const editor = await createEditor(options.path, envName)
+  const { editor } = await getConfigs(options.path, envName)
 
   const yarnVersion = await getYarnVersion()
 
@@ -61,8 +61,20 @@ const init = async (options: any) => {
   logInfo('[init] install components ...')
 
   // install
-  installs.all.length && await install(...installs.all)
-  installs.dev.length && await install(...installs.dev)
+  if (installs.all.length) {
+    logInfo('[init] install', installs.all.join(' '))
+    await install(...installs.all)
+  }
+
+  if (installs.dev.length) {
+    logInfo('[init] install dev', installs.dev.join(' '))
+    await install('--dev', ...installs.dev)
+  }
+
+  if (answers.sdk === true) {
+    logInfo('[init] install sdk')
+    await installSdk('vscode')
+  }
 
   const copies: Array<{ from: string, to: string }> = [{
     from: configSource.resolve('.vscode'),

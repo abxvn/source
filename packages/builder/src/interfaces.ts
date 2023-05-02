@@ -92,4 +92,7 @@ export interface IPathResolver {
   rootPath: string
   resolve: (...paths: string[]) => string
   relative: (fullPath: string) => string
+  includes: (fullPath: string) => boolean
+  resolveList: (paths: string[]) => string[]
+  dir: () => IPathResolver
 }

@@ -5,6 +5,8 @@ import type {
   IPathResolver
 } from '../interfaces'
 
+export { stat } from 'fs-extra'
+
 export const expandTargetedEntries = async (
   path: IPathResolver,
   patterns: string[]

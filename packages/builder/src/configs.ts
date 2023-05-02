@@ -1,12 +1,16 @@
-import type { IBuildEnvironment, IConfigEditor } from './interfaces'
+import type { IBuildEnvironment, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
 import { pathExists } from 'fs-extra'
+import chalk from 'chalk'
 
-const createEditor = async (
+export const getConfigs = async (
   rootPath: string,
   envName: IBuildEnvironment = 'development'
-): Promise<IConfigEditor> => {
+): Promise<{
+  editor: IConfigEditor
+  configs: IWebpackConfig[]
+}> => {
   const editor = new ConfigEditor(envName, rootPath)
   const customConfigFile = editor.path.resolve('teku.config.js')
 
@@ -27,10 +31,15 @@ const createEditor = async (
 
   await editor.init()
 
-  return editor
-}
+  const configs = editor.configs
 
-export default createEditor
+  return {
+    editor,
+    configs: Object.keys(configs).map(configName => Object.assign(configs[configName], {
+      name: chalk.bold.underline.greenBright(configName)
+    }))
+  }
+}
 
 const addDefaultDeps = (editor: IConfigEditor) => {
   editor.dep('typescript', '^5.0.4')

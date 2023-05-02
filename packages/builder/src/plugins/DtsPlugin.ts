@@ -1,9 +1,8 @@
-import dtsGenerator from 'dts-generator'
+import { Dts } from '../lib/dts'
 import { pathExists, readJSON } from 'fs-extra'
 import { logError, logInfo, logSuccess } from '../lib/logger'
 import type { Compiler } from 'webpack'
-import type { IDtsGeneratorModule, IPathResolver } from '../interfaces'
-import { getDir, getName, resolvePath } from '../lib/paths'
+import type { IPathResolver } from '../interfaces'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 
@@ -38,7 +37,6 @@ class DtsPlugin {
           const packageInfo: any = await readJSON(this.path.resolve(p, 'package.json'))
           const typesFile = packageInfo.types
           const packageName: string = packageInfo.name
-          const packageMain: string | undefined = packageInfo.main
           const projectPath = this.path.resolve(p)
           const typesFilePath = this.path.resolve(p, typesFile)
           const tsconfigPath = this.path.resolve(p, 'tsconfig.json')
@@ -55,34 +53,12 @@ class DtsPlugin {
 
           logInfo('[dts]', packageName, 'generation started')
 
-          const main = '/' + (packageMain?.replace(/^\//, '').replace(/\.js$/, '') || 'index')
+          const dts = new Dts()
 
-          await dtsGenerator({
-            prefix: '',
+          await dts.generate({
             name: packageName,
-            main,
-            eol: '\n',
-            project: projectPath,
-            exclude: [
-              '**/*.{test,spec}.{ts,tsx}'
-            ],
-            out: typesFilePath,
-            resolveModuleId: ({ currentModuleId }) => {
-              const isIndexModule = getName(currentModuleId) === 'index'
-
-              return isIndexModule
-                ? [packageName, currentModuleId.replace(/\/?index$/, '')].filter(Boolean).join('/')
-                : `${packageName}/.internal/${currentModuleId.replace(/^src\/?/, '')}`
-            },
-            resolveModuleImport: ({ importedModuleId, isDeclaredExternalModule, currentModuleId }: IDtsGeneratorModule) => {
-              const fullImport = resolvePath(getDir(currentModuleId), importedModuleId)
-              const isInternalModule = !isDeclaredExternalModule &&
-                importedModuleId.indexOf('.') === 0
-
-              return isInternalModule
-                ? packageName + fullImport.replace(/^.+\/src\//, '/.internal/')
-                : importedModuleId
-            }
+            inputDir: projectPath,
+            outputPath: typesFilePath
           })
 
           logSuccess('[dts]', packageName, 'declaration at', typesFile)

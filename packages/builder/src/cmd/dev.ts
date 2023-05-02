@@ -1,14 +1,13 @@
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import type { Configuration, MultiCompiler } from 'webpack'
-import createEditor from '../createEditor'
+import { getConfigs } from '../configs'
 import { logError, logInfo } from '../lib/logger'
 import { path } from './options'
 
 const dev = async (options: any): Promise<void> => {
   const envName = 'development'
-  const editor = await createEditor(options.path, envName)
-  const configs = Object.values(editor.configs)
+  const { configs } = await getConfigs(options.path, envName)
   const compiler: MultiCompiler = webpack(configs as Configuration[])
 
   await Promise.all(configs.map(async (config, idx) => {
