@@ -1,6 +1,6 @@
 {
   "name": "@teku/builder",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Build web and game components at Teku",
   "main": "./cli/index.js",
   "bin": "./cli/index.js",

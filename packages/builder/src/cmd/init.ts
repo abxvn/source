@@ -2,7 +2,15 @@ import { logError, logInfo } from '../lib/logger'
 import { resolver } from '../lib/paths'
 import { path } from './options'
 import { getConfigs } from '../configs'
-import { type IComponentAnswer, components, type ISdkAnswer, ask, sdk } from './questions'
+import {
+  ask,
+  type IComponentAnswer,
+  components,
+  type ISdkAnswer,
+  sdk,
+  type IEditorConfigsAnswer,
+  editorConfigs
+} from './questions'
 import { getYarnVersion, copy, install, installSdk } from '../lib/packages'
 
 const configSource = resolver(resolver(__dirname).resolve('../config'))
@@ -10,6 +18,7 @@ const configSource = resolver(resolver(__dirname).resolve('../config'))
 interface IAnswers {
   components?: IComponentAnswer
   sdk?: ISdkAnswer
+  editorConfigs?: IEditorConfigsAnswer
 }
 
 interface IInstalls {
@@ -35,7 +44,8 @@ const init = async (options: any) => {
 
   const answers = await ask<IAnswers>({
     components,
-    sdk
+    sdk,
+    editorConfigs
   })
 
   components.choices?.forEach(name => {
@@ -58,7 +68,9 @@ const init = async (options: any) => {
     dev: []
   })
 
-  logInfo('[init] install components ...')
+  if (installs.all.length && installs.dev.length) {
+    logInfo('[init] install components ...')
+  }
 
   // install
   if (installs.all.length) {
@@ -92,6 +104,15 @@ const init = async (options: any) => {
     copies.push({
       from: configSource.resolve('_.eslintrc.js'),
       to: editor.path.resolve('.eslintrc.js')
+    })
+  }
+
+  if (answers.editorConfigs) {
+    ['.editorconfig', '.gitignore', '.gitattributes'].forEach(name => {
+      copies.push({
+        from: configSource.resolve(`.editor/${name}`),
+        to: editor.path.resolve(name)
+      })
     })
   }
 

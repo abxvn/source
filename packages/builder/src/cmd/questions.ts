@@ -19,9 +19,17 @@ export const sdk: ConfirmQuestionOptions = {
 }
 export type ISdkAnswer = boolean
 
+export const editorConfigs: ConfirmQuestionOptions = {
+  message: 'Copy editconfig, git config files?',
+  type: 'confirm',
+  default: true
+}
+export type IEditorConfigsAnswer = boolean
+
 const allQuestions: any = {
   components,
-  sdk
+  sdk,
+  editorConfigs
 }
 
 type IAskQuestionName = keyof typeof allQuestions
