@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
 import { getConfigs } from '../configs'
-import { logError, logEntries, log } from '../lib/logger'
+import { logError, logEntries, log, logSuccess, logInfo } from '../lib/logger'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
 import { nodeEnv, path } from './options'
 import { type IBuildEnvironment } from '../interfaces'
@@ -19,11 +19,11 @@ const build = async (options: IBuildOptions): Promise<void> => {
     const { configs } = await getConfigs(options.path, envName)
 
     if (!configs.length) {
-      throw Error(`No entries found for "${options.path}"`)
+      throw Error(`[build] no entries found for "${options.path}"`)
     }
 
     logEntries(configs)
-
+    logInfo('[build] start')
     configs.forEach(config => config.plugins.push(new ProgressReportPlugin()))
 
     await new Promise<void>((resolve, reject) => {
@@ -44,6 +44,8 @@ const build = async (options: IBuildOptions): Promise<void> => {
         }
       })
     })
+
+    logSuccess('[build] done')
   } catch (err: any) {
     logError(err.message)
   }

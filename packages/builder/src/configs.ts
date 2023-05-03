@@ -36,7 +36,8 @@ export const getConfigs = async (
   return {
     editor,
     configs: Object.keys(configs).map(configName => Object.assign(configs[configName], {
-      name: chalk.bold.underline.greenBright(configName)
+      name: chalk.bold.underline.greenBright(configName),
+      plugins: configs[configName].plugins.filter(Boolean)
     }))
   }
 }

@@ -14,12 +14,16 @@ export class PathResolver implements IPathResolver {
     return normalize(_relative(this.rootPath, normalize(fullPath)))
   }
 
+  relativeList (fullPaths: string[]) {
+    return fullPaths.map(fullPath => this.relative(fullPath))
+  }
+
   includes (fullPath: string): boolean {
     return normalize(fullPath).indexOf(this.rootPath) === 0
   }
 
   resolve (...paths: string[]) {
-    return normalize(_resolve(this.rootPath, ...paths.map(p => p.replace(/^\/+/, ''))))
+    return normalize(_resolve(this.rootPath, ...paths.filter(Boolean).map(p => p.replace(/^\/+/, ''))))
   }
 
   resolveList (paths: string[]) {
@@ -35,9 +39,10 @@ export class PathResolver implements IPathResolver {
   }
 }
 
-export const normalize = (path: string) => path.replace(/\\/g, '/')
+export const normalize = (path: string) => path?.replace(/\\/g, '/') || ''
 export const getDir = (path: string) => normalize(path).replace(/\/[^/]+\/?$/, '')
 export const getName = (path: string) => basename(normalize(path))
 export const resolver = (rootPath: string): IPathResolver => new PathResolver(rootPath)
 export const resolve = (path: string) => normalize(_resolve(path))
 export const merge = (...paths: string[]) => normalize(join(...paths))
+export const removeExt = (path: string) => path?.replace(/\.([^/]+)$/, '')

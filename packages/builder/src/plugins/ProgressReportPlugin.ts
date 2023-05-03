@@ -7,13 +7,13 @@ type IEvents = Partial<Record<IEventName, any>>
 export default class ProgressReportPlugin {
   private readonly events: IEvents = {
     beforeRun (compiler: Compiler) {
-      logInfo(`${compiler.name as string}: started building`)
+      logProgress(`${compiler.name as string}: start building`)
     },
     compilation (compilation: Compilation) {
       logProgress(`${compilation.compiler.name as string}: compiling`)
     },
     afterCompile (compilation: Compilation) {
-      logSuccess(`${compilation.compiler.name as string}: compiled`)
+      logProgress(`${compilation.compiler.name as string}: compiled`)
     }
   }
 

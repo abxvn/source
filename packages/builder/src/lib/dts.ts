@@ -7,20 +7,21 @@ import {
   createCompilerHost,
   createProgram,
   createSourceFile,
-  ScriptTarget
-} from 'typescript'
-import type {
-  SourceFile,
-  Node,
-  Diagnostic,
-  CompilerOptions,
-  ImportDeclaration,
-  ExternalModuleReference,
-  StringLiteral,
-  ExportAssignment,
-  ExportDeclaration,
-  ModuleDeclaration,
-  LiteralExpression
+  ScriptTarget,
+  type NamedExports
+  ,
+  type SourceFile,
+  type Node,
+  type Diagnostic,
+  type CompilerOptions,
+  type ImportDeclaration,
+  type ExternalModuleReference,
+  type StringLiteral,
+  type ExportAssignment,
+  type ExportDeclaration,
+  type ModuleDeclaration,
+  type LiteralExpression,
+  type VariableStatement
 } from 'typescript'
 import { getDir, merge, normalize, resolve, resolver } from './paths'
 import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from 'fs-extra'
@@ -92,7 +93,7 @@ export class Dts extends EventEmitter {
     // TODO should compilerOptions.baseDir come into play?
     const writeInputDir = resolver(compilerOptions.rootDir || projectPath || inDir.rootPath)
     const writeOutputDir = compilerOptions.outDir || outDir.rootPath
-    const generatedFiles = inDir.resolveList(files)
+    const generatedFiles = files
 
     const params = [
       `baseDir = "${writeInputDir.rootPath}"`,
@@ -211,9 +212,7 @@ export class DtsWriter extends EventEmitter {
     const outDir = resolver(outputPath).dir()
     const inDir = resolver(inputDir)
     const main = `${this.options.name}/${this.options.main?.replace(/^\/+/, '') || 'index'}`
-    let mainFound = false
-    let mainExportAll = false
-    let mainExportDefault = false
+    let mainExports: string[] = []
 
     this.listExternals(sourceFiles)
 
@@ -255,12 +254,8 @@ export class DtsWriter extends EventEmitter {
 
       // We can optionally output the main module if there's something to export.
       if (main === resolvedModuleId) {
-        mainFound = true
         this.emit('log:verbose', `[dtsw] main found ${main}`)
-        forEachChild(sourceFile, node => {
-          mainExportAll = mainExportAll || NodeKinds.isExportDeclaration(node)
-          mainExportDefault = mainExportDefault || NodeKinds.isExportAssignment(node)
-        })
+        mainExports = this.getModuleExports(sourceFile)
       }
 
       const emitOutput = program.emit(sourceFile, (filePath: string, data: string) => {
@@ -288,9 +283,7 @@ export class DtsWriter extends EventEmitter {
       return false // continue
     })
 
-    if (mainFound) {
-      this.writeMainDeclaration(compilerOptions.target, mainExportAll, mainExportDefault)
-    }
+    this.writeMainDeclaration(compilerOptions.target, mainExports)
 
     this.output.close()
     this.emit('log', '[dtsw] done')
@@ -346,40 +339,78 @@ export class DtsWriter extends EventEmitter {
 
     if ((declarationFile as any).externalModuleIndicator) {
       this.writeExternalDeclaration(declarationFile, currentModule)
-    } else {
-      if (currentModule === '../tests/mocks/mockScript') {
-        console.log(declarationFile.text)
-      }
-
+    } else if (filePath !== this.output?.path) {
       this.emit('log', `[dtsw] declare ${currentModule} from text`)
       this.writeOutput(declarationFile.text)
       this.emit('log:verbose', `[dtsw] declare ${currentModule} done`)
+    } else {
+      this.emit('log:verbose', `[dtsw] declare ignored ${currentModule}`)
     }
   }
 
-  private writeMainDeclaration (buildTarget?: ScriptTarget, mainExportAll = false, mainExportDefault = false) {
+  private writeMainDeclaration (buildTarget?: ScriptTarget, mainExports: string[] = []) {
+    if (!mainExports.length) {
+      return
+    }
+
     const main = `${this.options.name}/${this.options.main as string}`
+    const declarations: string[] = []
 
     this.emit('log', `[dtsw] declare:main ${main}`)
-
-    const declarations: string[] = []
 
     if (!buildTarget || buildTarget < ScriptTarget.ES2015) {
       this.emit('log:verbose', '[dtsw] declare:main require')
       declarations.push(`import main = require('${main}');`)
       declarations.push('export = main;')
     } else {
-      if (mainExportDefault) {
+      if (mainExports.includes('default')) {
         this.emit('log:verbose', '[dtsw] declare:main export default')
-        declarations.push(`export {default} from '${main}';`)
+        declarations.push(`export { default } from '${main}';`)
       }
-      if (mainExportAll) {
+
+      // could be * or named exports
+      const hasOtherExports = mainExports.some(e => e !== 'default')
+
+      if (hasOtherExports) {
         this.emit('log:verbose', '[dtsw] declare:main export *')
         declarations.push(`export * from '${main}';`)
       }
     }
 
+    if (!declarations.length) {
+      this.emit('log', '[dtsw] declare:main no valid exports')
+    }
+
     this.writeOutputModule(this.options.name, declarations)
+  }
+
+  private getModuleExports (sourceFile: SourceFile) {
+    // collected named expxorts
+    // or variable statement with modifier export keyword
+    // or *
+    // or default
+    const exportedNames: string[] = []
+
+    forEachChild(sourceFile, node => {
+      if (NodeKinds.isExportAssignment(node)) {
+        exportedNames.push('default')
+      } else if (NodeKinds.isExportDeclaration(node)) {
+        exportedNames.push('*')
+      } else if (NodeKinds.isNamedExports(node)) {
+        node.elements.forEach(element => {
+          exportedNames.push(element.propertyName?.getText() || element.name.getText())
+        })
+      } else if (
+        NodeKinds.isVariableStatement(node) &&
+        node.modifiers?.some(m => m.kind === SyntaxKind.ExportKeyword)
+      ) {
+        if (node.declarationList.declarations.length) {
+          exportedNames.push(node.declarationList.declarations[0].name.getText())
+        }
+      }
+    })
+
+    return exportedNames
   }
 
   private writeExternalDeclaration (declarationFile: SourceFile, currentModule: string) {
@@ -426,7 +457,7 @@ export class DtsWriter extends EventEmitter {
     })
 
     const declarationLines = content.join('')
-      .split('\n')
+      .split(/[\r\n]+/)
       .filter(line => line && line !== 'export {};')
 
     this.writeOutputModule(resolvedModuleId, declarationLines)
@@ -452,7 +483,6 @@ export class DtsWriter extends EventEmitter {
   }
 
   private resolveModule (resolution: IModuleResolution) {
-    // TODO
     let resolvedId = resolution.currentModule
 
     if (this.options.resolvedModule) {
@@ -516,6 +546,12 @@ export const NodeKinds = {
   isExportAssignment (node: Node): node is ExportAssignment {
     return node && node.kind === SyntaxKind.ExportAssignment
   },
+  isNamedExports (node: Node): node is NamedExports {
+    return node && node.kind === SyntaxKind.NamedExports
+  },
+  isVariableStatement (node: Node): node is VariableStatement {
+    return node && node.kind === SyntaxKind.VariableStatement
+  },
   isModuleDeclaration (node: Node): node is ModuleDeclaration {
     return node && node.kind === SyntaxKind.ModuleDeclaration
   }
@@ -563,9 +599,6 @@ const parseTsConfig = async (fileName: string): Promise<{
   fileNames: string[]
   compilerOptions: CompilerOptions
 }> => {
-  // TODO this needs a better design than merging stuff into options.
-  // the trouble is what to do when no tsconfig is specified...
-
   const configText = await readFile(fileName, { encoding: 'utf8' })
   const result = parseConfigFileTextToJson(fileName, configText)
 

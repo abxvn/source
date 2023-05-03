@@ -6,7 +6,7 @@ const { bold, red, gray } = chalk
 export const log = console.log.bind(console)
 
 export const logInfo = (...items: any[]) => {
-  console.info(bold.cyan('ℹ'), ...items)
+  console.info(bold.blueBright('ℹ'), ...items)
 }
 
 export const logProgress = (...items: any[]) => {

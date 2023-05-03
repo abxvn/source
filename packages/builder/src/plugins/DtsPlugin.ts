@@ -1,8 +1,9 @@
 import { Dts } from '../lib/dts'
 import { pathExists, readJSON } from 'fs-extra'
-import { logError, logInfo, logProgress, logSuccess } from '../lib/logger'
+import { logError, logInfo, logProgress, logSuccess, logWarn } from '../lib/logger'
 import type { Compiler } from 'webpack'
 import type { IPathResolver } from '../interfaces'
+import { removeExt } from '../lib/paths'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 
@@ -40,13 +41,14 @@ class DtsPlugin {
           const projectPath = this.path.resolve(p)
           const typesFilePath = this.path.resolve(p, typesFile)
           const tsconfigPath = this.path.resolve(p, 'tsconfig.json')
+          const packageMain: string = packageInfo.main || 'index'
 
           if (!typesFile) {
             return
           }
 
           if (!await pathExists(tsconfigPath)) {
-            logInfo('[dts]', packageName, ' generation ignored, required tsconfig')
+            logWarn('[dts]', packageName, ' generation ignored, required tsconfig')
 
             return
           }
@@ -54,12 +56,14 @@ class DtsPlugin {
           const dts = new Dts()
 
           dts.on('log', message => { logProgress(message) })
+          // dts.on('log:verbose', message => { logProgress(message) })
           logInfo('[dts]', packageName, 'generation started')
 
           await dts.generate({
             name: packageName,
             inputDir: projectPath,
-            outputPath: typesFilePath
+            outputPath: typesFilePath,
+            main: removeExt(packageMain.replace(/^(\.\/?)+/, ''))
           })
 
           logSuccess('[dts]', packageName, 'declaration at', typesFile)

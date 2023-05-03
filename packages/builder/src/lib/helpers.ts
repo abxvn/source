@@ -4,6 +4,7 @@ import type {
   ITargetedExpandedEntries,
   IPathResolver
 } from '../interfaces'
+import { resolve } from './paths'
 
 export { stat } from 'fs-extra'
 
@@ -16,7 +17,7 @@ export const expandTargetedEntries = async (
   return files.reduce<ITargetedExpandedEntries>(
     (targetedEntries, f: string) => {
       const relativePath = path.relative(f)
-      const fullPath = path.resolve(f)
+      const fullPath = resolve(path.relative(f))
       const target = /\/(scripts|dev|web)\//.test(relativePath) ? 'web' : 'node'
 
       return {
