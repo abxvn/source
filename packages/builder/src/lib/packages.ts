@@ -13,7 +13,7 @@ export const install = async (...packages: string[]) => {
   subProcess.stdout?.on('data', (chunk: Buffer) => {
     const line = chunk.toString()
 
-    if (!line.includes('fetched from the remote registry')) {
+    if (!line.includes('fetched from')) {
       process.stdout.write(line)
     }
   })
