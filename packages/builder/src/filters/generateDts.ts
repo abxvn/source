@@ -8,7 +8,7 @@ const generateDts: IFilter = async ({ editor }) => {
       ...config,
       plugins: [
         ...config.plugins,
-        editor.options.envName === 'production' && new DtsPlugin(editor.path)
+        editor.options.envName === 'production' && new DtsPlugin(editor.path.rootPath)
       ]
     }))
   }

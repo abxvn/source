@@ -23,11 +23,12 @@ import {
   type LiteralExpression,
   type VariableStatement
 } from 'typescript'
-import { getDir, merge, normalize, resolve, resolver } from './paths'
-import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from 'fs-extra'
-import { type IPathResolver } from '../interfaces'
 import { minimatch } from 'minimatch'
 import EventEmitter from 'events'
+import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from 'fs-extra'
+
+import { getDir, merge, normalize, resolve, resolver } from '../paths'
+import { type IPathResolver } from '../../interfaces'
 
 const EOL = '\n'
 const DTSLEN = '.d.ts'.length

@@ -1,14 +1,19 @@
-import { Dts } from '../lib/dts'
-import { pathExists, readJSON } from 'fs-extra'
-import { logError, logInfo, logProgress, logSuccess, logWarn } from '../lib/logger'
 import type { Compiler } from 'webpack'
-import type { IPathResolver } from '../interfaces'
-import { removeExt } from '../lib/paths'
+import { pathExists, readJSON } from 'fs-extra'
+
+import { Dts } from '../../lib/dts'
+import { logError, logInfo, logProgress, logSuccess, logWarn } from '../../lib/logger'
+import type { IPathResolver } from '../../interfaces'
+import { removeExt, resolver } from '../../lib/paths'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 
 class DtsPlugin {
-  constructor (private readonly path: IPathResolver) {}
+  readonly path: IPathResolver
+
+  constructor (private readonly rootPath: string) {
+    this.path = resolver(rootPath)
+  }
 
   apply (compiler: Compiler) {
     let builtModulePaths: string[] = []

@@ -120,6 +120,9 @@ dist
 **/*.cache
 **/.env
 **/index.js
+!packages/builder/src/lib/dts/index.js
+!packages/builder/src/lib/paths/index.js
+!packages/builder/src/plugins/DtsPlugin/index.js
 
 tmp/
 **/tmp
