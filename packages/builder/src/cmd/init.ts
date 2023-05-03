@@ -68,6 +68,8 @@ const init = async (options: any) => {
     dev: []
   })
 
+  installs.all.push('@teku/resolve')
+
   if (installs.all.length && installs.dev.length) {
     logInfo('[init] install components ...')
   }
@@ -88,10 +90,16 @@ const init = async (options: any) => {
     await installSdk('vscode')
   }
 
-  const copies: Array<{ from: string, to: string }> = [{
-    from: configSource.resolve('.vscode'),
-    to: editor.path.resolve('.vscode')
-  }]
+  const copies: Array<{ from: string, to: string }> = [
+    {
+      from: configSource.resolve('.'),
+      to: editor.path.resolve('.vscode')
+    },
+    {
+      from: configSource.resolve('_tsconfig.json'),
+      to: editor.path.resolve('tsconfig.json')
+    }
+  ]
 
   if (deps.jest) {
     copies.push({
@@ -108,10 +116,10 @@ const init = async (options: any) => {
   }
 
   if (answers.editorConfigs) {
-    ['.editorconfig', '.gitignore', '.gitattributes'].forEach(name => {
+    ['editorconfig', 'gitignore', 'gitattributes'].forEach(name => {
       copies.push({
         from: configSource.resolve(`.editor/${name}`),
-        to: editor.path.resolve(name)
+        to: editor.path.resolve(`.${name}`)
       })
     })
   }

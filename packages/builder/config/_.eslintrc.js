@@ -90,7 +90,7 @@ module.exports = {
       },
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: resolveSync('@teku/builder/config/ts/tsconfig.eslint.json'),
+        project: resolveSync('./tsconfig.json'),
         ecmaVersion: 8,
         ecmaFeatures: {
           experimentalObjectRestSpread: true

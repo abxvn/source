@@ -52,7 +52,10 @@ exports = module.exports = {
           {
             loader: require.resolve('ts-loader'),
             options: {
-              configFile: resolvePath('config/ts/tsconfig.packages.json')
+              configFile: resolvePath('./tsconfig.json'),
+              compilerOptions: {
+                projectDir: __dirname
+              }
             }
           }
         ],

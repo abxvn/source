@@ -5,8 +5,8 @@ module.exports = {
   // testEnvironment: 'node'
   transform: {
     '^.+\\.tsx?$': [
-      'ts-jest',
-      { tsconfig: require.resolve('./config/ts/tsconfig.packages.json') }
+      'ts-jest'
+      // { tsconfig: require('@teku/resolve').resolve('./custom.config.json') }
     ]
   }
 }

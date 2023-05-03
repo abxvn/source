@@ -27,7 +27,7 @@ const devServer: IFilter = async ({ editor }) => {
         return
       }
 
-      const newConfigName = `${config.target as string}:dev:${editor.path.relative(devDirPath)}`
+      const newConfigName = `${config.target as string}:dev:${devDirPath}`
 
       newDevConfigs[newConfigName] = {
         ...config,
