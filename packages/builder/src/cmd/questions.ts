@@ -8,7 +8,7 @@ export const components: CheckBoxOptions = {
   message: 'Select components to install',
   type: 'checkbox',
   choices: ['webpack', 'typescript', 'eslint', 'jest'],
-  default: ['webpack', 'typescript']
+  default: ['webpack', 'typescript', 'eslint', 'jest']
 }
 export type IComponentAnswer = string[]
 

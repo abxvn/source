@@ -95,4 +95,6 @@ export interface IPathResolver {
   includes: (fullPath: string) => boolean
   resolveList: (paths: string[]) => string[]
   dir: () => IPathResolver
+  // alias of resolve, but return IPathResolver
+  res: (...paths: string[]) => IPathResolver
 }

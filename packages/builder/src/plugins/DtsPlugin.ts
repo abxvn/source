@@ -1,6 +1,6 @@
 import { Dts } from '../lib/dts'
 import { pathExists, readJSON } from 'fs-extra'
-import { logError, logInfo, logSuccess } from '../lib/logger'
+import { logError, logInfo, logProgress, logSuccess } from '../lib/logger'
 import type { Compiler } from 'webpack'
 import type { IPathResolver } from '../interfaces'
 
@@ -51,9 +51,10 @@ class DtsPlugin {
             return
           }
 
-          logInfo('[dts]', packageName, 'generation started')
-
           const dts = new Dts()
+
+          dts.on('log', message => { logProgress(message) })
+          logInfo('[dts]', packageName, 'generation started')
 
           await dts.generate({
             name: packageName,

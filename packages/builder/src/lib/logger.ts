@@ -1,12 +1,20 @@
 import chalk from 'chalk'
 import type { IWebpackConfig } from '../interfaces'
 
-const { bold } = chalk
+const { bold, red, gray } = chalk
 
 export const log = console.log.bind(console)
 
 export const logInfo = (...items: any[]) => {
   console.info(bold.cyan('ℹ'), ...items)
+}
+
+export const logProgress = (...items: any[]) => {
+  console.info(gray('➤'), ...items)
+}
+
+export const logWarn = (...items: any[]) => {
+  console.info(red('△'), ...items)
 }
 
 export const logError = (...items: any[]) => {

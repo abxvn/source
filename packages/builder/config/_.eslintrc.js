@@ -1,5 +1,3 @@
-const { resolveSync } = require('@teku/resolve')
-
 module.exports = {
   extends: [
     'eslint:recommended',
@@ -90,7 +88,7 @@ module.exports = {
       },
       parser: '@typescript-eslint/parser',
       parserOptions: {
-        project: resolveSync('./tsconfig.json'),
+        project: require.resolve('./tsconfig.json'),
         ecmaVersion: 8,
         ecmaFeatures: {
           experimentalObjectRestSpread: true

@@ -19,7 +19,7 @@ export class PathResolver implements IPathResolver {
   }
 
   resolve (...paths: string[]) {
-    return normalize(_resolve(this.rootPath, ...paths))
+    return normalize(_resolve(this.rootPath, ...paths.map(p => p.replace(/^\/+/, ''))))
   }
 
   resolveList (paths: string[]) {
@@ -28,6 +28,10 @@ export class PathResolver implements IPathResolver {
 
   dir (): IPathResolver {
     return resolver(getDir(this.rootPath))
+  }
+
+  res (...paths: string[]) {
+    return resolver(this.resolve(...paths))
   }
 }
 

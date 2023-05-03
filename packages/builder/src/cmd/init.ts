@@ -1,4 +1,4 @@
-import { logError, logInfo } from '../lib/logger'
+import { logError, logInfo, logProgress, logSuccess } from '../lib/logger'
 import { resolver } from '../lib/paths'
 import { path } from './options'
 import { getConfigs } from '../configs'
@@ -12,8 +12,8 @@ import {
   editorConfigs
 } from './questions'
 import { getYarnVersion, copy, install, installSdk } from '../lib/packages'
-
-const configSource = resolver(resolver(__dirname).resolve('../config'))
+import { type IConfigEditor } from '../interfaces'
+import chalk from 'chalk'
 
 interface IAnswers {
   components?: IComponentAnswer
@@ -68,72 +68,61 @@ const init = async (options: any) => {
     dev: []
   })
 
-  installs.all.push('@teku/resolve')
+  installs.all.push('@teku/builder')
 
-  if (installs.all.length && installs.dev.length) {
-    logInfo('[init] install components ...')
-  }
-
-  // install
-  if (installs.all.length) {
-    logInfo('[init] install', installs.all.join(' '))
-    await install(...installs.all)
-  }
-
-  if (installs.dev.length) {
-    logInfo('[init] install dev', installs.dev.join(' '))
-    await install('--dev', ...installs.dev)
-  }
+  await installPackages(installs)
 
   if (answers.sdk === true) {
     logInfo('[init] install sdk')
-    await installSdk('vscode')
+    // await installSdk('vscode')
   }
 
-  const copies: Array<{ from: string, to: string }> = [
-    {
-      from: configSource.resolve('.'),
-      to: editor.path.resolve('.vscode')
-    },
-    {
-      from: configSource.resolve('_tsconfig.json'),
-      to: editor.path.resolve('tsconfig.json')
-    }
+  const copies: string[] = [
+    '.vscode',
+    'packages/dummy/package.json',
+    'packages/dummy/cli/_index.ts'
   ]
 
+  if (deps.typescript) {
+    copies.push('_tsconfig.json')
+  }
+
   if (deps.jest) {
-    copies.push({
-      from: configSource.resolve('_jest.config.js'),
-      to: editor.path.resolve('jest.config.js')
-    })
+    copies.push('_jest.config.js')
   }
 
   if (deps.eslint) {
-    copies.push({
-      from: configSource.resolve('_.eslintrc.js'),
-      to: editor.path.resolve('.eslintrc.js')
-    })
+    copies.push('_.eslintrc.js')
   }
 
   if (answers.editorConfigs) {
     ['editorconfig', 'gitignore', 'gitattributes'].forEach(name => {
-      copies.push({
-        from: configSource.resolve(`.editor/${name}`),
-        to: editor.path.resolve(`.${name}`)
-      })
+      copies.push(`_/_.${name}`)
     })
   }
 
   if (copies.length) {
     logInfo('[init] copy configs ...')
 
-    await Promise.all(
-      copies.map(async ({ from, to }) => {
-        logInfo(`[init] copy ${editor.path.relative(to)}`)
-        await copy(from, to)
-      })
-    )
+    await copyConfigs(editor, ...copies)
   }
+
+  logInfo(`You probably want to add your workspaces path into package.json:
+  ${chalk.italic`"workspaces:" [
+    "packages/*"
+  ]`}`)
+
+  if (deps.eslint) {
+    logInfo(`Essential config for linting command:
+    ${chalk.italic`"lint": "eslint packages/**/*.ts"`}`)
+  }
+
+  if (deps.jest) {
+    logInfo(`Essential config for testing command:
+    ${chalk.italic`"test": "jest"`}`)
+  }
+
+  logSuccess('[init] done')
 }
 
 export default {
@@ -142,4 +131,34 @@ export default {
   options: [
     path
   ]
+}
+
+const configSource = resolver(__dirname).res('../config')
+const copyConfigs = async (editor: IConfigEditor, ...subPaths: string[]) => {
+  const sourcePaths = configSource.resolveList(subPaths)
+  const destPaths = editor.path.resolveList(
+    subPaths.map(p => p.replace(/\/?_/g, '/'))
+  )
+
+  await Promise.all(destPaths.map(async (dest, idx) => {
+    logProgress(`[init] copy ${dest}`)
+    await copy(sourcePaths[idx], dest)
+  }))
+}
+
+const installPackages = async (installs: IInstalls) => {
+  if (installs.all.length && installs.dev.length) {
+    logInfo('[init] install components ...')
+  }
+
+  // install
+  if (installs.all.length) {
+    logInfo('[init] install', installs.all.join(' '))
+    // await install(...installs.all)
+  }
+
+  if (installs.dev.length) {
+    logInfo('[init] install dev', installs.dev.join(' '))
+    // await install('--dev', ...installs.dev)
+  }
 }

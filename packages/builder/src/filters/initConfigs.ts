@@ -38,7 +38,7 @@ export const getConfig = async (
             {
               loader: await resolve('ts-loader'),
               options: {
-                configFile: editor.path.resolve('config/ts/tsconfig.packages.json')
+                configFile: editor.path.resolve('tsconfig.json')
               }
             }
           ],

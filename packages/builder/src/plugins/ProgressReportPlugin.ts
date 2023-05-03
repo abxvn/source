@@ -1,5 +1,5 @@
 import type { Compilation, Compiler } from 'webpack'
-import { logInfo } from '../lib/logger'
+import { logInfo, logProgress, logSuccess } from '../lib/logger'
 
 type IEventName = keyof Compiler['hooks']
 type IEvents = Partial<Record<IEventName, any>>
@@ -10,10 +10,10 @@ export default class ProgressReportPlugin {
       logInfo(`${compiler.name as string}: started building`)
     },
     compilation (compilation: Compilation) {
-      logInfo(`${compilation.compiler.name as string}: compiling`)
+      logProgress(`${compilation.compiler.name as string}: compiling`)
     },
     afterCompile (compilation: Compilation) {
-      logInfo(`${compilation.compiler.name as string}: compiled`)
+      logSuccess(`${compilation.compiler.name as string}: compiled`)
     }
   }
 
