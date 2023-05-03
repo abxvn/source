@@ -74,7 +74,7 @@ const init = async (options: any) => {
 
   if (answers.sdk === true) {
     logInfo('[init] install sdk')
-    // await installSdk('vscode')
+    await installSdk('vscode')
   }
 
   const copies: string[] = [
@@ -154,11 +154,11 @@ const installPackages = async (installs: IInstalls) => {
   // install
   if (installs.all.length) {
     logInfo('[init] install', installs.all.join(' '))
-    // await install(...installs.all)
+    await install(...installs.all)
   }
 
   if (installs.dev.length) {
     logInfo('[init] install dev', installs.dev.join(' '))
-    // await install('--dev', ...installs.dev)
+    await install('--dev', ...installs.dev)
   }
 }
