@@ -6,7 +6,7 @@ import type {
 } from '../interfaces'
 import { resolve } from './paths'
 
-export { stat } from 'fs-extra'
+export { stat, copy } from 'fs-extra'
 
 export const expandTargetedEntries = async (
   path: IPathResolver,

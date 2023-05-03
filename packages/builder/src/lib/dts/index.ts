@@ -179,6 +179,7 @@ export class DtsWriter extends EventEmitter {
   private externalModules: string[] = []
   private outDir?: IPathResolver
   private output?: WriteStream
+  private inDir?: IPathResolver
 
   constructor (options: IDtsWriterOptions) {
     super()
@@ -217,6 +218,7 @@ export class DtsWriter extends EventEmitter {
 
     this.listExternals(sourceFiles)
 
+    this.inDir = inDir
     this.outDir = outDir
     this.output = createWriteStream(outputPath, { mode: parseInt('644', 8) })
 
@@ -331,18 +333,18 @@ export class DtsWriter extends EventEmitter {
   }
 
   private writeDeclaration (declarationFile: SourceFile) {
-    if (!this.outDir) {
-      throw Error('[dtsw] output dir not provided')
-    }
-
     const filePath = resolve(declarationFile.fileName)
-    const currentModule = removeExtension(this.outDir.relative(filePath))
+    const currentModule = removeExtension(this.inDir?.relative(filePath) || '')
+
+    if (!currentModule) {
+      throw Error(`[dtsw] unable to resolve current module for ${currentModule}`)
+    }
 
     if ((declarationFile as any).externalModuleIndicator) {
       this.writeExternalDeclaration(declarationFile, currentModule)
     } else if (filePath !== this.output?.path) {
       this.emit('log', `[dtsw] declare ${currentModule} from text`)
-      this.writeOutput(declarationFile.text)
+      this.writeOutputModule(currentModule, [declarationFile.text])
       this.emit('log:verbose', `[dtsw] declare ${currentModule} done`)
     } else {
       this.emit('log:verbose', `[dtsw] declare ignored ${currentModule}`)
@@ -403,11 +405,10 @@ export class DtsWriter extends EventEmitter {
         })
       } else if (
         NodeKinds.isVariableStatement(node) &&
-        node.modifiers?.some(m => m.kind === SyntaxKind.ExportKeyword)
+        node.modifiers?.some(m => m.kind === SyntaxKind.ExportKeyword) &&
+        node.declarationList.declarations.length
       ) {
-        if (node.declarationList.declarations.length) {
-          exportedNames.push(node.declarationList.declarations[0].name.getText())
-        }
+        exportedNames.push('*')
       }
     })
 

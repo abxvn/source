@@ -28,7 +28,11 @@ export const getMockConfig = async (
   options?: Partial<IBuilderOptions>,
   filters?: Record<string, IFilter>
 ) => {
-  const editor = new MockConfigEditor('development', __dirname, filters)
+  const editor = new MockConfigEditor({
+    envName: 'development',
+    rootPath: __dirname,
+    filters
+  })
 
   if (options) {
     editor.updateOptions(options)

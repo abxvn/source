@@ -18,24 +18,14 @@ export interface IConfigCustomizer {
   filter: (filterName: string, filter: IFilter | null) => void
 }
 
-export type IConfigDepVersion = string
-
-export interface IConfigDep {
-  name: string
-  version: IConfigDepVersion
-  dev?: boolean
+export interface IConfigEditorParams {
+  envName: IBuildEnvironment
+  rootPath: string
+  filters?: Record<string, IFilter>
+  deps?: IConfigDeps
 }
 
-export interface IConfigDepWithDeps extends IConfigDep {
-  dependencies?: IConfigDep[]
-}
-
-export interface IConfigWithDependencies {
-  getDeps: () => Record<string, IConfigDep>
-  dep: (name: string, version?: IConfigDepVersion) => IConfigDepWithDeps
-}
-
-export interface IConfigEditor extends IConfigWithDependencies {
+export interface IConfigEditor extends IConfigCustomizer {
   readonly path: IPathResolver
   readonly configs: IWebpackConfigs
   readonly entries: ITargetedExpandedEntries
@@ -46,6 +36,7 @@ export type IEntryFilter = (targetEntries: ITargetedExpandedEntries) => Promise<
 
 export interface IFilterOptions {
   editor: IConfigEditor
+  deps: IConfigDeps
 }
 export interface IFilterOutput {
   configs: IWebpackConfigs
@@ -97,4 +88,26 @@ export interface IPathResolver {
   dir: () => IPathResolver
   // alias of resolve, but return IPathResolver
   res: (...paths: string[]) => IPathResolver
+}
+
+export type IDepVersion = string
+
+export interface IDep {
+  name: string
+  version: IDepVersion
+  dev?: boolean
+}
+
+export interface IDepWithDeps extends IDep {
+  dependencies?: IDep[]
+}
+
+export type IConfigDepsSetData = Partial<Omit<IDepWithDeps, 'name'>>
+export interface IConfigDeps {
+  dependencies: string[]
+  requires: (name: string) => boolean
+
+  get: (name: string) => IDepWithDeps | undefined
+  set: (name: string, data: IConfigDepsSetData) => IDepWithDeps
+  unset: (name: string) => void
 }

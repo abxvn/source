@@ -1,7 +1,5 @@
 import execa from 'execa'
 
-export { copy } from 'fs-extra'
-
 const cliOptions = {
   env: {
     FORCE_COLOR: 'true'
@@ -11,7 +9,16 @@ const cliOptions = {
 export const install = async (...packages: string[]) => {
   const subProcess = execa('yarn', ['add', '--silent', ...packages], cliOptions)
 
-  subProcess.stdout?.pipe(process.stdout)
+  // Filter out specific messages and pipe remaining output to process.stdout
+  subProcess.stdout?.on('data', (chunk: Buffer) => {
+    const line = chunk.toString()
+
+    if (!line.includes('fetched from the remote registry')) {
+      process.stdout.write(line)
+    }
+  })
+
+  subProcess.stderr?.pipe(process.stderr)
 
   await subProcess
 }

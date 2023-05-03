@@ -82,7 +82,9 @@ declare module '@teku/resolve/index' {
   export { resolveSync } from '@teku/resolve/src/resolveSync';
   export type { IModule, IResolveOptions } from '@teku/resolve/src/interfaces';
 }
-
+declare module 'tests/mocks/mockScript' {
+  
+}
 declare module '@teku/resolve' {
   export * from '@teku/resolve/index';
 }

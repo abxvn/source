@@ -82,8 +82,8 @@ exports = module.exports = {
       },
       raw: true
     }),
-    new DtsPlugin(rootPath)
-  ],
+    envName === 'production' && new DtsPlugin(rootPath)
+  ].filter(Boolean),
   watch: envName === 'development',
   watchOptions: {
     ignored: [

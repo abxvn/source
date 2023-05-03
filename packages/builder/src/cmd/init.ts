@@ -1,5 +1,7 @@
+import chalk from 'chalk'
 import { logError, logInfo, logProgress, logSuccess } from '../lib/logger'
 import { resolver } from '../lib/paths'
+import { copy } from '../lib/helpers'
 import { path } from './options'
 import { getConfigs } from '../configs'
 import {
@@ -11,9 +13,8 @@ import {
   type IEditorConfigsAnswer,
   editorConfigs
 } from './questions'
-import { getYarnVersion, copy, install, installSdk } from '../lib/packages'
+import { getYarnVersion, install, installSdk } from '../lib/packages'
 import { type IConfigEditor } from '../interfaces'
-import chalk from 'chalk'
 
 interface IAnswers {
   components?: IComponentAnswer
@@ -21,14 +22,9 @@ interface IAnswers {
   editorConfigs?: IEditorConfigsAnswer
 }
 
-interface IInstalls {
-  dev: string[]
-  all: string[]
-}
-
 const init = async (options: any) => {
   const envName = 'development'
-  const { editor } = await getConfigs(options.path, envName)
+  const { editor, deps } = await getConfigs(options.path, envName)
 
   const yarnVersion = await getYarnVersion()
 
@@ -50,27 +46,13 @@ const init = async (options: any) => {
 
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
-      editor.dep(name, '')
+      deps.unset(name)
     }
   })
 
-  const deps = editor.getDeps()
-  const installs = Object.values(deps).reduce<IInstalls>((installs, { name, version, dev }) => {
-    if (dev) {
-      installs.dev.push(`${name}@${version}`)
-    } else {
-      installs.all.push(`${name}@${version}`)
-    }
+  deps.set('@teku/builder', { version: '*' })
 
-    return installs
-  }, {
-    all: [],
-    dev: []
-  })
-
-  installs.all.push('@teku/builder')
-
-  await installPackages(installs)
+  await installPackages(deps.dependencies)
 
   if (answers.sdk === true) {
     logInfo('[init] install sdk')
@@ -80,20 +62,11 @@ const init = async (options: any) => {
   const copies: string[] = [
     '.vscode',
     'packages/dummy/package.json',
-    'packages/dummy/cli/_index.ts'
-  ]
-
-  if (deps.typescript) {
-    copies.push('_tsconfig.json')
-  }
-
-  if (deps.jest) {
-    copies.push('_jest.config.js')
-  }
-
-  if (deps.eslint) {
-    copies.push('_.eslintrc.js')
-  }
+    'packages/dummy/cli/_index.ts',
+    deps.requires('typescript') ? '_tsconfig.json' : '',
+    deps.requires('jest') ? '_jest.config.js' : '',
+    deps.requires('eslint') ? '_.eslintrc.js' : ''
+  ].filter(Boolean)
 
   if (answers.editorConfigs) {
     ['editorconfig', 'gitignore', 'gitattributes'].forEach(name => {
@@ -112,12 +85,12 @@ const init = async (options: any) => {
     "packages/*"
   ]`}`)
 
-  if (deps.eslint) {
+  if (deps.requires('eslint')) {
     logInfo(`Essential config for linting command:
     ${chalk.italic`"lint": "eslint packages/**/*.ts"`}`)
   }
 
-  if (deps.jest) {
+  if (deps.requires('jest')) {
     logInfo(`Essential config for testing command:
     ${chalk.italic`"test": "jest"`}`)
   }
@@ -146,19 +119,25 @@ const copyConfigs = async (editor: IConfigEditor, ...subPaths: string[]) => {
   }))
 }
 
-const installPackages = async (installs: IInstalls) => {
-  if (installs.all.length && installs.dev.length) {
-    logInfo('[init] install components ...')
+const installPackages = async (dependencies: string[], withDevs = true) => {
+  const mainDependencies: string[] = []
+  const devDependencies: string[] = []
+
+  dependencies.forEach(dependency => {
+    if (dependency.indexOf('dev//') === 0) {
+      devDependencies.push(dependency.replace('dev//', ''))
+    } else {
+      mainDependencies.push(dependency)
+    }
+  })
+
+  if (mainDependencies.length) {
+    logInfo('[init] install', mainDependencies.join(' '))
+    await install(...mainDependencies)
   }
 
-  // install
-  if (installs.all.length) {
-    logInfo('[init] install', installs.all.join(' '))
-    await install(...installs.all)
-  }
-
-  if (installs.dev.length) {
-    logInfo('[init] install dev', installs.dev.join(' '))
-    await install('--dev', ...installs.dev)
+  if (withDevs && devDependencies.length) {
+    logInfo('[init] install dev', devDependencies.join(' '))
+    await install('--dev', ...devDependencies)
   }
 }

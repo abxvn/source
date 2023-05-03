@@ -1,5 +1,5 @@
 import type { Compilation, Compiler } from 'webpack'
-import { logInfo, logProgress, logSuccess } from '../lib/logger'
+import { logProgress } from '../lib/logger'
 
 type IEventName = keyof Compiler['hooks']
 type IEvents = Partial<Record<IEventName, any>>
