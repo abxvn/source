@@ -1,9 +1,11 @@
 import type { IBuildEnvironment, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
-import { pathExists } from 'fs-extra'
+import { pathExists, readdir } from 'fs-extra'
 import chalk from 'chalk'
 import ConfigDeps from './ConfigDeps'
+import { resolver } from './lib/paths'
+import { module } from './lib/packages'
 
 export const getConfigs = async (
   rootPath: string,
@@ -19,9 +21,27 @@ export const getConfigs = async (
 
   addDefaultDeps(deps)
 
+  console.log([
+    editor.path.rootPath,
+    customConfigFile,
+    await pathExists(customConfigFile),
+    __dirname,
+    resolver(__dirname).relative(customConfigFile),
+    await pathExists(resolver(__dirname).relative(customConfigFile))
+  ])
+
+  console.log(await readdir(editor.path.rootPath))
+
+  console.log(await module(customConfigFile))
+
+  console.log([
+    require.resolve(customConfigFile),
+    require.resolve(resolver(__dirname).relative(customConfigFile))
+  ])
+
   if (await pathExists(customConfigFile)) {
     // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const customConfig = require(customConfigFile)
+    const customConfig = require(`./${resolver(process.cwd()).relative(customConfigFile)}`)
 
     if (customConfig.options) {
       editor.updateOptions(customConfig.options)

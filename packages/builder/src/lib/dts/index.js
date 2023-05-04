@@ -1,1 +1,628 @@
-(()=>{"use strict";var e={9574:function(e,t,r){var o=this&&this.__awaiter||function(e,t,r,o){return new(r||(r=Promise))((function(i,s){function n(e){try{a(o.next(e))}catch(e){s(e)}}function l(e){try{a(o.throw(e))}catch(e){s(e)}}function a(e){var t;e.done?i(e.value):(t=e.value,t instanceof r?t:new r((function(e){e(t)}))).then(n,l)}a((o=o.apply(e,t||[])).next())}))},i=this&&this.__asyncValues||function(e){if(!Symbol.asyncIterator)throw new TypeError("Symbol.asyncIterator is not defined.");var t,r=e[Symbol.asyncIterator];return r?r.call(e):(e="function"==typeof __values?__values(e):e[Symbol.iterator](),t={},o("next"),o("throw"),o("return"),t[Symbol.asyncIterator]=function(){return this},t);function o(r){t[r]=e[r]&&function(t){return new Promise((function(o,i){!function(e,t,r,o){Promise.resolve(o).then((function(t){e({value:t,done:r})}),t)}(o,i,(t=e[r](t)).done,t.value)}))}}},s=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(t,"__esModule",{value:!0}),t.NodeKinds=t.DtsWriter=t.Dts=void 0;const n=r(4007),l=r(6828),a=s(r(2361)),d=r(4470),u=r(589);class c extends a.default{generate({name:e,main:t,inputDir:r,projectPath:i,outputPath:s,files:l=[],references:a=[]}){var c;return o(this,void 0,void 0,(function*(){let o={};const m=(0,u.resolver)(r),p=s?(0,u.resolver)(s).dir():m;if(s=s||m.resolve("index.d.ts"),this.emit("log",`[dts] generate for ${r} > ${s}`),!l.length||i){const e=yield this.getTsConfig(r,i);l=e.fileNames,o=e.compilerOptions}o.declaration=!0,o.target=o.target||n.ScriptTarget.Latest,o.outDir=o.outDir||p.rootPath;const v=(0,u.resolver)(o.rootDir||i||m.rootPath),f=o.outDir||p.rootPath,g=l,x=[`baseDir = "${v.rootPath}"`,`target = ${o.target.toString()}`,`outDir = ${f||""}`,`rootDir = ${o.rootDir||""}`,`moduleResolution = ${(null===(c=o.moduleResolution)||void 0===c?void 0:c.toString())||""}`,"files =",...g.map((e=>`  ${e}`))];this.emit("log:verbose","[dts] params:\n"+x.map((e=>`  ${e}`)).join("\n")),yield(0,d.mkdirp)((0,u.getDir)(s));const w=new h({name:e,main:t,references:a});w.on("log",(e=>this.emit("log",e))),w.on("log:verbose",(e=>this.emit("log:verbose",e))),yield w.write(v.rootPath,s,o,g)}))}getTsConfig(e,t){var r,s,n,l;return o(this,void 0,void 0,(function*(){const o=(0,u.resolver)(e),a=[t&&(0,u.resolver)(t).resolve("tsconfig.json"),t,o.resolve("tsconfig.json")].filter(Boolean);try{for(var c,h=!0,m=i(a);c=yield m.next(),!(r=c.done);){l=c.value,h=!1;try{const e=l;if(yield(0,d.pathExists)(e))return this.emit("log",`[dts] tsconfig from ${e}`),yield p(e)}finally{h=!0}}}catch(e){s={error:e}}finally{try{h||r||!(n=m.return)||(yield n.call(m))}finally{if(s)throw s.error}}throw Error(`Can't find tsconfig in ${t||o.rootPath}`)}))}}t.Dts=c;class h extends a.default{constructor(e){super(),this.ident="  ",this.externalModules=[],this.options=Object.assign({main:"index",references:[],excludedPatterns:["**/node_modules/**/*.d.ts","**/.yarn/**/*.d.ts"]},e),this.options.main||(this.options.main="index")}write(e,t,r,i){var s;return o(this,void 0,void 0,(function*(){this.externalModules=[],this.emit("log","[dtsw] start");const o=(0,n.createCompilerHost)(r),a=(0,n.createProgram)(i,r,o),c=a.getSourceFiles(),h=(0,u.resolver)(t).dir(),m=(0,u.resolver)(e),p=`${this.options.name}/${(null===(s=this.options.main)||void 0===s?void 0:s.replace(/^\/+/,""))||"index"}`;let g=[];this.listExternals(c),this.inDir=m,this.outDir=h,this.output=(0,d.createWriteStream)(t,{mode:parseInt("644",8)}),this.emit("log","[dtsw] process files"),this.writeReferences(),c.some((e=>{var t;const o=(0,u.normalize)(e.fileName);if(!m.includes(o))return this.emit("log:verbose",`[dtsw] process: ignored library ${o}`),!1;if(null===(t=this.options.excludedPatterns)||void 0===t?void 0:t.some((e=>(0,l.minimatch)(o,e))))return this.emit("log:verbose",`[dtsw] process: excluded ${o}`),!1;if(".d.ts"===o.slice(-5))return this.emit("log:verbose",`[dtsw] process: d.ts ${o}`),this.writeDeclaration(e),!1;const i=this.resolveModule({currentModule:m.relative(f(e.fileName))});p===i&&(this.emit("log:verbose",`[dtsw] main found ${p}`),g=this.getModuleExports(e));const s=a.emit(e,((e,t)=>{".d.ts"===e.slice(-5)?(this.emit("log:verbose",`[dtsw] process: ts ${e}`),this.writeDeclaration((0,n.createSourceFile)(e,t,r.target,!0))):this.emit("log:verbose",`[dtsw] process: ignored d.ts ${e}`)}));if(s.emitSkipped||s.diagnostics.length>0)throw this.emit("log:verbose",`[dtsw] process: ts ${o} error`),v(s.diagnostics.concat(a.getSemanticDiagnostics(e)).concat(a.getSyntacticDiagnostics(e)).concat(a.getDeclarationDiagnostics(e)));return!1})),this.writeMainDeclaration(r.target,g),this.output.close(),this.emit("log","[dtsw] done")}))}listExternals(e){this.emit("log","[dtsw] list externals"),e.forEach((e=>{m(e,(e=>{if(t.NodeKinds.isModuleDeclaration(e)){const r=e.name;t.NodeKinds.isStringLiteral(r)&&this.externalModules.push(r.text)}}))})),this.externalModules.length?this.emit("log:verbose",["[dtsw] list externals:",...this.externalModules.map((e=>`  - ${e}`))].join("\n")):this.emit("log:verbose","[dtsw] list externals: no externals found")}writeReferences(){var e;const t=/^\./;null===(e=this.options.references)||void 0===e||e.forEach((e=>{t.test(e)?(this.emit("log",`[dtsw] ref.path ${e}`),this.writeOutput(`/// <reference path="${e}" />`)):(this.emit("log",`[dtsw] ref.types ${e}`),this.writeOutput(`/// <reference types="${e}" />`))}))}writeDeclaration(e){var t,r;const o=(0,u.resolve)(e.fileName),i=f((null===(t=this.inDir)||void 0===t?void 0:t.relative(o))||"");if(!i)throw Error(`[dtsw] unable to resolve current module for ${i}`);e.externalModuleIndicator?this.writeExternalDeclaration(e,i):o!==(null===(r=this.output)||void 0===r?void 0:r.path)?(this.emit("log",`[dtsw] declare ${i} from text`),this.writeOutputModule(i,[e.text]),this.emit("log:verbose",`[dtsw] declare ${i} done`)):this.emit("log:verbose",`[dtsw] declare ignored ${i}`)}writeMainDeclaration(e,t=[]){if(!t.length)return;const r=`${this.options.name}/${this.options.main}`,o=[];this.emit("log",`[dtsw] declare:main ${r}`),!e||e<n.ScriptTarget.ES2015?(this.emit("log:verbose","[dtsw] declare:main require"),o.push(`import main = require('${r}');`),o.push("export = main;")):(t.includes("default")&&(this.emit("log:verbose","[dtsw] declare:main export default"),o.push(`export { default } from '${r}';`)),t.some((e=>"default"!==e))&&(this.emit("log:verbose","[dtsw] declare:main export *"),o.push(`export * from '${r}';`))),o.length||this.emit("log","[dtsw] declare:main no valid exports"),this.writeOutputModule(this.options.name,o)}getModuleExports(e){const r=[];return(0,n.forEachChild)(e,(e=>{var o;t.NodeKinds.isExportAssignment(e)?r.push("default"):t.NodeKinds.isExportDeclaration(e)?r.push("*"):t.NodeKinds.isNamedExports(e)?e.elements.forEach((e=>{var t;r.push((null===(t=e.propertyName)||void 0===t?void 0:t.getText())||e.name.getText())})):t.NodeKinds.isVariableStatement(e)&&(null===(o=e.modifiers)||void 0===o?void 0:o.some((e=>e.kind===n.SyntaxKind.ExportKeyword)))&&e.declarationList.declarations.length&&r.push("*")})),r}writeExternalDeclaration(e,r){const o=this.resolveModule({currentModule:r});this.emit("log",`[dtsw] declare:external ${o} (${e.fileName})`);const i=m(e,(e=>{if(t.NodeKinds.isExternalModuleReference(e)){const t=e.expression,i=this.resolveImport({importedModule:t.text,currentModule:r});return this.emit("log:verbose",`[dtsw] declare:external ${o}: require ${i}`),` require('${i}')`}if(t.NodeKinds.isDeclareKeyWord(e))return this.emit("log:verbose",`[dtsw] declare:external ${o}: ignored declare keyword`),"";if(t.NodeKinds.isStringLiteral(e)&&e.parent&&(t.NodeKinds.isExportDeclaration(e.parent)||t.NodeKinds.isImportDeclaration(e.parent))){const t=e.text,i=this.resolveImport({importedModule:t,currentModule:r});if(i)return this.emit("log:verbose",`[dtsw] declare:external ${o}: import ${i}`),` '${i}'`}})).join("").split(/[\r\n]+/).filter((e=>e&&"export {};"!==e));this.writeOutputModule(o,i),this.emit("log:verbose",`[dtsw] declare:external ${o} done`)}writeOutput(e,t=0){if(!this.output)throw Error("[dtsw] output stream not set");this.output.write(e+"\n")}writeOutputModule(e,t=[]){t.length&&(this.writeOutput(`declare module '${e}' {`),this.writeOutput(t.map((e=>`${this.ident}${e}`.replace(/\s{4}/g,this.ident))).join("\n")),this.writeOutput("}"))}resolveModule(e){let t=e.currentModule;return t=this.options.resolvedModule?this.options.resolvedModule(e)||t:t.replace(/^.+\/src/,"src"),t=`${this.options.name}/${t}`,this.emit("log:verbose",`[dtsw] resolve ${t} (${e.currentModule})`),t}resolveImport(e){const t=this.externalModules.includes(e.importedModule)||!/^\./.test(e.importedModule),r=t?e.importedModule:(0,u.merge)((0,u.getDir)(e.currentModule),e.importedModule);let o=r;return o=this.options.resolvedImport?this.options.resolvedImport({currentModule:e.currentModule,importedModule:r,isExternal:t})||o:o.replace(/^.+\/src/,"src"),o=t?o:`${this.options.name}/${o}`,this.emit("log:verbose",`[dtsw] resolve:import ${o}${t?" (external)":""} (${e.currentModule}, ${e.importedModule})`),o}}t.DtsWriter=h,t.NodeKinds={isDeclareKeyWord:e=>e&&e.kind===n.SyntaxKind.DeclareKeyword,isImportDeclaration:e=>e&&e.kind===n.SyntaxKind.ImportDeclaration,isExternalModuleReference:e=>e&&e.kind===n.SyntaxKind.ExternalModuleReference,isStringLiteral:e=>e&&e.kind===n.SyntaxKind.StringLiteral,isExportDeclaration:e=>e&&e.kind===n.SyntaxKind.ExportDeclaration,isExportAssignment:e=>e&&e.kind===n.SyntaxKind.ExportAssignment,isNamedExports:e=>e&&e.kind===n.SyntaxKind.NamedExports,isVariableStatement:e=>e&&e.kind===n.SyntaxKind.VariableStatement,isModuleDeclaration:e=>e&&e.kind===n.SyntaxKind.ModuleDeclaration};const m=(e,t)=>{const r=[];let o=0;return function i(s){!function(t){r.push(e.text.slice(o,t.pos)),o=t.pos}(s);const l=t(s);void 0!==l?(r.push(l),function(e){o=e.end}(s)):(0,n.forEachChild)(s,i)}(e),r.push(e.text.slice(o)),r.filter(Boolean)},p=e=>o(void 0,void 0,void 0,(function*(){var t;const r=yield(0,d.readFile)(e,{encoding:"utf8"}),o=(0,n.parseConfigFileTextToJson)(e,r);if(o.error)throw v([o.error]);const i=o.config,s=(0,n.parseJsonConfigFileContent)(i,n.sys,(0,u.getDir)(e));if(null===(t=s.errors)||void 0===t?void 0:t.length)throw v(s.errors);return{fileNames:s.fileNames,compilerOptions:s.options}})),v=e=>{const t=["Declaration generation failed"];e.forEach((e=>{const r="string"==typeof e.messageText?e.messageText:e.messageText.messageText;if(e.file){const o=e.file.getLineAndCharacterOfPosition(e.start||0);t.push(`${e.file.fileName}(${o.line+1},${o.character+1}): error TS${e.code}: ${r}`)}else t.push(`error TS${e.code}: ${r}`)}));const r=new Error(t.join("\n"));return r.name="EmitterError",r},f=e=>e.replace(/(\.d)?\.ts$/,"")},589:(e,t,r)=>{Object.defineProperty(t,"__esModule",{value:!0}),t.removeExt=t.merge=t.resolve=t.resolver=t.getName=t.getDir=t.normalize=t.PathResolver=t.resolvePath=void 0;const o=r(1017);var i=r(1017);Object.defineProperty(t,"resolvePath",{enumerable:!0,get:function(){return i.resolve}});class s{constructor(e){this.rootPath=(0,t.normalize)((0,o.resolve)(e))}relative(e){return(0,t.normalize)((0,o.relative)(this.rootPath,(0,t.normalize)(e)))}relativeList(e){return e.map((e=>this.relative(e)))}includes(e){return 0===(0,t.normalize)(e).indexOf(this.rootPath)}resolve(...e){return(0,t.normalize)((0,o.resolve)(this.rootPath,...e.filter(Boolean).map((e=>e.replace(/^\/+/,"")))))}resolveList(e){return e.map((e=>this.resolve(e)))}dir(){return(0,t.resolver)((0,t.getDir)(this.rootPath))}res(...e){return(0,t.resolver)(this.resolve(...e))}}t.PathResolver=s,t.normalize=e=>(null==e?void 0:e.replace(/\\/g,"/"))||"",t.getDir=e=>(0,t.normalize)(e).replace(/\/[^/]+\/?$/,""),t.getName=e=>(0,o.basename)((0,t.normalize)(e)),t.resolver=e=>new s(e),t.resolve=e=>(0,t.normalize)((0,o.resolve)(e)),t.merge=(...e)=>(0,t.normalize)((0,o.join)(...e)),t.removeExt=e=>null==e?void 0:e.replace(/\.([^/]+)$/,"")},4470:e=>{e.exports=require("fs-extra")},6828:e=>{e.exports=require("minimatch")},4007:e=>{e.exports=require("typescript")},2361:e=>{e.exports=require("events")},1017:e=>{e.exports=require("path")}},t={},r=function r(o){var i=t[o];if(void 0!==i)return i.exports;var s=t[o]={exports:{}};return e[o].call(s.exports,s,s.exports,r),s.exports}(9574);module.exports=r})();
+
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./packages/builder/src/lib/dts/index.ts":
+/*!***********************************************!*\
+  !*** ./packages/builder/src/lib/dts/index.ts ***!
+  \***********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __asyncValues = (this && this.__asyncValues) || function (o) {
+    if (!Symbol.asyncIterator) throw new TypeError("Symbol.asyncIterator is not defined.");
+    var m = o[Symbol.asyncIterator], i;
+    return m ? m.call(o) : (o = typeof __values === "function" ? __values(o) : o[Symbol.iterator](), i = {}, verb("next"), verb("throw"), verb("return"), i[Symbol.asyncIterator] = function () { return this; }, i);
+    function verb(n) { i[n] = o[n] && function (v) { return new Promise(function (resolve, reject) { v = o[n](v), settle(resolve, reject, v.done, v.value); }); }; }
+    function settle(resolve, reject, d, v) { Promise.resolve(v).then(function(v) { resolve({ value: v, done: d }); }, reject); }
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.NodeKinds = exports.DtsWriter = exports.Dts = void 0;
+const typescript_1 = __webpack_require__(/*! typescript */ "typescript");
+const minimatch_1 = __webpack_require__(/*! minimatch */ "minimatch");
+const events_1 = __importDefault(__webpack_require__(/*! events */ "events"));
+const fs_extra_1 = __webpack_require__(/*! fs-extra */ "fs-extra");
+const paths_1 = __webpack_require__(/*! ../paths */ "./packages/builder/src/lib/paths/index.ts");
+const EOL = '\n';
+const DTSLEN = '.d.ts'.length;
+class Dts extends events_1.default {
+    generate({ name, main, inputDir, projectPath, outputPath, files = [], references = [] }) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            let compilerOptions = {};
+            const inDir = (0, paths_1.resolver)(inputDir);
+            const outDir = outputPath ? (0, paths_1.resolver)(outputPath).dir() : inDir;
+            outputPath = outputPath || inDir.resolve('index.d.ts');
+            this.emit('log', `[dts] generate for ${inputDir} > ${outputPath}`);
+            if (!files.length || projectPath) {
+                const tsConfig = yield this.getTsConfig(inputDir, projectPath);
+                files = tsConfig.fileNames;
+                compilerOptions = tsConfig.compilerOptions;
+            }
+            compilerOptions.declaration = true;
+            compilerOptions.target = compilerOptions.target || typescript_1.ScriptTarget.Latest;
+            compilerOptions.outDir = compilerOptions.outDir || outDir.rootPath;
+            const writeInputDir = (0, paths_1.resolver)(compilerOptions.rootDir || projectPath || inDir.rootPath);
+            const writeOutputDir = compilerOptions.outDir || outDir.rootPath;
+            const generatedFiles = files;
+            const params = [
+                `baseDir = "${writeInputDir.rootPath}"`,
+                `target = ${compilerOptions.target.toString()}`,
+                `outDir = ${writeOutputDir || ''}`,
+                `rootDir = ${compilerOptions.rootDir || ''}`,
+                `moduleResolution = ${((_a = compilerOptions.moduleResolution) === null || _a === void 0 ? void 0 : _a.toString()) || ''}`,
+                'files =',
+                ...generatedFiles.map(file => `  ${file}`)
+            ];
+            this.emit('log:verbose', '[dts] params:\n' + params.map(p => `  ${p}`).join('\n'));
+            yield (0, fs_extra_1.mkdirp)((0, paths_1.getDir)(outputPath));
+            const writer = new DtsWriter({
+                name,
+                main,
+                references
+            });
+            writer.on('log', msg => this.emit('log', msg));
+            writer.on('log:verbose', msg => this.emit('log:verbose', msg));
+            yield writer.write(writeInputDir.rootPath, outputPath, compilerOptions, generatedFiles);
+        });
+    }
+    getTsConfig(inputDir, projectPath) {
+        var _a, e_1, _b, _c;
+        return __awaiter(this, void 0, void 0, function* () {
+            const inDir = (0, paths_1.resolver)(inputDir);
+            const tsconfigFiles = [
+                projectPath && (0, paths_1.resolver)(projectPath).resolve('tsconfig.json'),
+                projectPath,
+                inDir.resolve('tsconfig.json')
+            ].filter(Boolean);
+            try {
+                for (var _d = true, tsconfigFiles_1 = __asyncValues(tsconfigFiles), tsconfigFiles_1_1; tsconfigFiles_1_1 = yield tsconfigFiles_1.next(), _a = tsconfigFiles_1_1.done, !_a;) {
+                    _c = tsconfigFiles_1_1.value;
+                    _d = false;
+                    try {
+                        const tsconfigFile = _c;
+                        if (yield (0, fs_extra_1.pathExists)(tsconfigFile)) {
+                            this.emit('log', `[dts] tsconfig from ${tsconfigFile}`);
+                            return yield parseTsConfig(tsconfigFile);
+                        }
+                    }
+                    finally {
+                        _d = true;
+                    }
+                }
+            }
+            catch (e_1_1) { e_1 = { error: e_1_1 }; }
+            finally {
+                try {
+                    if (!_d && !_a && (_b = tsconfigFiles_1.return)) yield _b.call(tsconfigFiles_1);
+                }
+                finally { if (e_1) throw e_1.error; }
+            }
+            throw Error(`Can't find tsconfig in ${projectPath || inDir.rootPath}`);
+        });
+    }
+}
+exports.Dts = Dts;
+class DtsWriter extends events_1.default {
+    constructor(options) {
+        super();
+        this.ident = '  ';
+        this.externalModules = [];
+        this.options = Object.assign({ main: 'index', references: [], excludedPatterns: [
+                '**/node_modules/**/*.d.ts',
+                '**/.yarn/**/*.d.ts'
+            ] }, options);
+        if (!this.options.main) {
+            this.options.main = 'index';
+        }
+    }
+    write(inputDir, outputPath, compilerOptions, filePaths) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            this.externalModules = [];
+            this.emit('log', '[dtsw] start');
+            const host = (0, typescript_1.createCompilerHost)(compilerOptions);
+            const program = (0, typescript_1.createProgram)(filePaths, compilerOptions, host);
+            const sourceFiles = program.getSourceFiles();
+            const outDir = (0, paths_1.resolver)(outputPath).dir();
+            const inDir = (0, paths_1.resolver)(inputDir);
+            const main = `${this.options.name}/${((_a = this.options.main) === null || _a === void 0 ? void 0 : _a.replace(/^\/+/, '')) || 'index'}`;
+            let mainExports = [];
+            this.listExternals(sourceFiles);
+            this.inDir = inDir;
+            this.outDir = outDir;
+            this.output = (0, fs_extra_1.createWriteStream)(outputPath, { mode: parseInt('644', 8) });
+            this.emit('log', '[dtsw] process files');
+            this.writeReferences();
+            sourceFiles.some(sourceFile => {
+                var _a;
+                const filePath = (0, paths_1.normalize)(sourceFile.fileName);
+                if (!inDir.includes(filePath)) {
+                    this.emit('log:verbose', `[dtsw] process: ignored library ${filePath}`);
+                    return false;
+                }
+                if ((_a = this.options.excludedPatterns) === null || _a === void 0 ? void 0 : _a.some(pattern => (0, minimatch_1.minimatch)(filePath, pattern))) {
+                    this.emit('log:verbose', `[dtsw] process: excluded ${filePath}`);
+                    return false;
+                }
+                if (filePath.slice(-DTSLEN) === '.d.ts') {
+                    this.emit('log:verbose', `[dtsw] process: d.ts ${filePath}`);
+                    this.writeDeclaration(sourceFile);
+                    return false;
+                }
+                const resolvedModuleId = this.resolveModule({
+                    currentModule: inDir.relative(removeExtension(sourceFile.fileName))
+                });
+                if (main === resolvedModuleId) {
+                    this.emit('log:verbose', `[dtsw] main found ${main}`);
+                    mainExports = this.getModuleExports(sourceFile);
+                }
+                const emitOutput = program.emit(sourceFile, (filePath, data) => {
+                    if (filePath.slice(-DTSLEN) !== '.d.ts') {
+                        this.emit('log:verbose', `[dtsw] process: ignored d.ts ${filePath}`);
+                        return;
+                    }
+                    this.emit('log:verbose', `[dtsw] process: ts ${filePath}`);
+                    this.writeDeclaration((0, typescript_1.createSourceFile)(filePath, data, compilerOptions.target, true));
+                });
+                if (emitOutput.emitSkipped || emitOutput.diagnostics.length > 0) {
+                    this.emit('log:verbose', `[dtsw] process: ts ${filePath} error`);
+                    throw getTsError(emitOutput.diagnostics
+                        .concat(program.getSemanticDiagnostics(sourceFile))
+                        .concat(program.getSyntacticDiagnostics(sourceFile))
+                        .concat(program.getDeclarationDiagnostics(sourceFile)));
+                }
+                return false;
+            });
+            this.writeMainDeclaration(compilerOptions.target, mainExports);
+            this.output.close();
+            this.emit('log', '[dtsw] done');
+        });
+    }
+    listExternals(declarationFiles) {
+        this.emit('log', '[dtsw] list externals');
+        declarationFiles.forEach(sourceFile => {
+            processTree(sourceFile, (node) => {
+                if (exports.NodeKinds.isModuleDeclaration(node)) {
+                    const name = node.name;
+                    if (exports.NodeKinds.isStringLiteral(name)) {
+                        this.externalModules.push(name.text);
+                    }
+                }
+                return undefined;
+            });
+        });
+        if (!this.externalModules.length) {
+            this.emit('log:verbose', '[dtsw] list externals: no externals found');
+        }
+        else {
+            this.emit('log:verbose', [
+                '[dtsw] list externals:',
+                ...this.externalModules.map(name => `  - ${name}`)
+            ].join('\n'));
+        }
+    }
+    writeReferences() {
+        var _a;
+        const pathRefRegex = /^\./;
+        (_a = this.options.references) === null || _a === void 0 ? void 0 : _a.forEach((ref) => {
+            if (pathRefRegex.test(ref)) {
+                this.emit('log', `[dtsw] ref.path ${ref}`);
+                this.writeOutput(`/// <reference path="${ref}" />`);
+            }
+            else {
+                this.emit('log', `[dtsw] ref.types ${ref}`);
+                this.writeOutput(`/// <reference types="${ref}" />`);
+            }
+        });
+    }
+    writeDeclaration(declarationFile) {
+        var _a, _b;
+        const filePath = (0, paths_1.resolve)(declarationFile.fileName);
+        const currentModule = removeExtension(((_a = this.inDir) === null || _a === void 0 ? void 0 : _a.relative(filePath)) || '');
+        if (!currentModule) {
+            throw Error(`[dtsw] unable to resolve current module for ${currentModule}`);
+        }
+        if (declarationFile.externalModuleIndicator) {
+            this.writeExternalDeclaration(declarationFile, currentModule);
+        }
+        else if (filePath !== ((_b = this.output) === null || _b === void 0 ? void 0 : _b.path)) {
+            this.emit('log', `[dtsw] declare ${currentModule} from text`);
+            this.writeOutputModule(currentModule, [declarationFile.text]);
+            this.emit('log:verbose', `[dtsw] declare ${currentModule} done`);
+        }
+        else {
+            this.emit('log:verbose', `[dtsw] declare ignored ${currentModule}`);
+        }
+    }
+    writeMainDeclaration(buildTarget, mainExports = []) {
+        if (!mainExports.length) {
+            return;
+        }
+        const main = `${this.options.name}/${this.options.main}`;
+        const declarations = [];
+        this.emit('log', `[dtsw] declare:main ${main}`);
+        if (!buildTarget || buildTarget < typescript_1.ScriptTarget.ES2015) {
+            this.emit('log:verbose', '[dtsw] declare:main require');
+            declarations.push(`import main = require('${main}');`);
+            declarations.push('export = main;');
+        }
+        else {
+            if (mainExports.includes('default')) {
+                this.emit('log:verbose', '[dtsw] declare:main export default');
+                declarations.push(`export { default } from '${main}';`);
+            }
+            const hasOtherExports = mainExports.some(e => e !== 'default');
+            if (hasOtherExports) {
+                this.emit('log:verbose', '[dtsw] declare:main export *');
+                declarations.push(`export * from '${main}';`);
+            }
+        }
+        if (!declarations.length) {
+            this.emit('log', '[dtsw] declare:main no valid exports');
+        }
+        this.writeOutputModule(this.options.name, declarations);
+    }
+    getModuleExports(sourceFile) {
+        const exportedNames = [];
+        (0, typescript_1.forEachChild)(sourceFile, node => {
+            var _a;
+            if (exports.NodeKinds.isExportAssignment(node)) {
+                exportedNames.push('default');
+            }
+            else if (exports.NodeKinds.isExportDeclaration(node)) {
+                exportedNames.push('*');
+            }
+            else if (exports.NodeKinds.isNamedExports(node)) {
+                node.elements.forEach(element => {
+                    var _a;
+                    exportedNames.push(((_a = element.propertyName) === null || _a === void 0 ? void 0 : _a.getText()) || element.name.getText());
+                });
+            }
+            else if (exports.NodeKinds.isVariableStatement(node) &&
+                ((_a = node.modifiers) === null || _a === void 0 ? void 0 : _a.some(m => m.kind === typescript_1.SyntaxKind.ExportKeyword)) &&
+                node.declarationList.declarations.length) {
+                exportedNames.push('*');
+            }
+        });
+        return exportedNames;
+    }
+    writeExternalDeclaration(declarationFile, currentModule) {
+        const resolvedModuleId = this.resolveModule({ currentModule });
+        this.emit('log', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`);
+        const content = processTree(declarationFile, (node) => {
+            if (exports.NodeKinds.isExternalModuleReference(node)) {
+                const expression = node.expression;
+                const resolvedImportedModule = this.resolveImport({
+                    importedModule: expression.text,
+                    currentModule
+                });
+                this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId}: require ${resolvedImportedModule}`);
+                return ` require('${resolvedImportedModule}')`;
+            }
+            else if (exports.NodeKinds.isDeclareKeyWord(node)) {
+                this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId}: ignored declare keyword`);
+                return '';
+            }
+            else if (exports.NodeKinds.isStringLiteral(node) && node.parent &&
+                (exports.NodeKinds.isExportDeclaration(node.parent) || exports.NodeKinds.isImportDeclaration(node.parent))) {
+                const text = node.text;
+                const resolvedImportedModule = this.resolveImport({
+                    importedModule: text,
+                    currentModule
+                });
+                if (resolvedImportedModule) {
+                    this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId}: import ${resolvedImportedModule}`);
+                    return ` '${resolvedImportedModule}'`;
+                }
+            }
+            return undefined;
+        });
+        const declarationLines = content.join('')
+            .split(/[\r\n]+/)
+            .filter(line => line && line !== 'export {};');
+        this.writeOutputModule(resolvedModuleId, declarationLines);
+        this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} done`);
+    }
+    writeOutput(message, postIdentChange = 0) {
+        if (!this.output) {
+            throw Error('[dtsw] output stream not set');
+        }
+        this.output.write(message + EOL);
+    }
+    writeOutputModule(name, lines = []) {
+        if (!lines.length) {
+            return;
+        }
+        this.writeOutput(`declare module '${name}' {`);
+        this.writeOutput(lines.map(line => `${this.ident}${line}`.replace(/\s{4}/g, this.ident)).join(EOL));
+        this.writeOutput('}');
+    }
+    resolveModule(resolution) {
+        let resolvedId = resolution.currentModule;
+        if (this.options.resolvedModule) {
+            resolvedId = this.options.resolvedModule(resolution) || resolvedId;
+        }
+        else {
+            resolvedId = resolvedId.replace(/^.+\/src/, 'src');
+        }
+        resolvedId = `${this.options.name}/${resolvedId}`;
+        this.emit('log:verbose', `[dtsw] resolve ${resolvedId} (${resolution.currentModule})`);
+        return resolvedId;
+    }
+    resolveImport(resolution) {
+        const isExternal = this.externalModules.includes(resolution.importedModule) ||
+            !/^\./.test(resolution.importedModule);
+        const importedModule = !isExternal
+            ? (0, paths_1.merge)((0, paths_1.getDir)(resolution.currentModule), resolution.importedModule)
+            : resolution.importedModule;
+        let resolvedId = importedModule;
+        if (this.options.resolvedImport) {
+            resolvedId = this.options.resolvedImport({
+                currentModule: resolution.currentModule,
+                importedModule,
+                isExternal
+            }) || resolvedId;
+        }
+        else {
+            resolvedId = resolvedId.replace(/^.+\/src/, 'src');
+        }
+        resolvedId = !isExternal
+            ? `${this.options.name}/${resolvedId}`
+            : resolvedId;
+        this.emit('log:verbose', `[dtsw] resolve:import ${resolvedId}${isExternal ? ' (external)' : ''} (${resolution.currentModule}, ${resolution.importedModule})`);
+        return resolvedId;
+    }
+}
+exports.DtsWriter = DtsWriter;
+exports.NodeKinds = {
+    isDeclareKeyWord(node) {
+        return node && node.kind === typescript_1.SyntaxKind.DeclareKeyword;
+    },
+    isImportDeclaration(node) {
+        return node && node.kind === typescript_1.SyntaxKind.ImportDeclaration;
+    },
+    isExternalModuleReference(node) {
+        return node && node.kind === typescript_1.SyntaxKind.ExternalModuleReference;
+    },
+    isStringLiteral(node) {
+        return node && node.kind === typescript_1.SyntaxKind.StringLiteral;
+    },
+    isExportDeclaration(node) {
+        return node && node.kind === typescript_1.SyntaxKind.ExportDeclaration;
+    },
+    isExportAssignment(node) {
+        return node && node.kind === typescript_1.SyntaxKind.ExportAssignment;
+    },
+    isNamedExports(node) {
+        return node && node.kind === typescript_1.SyntaxKind.NamedExports;
+    },
+    isVariableStatement(node) {
+        return node && node.kind === typescript_1.SyntaxKind.VariableStatement;
+    },
+    isModuleDeclaration(node) {
+        return node && node.kind === typescript_1.SyntaxKind.ModuleDeclaration;
+    }
+};
+const processTree = (sourceFile, replacer) => {
+    const codes = [];
+    let cursorPosition = 0;
+    function skip(node) {
+        cursorPosition = node.end;
+    }
+    function readThrough(node) {
+        codes.push(sourceFile.text.slice(cursorPosition, node.pos));
+        cursorPosition = node.pos;
+    }
+    function visit(node) {
+        readThrough(node);
+        const replacement = replacer(node);
+        if (replacement !== undefined) {
+            codes.push(replacement);
+            skip(node);
+        }
+        else {
+            (0, typescript_1.forEachChild)(node, visit);
+        }
+    }
+    visit(sourceFile);
+    codes.push(sourceFile.text.slice(cursorPosition));
+    return codes.filter(Boolean);
+};
+const parseTsConfig = (fileName) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const configText = yield (0, fs_extra_1.readFile)(fileName, { encoding: 'utf8' });
+    const result = (0, typescript_1.parseConfigFileTextToJson)(fileName, configText);
+    if (result.error) {
+        throw getTsError([result.error]);
+    }
+    const configObject = result.config;
+    const configParseResult = (0, typescript_1.parseJsonConfigFileContent)(configObject, typescript_1.sys, (0, paths_1.getDir)(fileName));
+    if ((_a = configParseResult.errors) === null || _a === void 0 ? void 0 : _a.length) {
+        throw getTsError(configParseResult.errors);
+    }
+    return {
+        fileNames: configParseResult.fileNames,
+        compilerOptions: configParseResult.options
+    };
+});
+const getTsError = (diagnostics) => {
+    const messages = ['Declaration generation failed'];
+    diagnostics.forEach(diagnostic => {
+        const messageText = typeof diagnostic.messageText === 'string'
+            ? diagnostic.messageText
+            : diagnostic.messageText.messageText;
+        if (diagnostic.file) {
+            const position = diagnostic.file.getLineAndCharacterOfPosition(diagnostic.start || 0);
+            messages.push(`${diagnostic.file.fileName}(${position.line + 1},${position.character + 1}): ` +
+                `error TS${diagnostic.code}: ${messageText}`);
+        }
+        else {
+            messages.push(`error TS${diagnostic.code}: ${messageText}`);
+        }
+    });
+    const error = new Error(messages.join('\n'));
+    error.name = 'EmitterError';
+    return error;
+};
+const removeExtension = (filePath) => filePath.replace(/(\.d)?\.ts$/, '');
+
+
+/***/ }),
+
+/***/ "./packages/builder/src/lib/paths/index.ts":
+/*!*************************************************!*\
+  !*** ./packages/builder/src/lib/paths/index.ts ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.removeExt = exports.merge = exports.resolve = exports.resolver = exports.getName = exports.getDir = exports.normalize = exports.PathResolver = exports.resolvePath = void 0;
+const path_1 = __webpack_require__(/*! path */ "path");
+var path_2 = __webpack_require__(/*! path */ "path");
+Object.defineProperty(exports, "resolvePath", ({ enumerable: true, get: function () { return path_2.resolve; } }));
+class PathResolver {
+    constructor(rootPath) {
+        this.rootPath = (0, exports.normalize)((0, path_1.resolve)(rootPath));
+    }
+    relative(fullPath) {
+        return (0, exports.normalize)((0, path_1.relative)(this.rootPath, (0, exports.normalize)(fullPath)));
+    }
+    relativeList(fullPaths) {
+        return fullPaths.map(fullPath => this.relative(fullPath));
+    }
+    includes(fullPath) {
+        return (0, exports.normalize)(fullPath).indexOf(this.rootPath) === 0;
+    }
+    resolve(...paths) {
+        return (0, exports.normalize)((0, path_1.resolve)(this.rootPath, ...paths.filter(Boolean).map(p => p.replace(/^\/+/, ''))));
+    }
+    resolveList(paths) {
+        return paths.map(path => this.resolve(path));
+    }
+    dir() {
+        return (0, exports.resolver)((0, exports.getDir)(this.rootPath));
+    }
+    res(...paths) {
+        return (0, exports.resolver)(this.resolve(...paths));
+    }
+}
+exports.PathResolver = PathResolver;
+const normalize = (path) => (path === null || path === void 0 ? void 0 : path.replace(/\\/g, '/')) || '';
+exports.normalize = normalize;
+const getDir = (path) => (0, exports.normalize)(path).replace(/\/[^/]+\/?$/, '');
+exports.getDir = getDir;
+const getName = (path) => (0, path_1.basename)((0, exports.normalize)(path));
+exports.getName = getName;
+const resolver = (rootPath) => new PathResolver(rootPath);
+exports.resolver = resolver;
+const resolve = (path) => (0, exports.normalize)((0, path_1.resolve)(path));
+exports.resolve = resolve;
+const merge = (...paths) => (0, exports.normalize)((0, path_1.join)(...paths));
+exports.merge = merge;
+const removeExt = (path) => path === null || path === void 0 ? void 0 : path.replace(/\.([^/]+)$/, '');
+exports.removeExt = removeExt;
+
+
+/***/ }),
+
+/***/ "fs-extra":
+/*!***************************!*\
+  !*** external "fs-extra" ***!
+  \***************************/
+/***/ ((module) => {
+
+module.exports = require("fs-extra");
+
+/***/ }),
+
+/***/ "minimatch":
+/*!****************************!*\
+  !*** external "minimatch" ***!
+  \****************************/
+/***/ ((module) => {
+
+module.exports = require("minimatch");
+
+/***/ }),
+
+/***/ "typescript":
+/*!*****************************!*\
+  !*** external "typescript" ***!
+  \*****************************/
+/***/ ((module) => {
+
+module.exports = require("typescript");
+
+/***/ }),
+
+/***/ "events":
+/*!*************************!*\
+  !*** external "events" ***!
+  \*************************/
+/***/ ((module) => {
+
+module.exports = require("events");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = require("path");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./packages/builder/src/lib/dts/index.ts");
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
+/******/ })()
+;

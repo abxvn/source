@@ -12,8 +12,7 @@ interface IInstallPackagesParams {
   deps: IConfigDeps
 }
 export const installPackages = async ({ answers, deps }: IInstallPackagesParams) => {
-// INSTALL PACKAGES & SDK
-  deps.set('@teku/builder', { version: '^0.0.' })
+  deps.set('@teku/builder', { version: '*' })
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
       deps.unset(name)

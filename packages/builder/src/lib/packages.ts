@@ -1,4 +1,7 @@
 import execa from 'execa'
+import { Module } from 'module'
+import { resolve } from './paths'
+import { readFile } from 'fs-extra'
 
 const cliOptions = {
   env: {
@@ -35,4 +38,28 @@ export const installSdk = async (name: string) => {
   subProcess.stdout?.pipe(process.stdout)
 
   await subProcess
+}
+
+console.log((Module as any)._cache)
+
+const moduleCaches: Record<string, typeof Module> = (Module as any)._cache || {}
+
+export const module = async (path: string): Promise<typeof Module> => {
+  const resolvedPath = resolve(path)
+
+  if (moduleCaches[resolvedPath]) {
+    return (moduleCaches[resolvedPath] as any).exports
+  }
+
+  const fileCode = await readFile(resolvedPath, 'utf8')
+
+  return moduleFromText(resolvedPath, fileCode)
+}
+
+export const moduleFromText = (name: string, code: string): typeof Module => {
+  const m = new Module(name)
+
+  (m)._compile(code)
+
+  return m.exports
 }

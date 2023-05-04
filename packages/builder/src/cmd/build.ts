@@ -18,6 +18,9 @@ const build = async (options: IBuildOptions): Promise<void> => {
     const envName = options.nodeEnv
     const { configs } = await getConfigs(options.path, envName)
 
+    console.log(configs[0].target, configs[0].output)
+    console.log(configs[1].target, configs[1].output)
+
     if (!configs.length) {
       throw Error(`[build] no entries found for "${options.path}"`)
     }

@@ -69,6 +69,7 @@ export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => 
     ...config,
     output: {
       ...config.output,
+      libraryTarget: 'commonjs2',
       library: {
         type: 'commonjs2'
       }
@@ -87,6 +88,7 @@ export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
     ...config,
     output: {
       ...config.output,
+      libraryTarget: 'umd',
       library: {
         type: 'umd'
       }
