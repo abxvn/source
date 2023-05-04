@@ -38,6 +38,9 @@ const init = async (options: any) => {
   await updatePackageJson({ editor, deps })
 
   logSuccess('[init] done')
+
+  logInfo(`You may also need to enabled / install recommended VSCode extensions
+  and agree if editor confirms for using workspace typescript`)
 }
 
 export default {

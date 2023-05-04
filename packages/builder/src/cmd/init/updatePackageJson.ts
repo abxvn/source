@@ -1,6 +1,6 @@
 import chalk from 'chalk'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
-import { logInfo, logWarn } from '../../lib/logger'
+import { logInfo, logProgress, logWarn } from '../../lib/logger'
 import { pathExists, readJSON, writeJSON } from 'fs-extra'
 
 interface IUpdatePackageJsonParams {
@@ -13,6 +13,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const useJest = deps.requires('jest')
 
   if (!modify) {
+    logInfo(chalk.bold.cyan`Recommended further config:`)
     logInfo(`You probably want to add your workspaces path into package.json:
     ${chalk.italic`"workspaces:" [
       "packages/*"
@@ -43,16 +44,22 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const scripts = json.scripts || {}
   const workspaces: string[] = json.workspaces || []
 
+  logProgress('[init] config script "start"')
   scripts.start = 'builder build'
+  logProgress('[init] config script "build"')
   scripts.build = 'builder build --node-env production'
+
   if (useEslint) {
+    logProgress('[init] config script "lint"')
     scripts.lint = 'eslint packages/**/*.{ts,tsx}'
   }
   if (useJest) {
+    logProgress('[init] config script "test"')
     scripts.test = 'jest'
   }
 
   if (!workspaces.some(w => w.includes('packages/'))) {
+    logProgress('[init] config add workspaces')
     workspaces.push('packages/*')
   }
 
@@ -63,4 +70,6 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   }, {
     spaces: 2
   })
+
+  logInfo('[init] config done')
 }

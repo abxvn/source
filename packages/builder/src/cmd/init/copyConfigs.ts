@@ -16,6 +16,7 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
     '.vscode',
     'packages/dummy/package.json',
     'packages/dummy/cli/_index.ts',
+    '_.yarnrc.yml',
     deps.requires('typescript') ? '_tsconfig.json' : '',
     deps.requires('jest') ? '_jest.config.js' : '',
     deps.requires('eslint') ? '_.eslintrc.js' : ''
