@@ -151,8 +151,8 @@ class DtsPlugin {
                 }
             });
         });
-        compiler.hooks.afterCompile.tapPromise('[dts] generate definitions', () => __awaiter(this, void 0, void 0, function* () {
-            yield Promise.all(builtModulePaths.map((p) => __awaiter(this, void 0, void 0, function* () {
+        compiler.hooks.afterCompile.tap('[dts] generate definitions', () => {
+            void Promise.all(builtModulePaths.map((p) => __awaiter(this, void 0, void 0, function* () {
                 try {
                     const packageInfo = yield (0, fs_extra_1.readJSON)(this.path.resolve(p, 'package.json'));
                     const typesFile = packageInfo.types;
@@ -173,15 +173,16 @@ class DtsPlugin {
                         return;
                     }
                     const dts = new index_js_1.Dts();
-                    const includeFiles = packageFiles.map(f => this.path.resolve('p', f));
-                    console.log(includeFiles);
+                    const filePatterns = packageFiles.map(f => (0, paths_1.resolver)(projectPath).relative(this.path.resolve(p, f)));
+                    dts.on('log', message => { (0, logger_1.logProgress)(message); });
                     (0, logger_1.logInfo)('[dts]', packageName, 'generation started');
                     yield dts.generate({
                         projectPath: tsconfigPath,
                         name: packageName,
                         inputDir: projectPath,
                         outputPath: typesFilePath,
-                        main: (0, paths_1.removeExt)(packageMain.replace(/^(\.\/?)+/, ''))
+                        main: (0, paths_1.removeExt)(packageMain.replace(/^(\.\/?)+/, '')),
+                        filePatterns
                     });
                     (0, logger_1.logSuccess)('[dts]', packageName, 'declaration at', typesFile);
                 }
@@ -189,7 +190,7 @@ class DtsPlugin {
                     (0, logger_1.logError)(`[dts] ${err.message}`);
                 }
             })));
-        }));
+        });
     }
 }
 exports["default"] = DtsPlugin;

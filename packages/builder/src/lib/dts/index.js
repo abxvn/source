@@ -30,7 +30,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.DtsWriter = exports.Dts = void 0;
+exports.DtsFilterWriter = exports.DtsWriter = exports.Dts = void 0;
 const typescript_1 = __webpack_require__(/*! typescript */ "typescript");
 const minimatch_1 = __webpack_require__(/*! minimatch */ "minimatch");
 const events_1 = __importDefault(__webpack_require__(/*! events */ "events"));
@@ -39,7 +39,7 @@ const paths_1 = __webpack_require__(/*! ../paths */ "./packages/builder/src/lib/
 const EOL = '\n';
 const DTSLEN = '.d.ts'.length;
 class Dts extends events_1.default {
-    generate({ name, main, inputDir, projectPath, outputPath, files = [], references = [] }) {
+    generate({ name, main, inputDir, projectPath, outputPath, files = [], references = [], filePatterns = [] }) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
             let compilerOptions = {};
@@ -73,11 +73,13 @@ class Dts extends events_1.default {
             ];
             this.emit('log:verbose', '[dts] params:\n' + params.map(p => `  ${p}`).join('\n'));
             yield (0, fs_extra_1.mkdirp)((0, paths_1.getDir)(outputPath));
-            const writer = new DtsWriter({
+            const writer = new DtsFilterWriter({
                 outputPath,
                 name,
                 main,
                 references
+            }, {
+                filePatterns
             });
             writer.on('log', msg => this.emit('log', msg));
             writer.on('log:verbose', msg => this.emit('log:verbose', msg));
@@ -125,6 +127,7 @@ class DtsWriter extends events_1.default {
     constructor(options) {
         super();
         this.ident = '  ';
+        this.mainModuleId = '';
         this.externalModules = [];
         this.options = Object.assign({ references: [], excludedPatterns: [
                 '**/node_modules/**/*.d.ts',
@@ -138,6 +141,7 @@ class DtsWriter extends events_1.default {
     write(inputDir, compilerOptions, filePaths) {
         var _a;
         return __awaiter(this, void 0, void 0, function* () {
+            this.mainModuleId = '';
             this.externalModules = [];
             this.emit('start');
             this.emit('log', '[dtsw] start');
@@ -168,14 +172,15 @@ class DtsWriter extends events_1.default {
                     return false;
                 }
                 const resolvedModuleId = this.resolveModule({
-                    currentModule: inDir.relative(removeExtension(sourceFile.fileName))
+                    currentModule: inDir.relative(removeExtension(filePath))
                 });
                 if (main === resolvedModuleId) {
+                    this.mainModuleId = resolvedModuleId;
                     this.emit('log:verbose', `[dtsw] main found ${main}`);
                     mainExports = this.getModuleExports(sourceFile);
                 }
-                const emitOutput = program.emit(sourceFile, (filePath, data) => {
-                    if (filePath.slice(-DTSLEN) !== '.d.ts') {
+                const emitOutput = program.emit(sourceFile, (emittedPath, data) => {
+                    if (emittedPath.slice(-DTSLEN) !== '.d.ts') {
                         this.emit('log:verbose', `[dtsw] process: ignored d.ts ${filePath}`);
                         return;
                     }
@@ -192,8 +197,7 @@ class DtsWriter extends events_1.default {
                 return false;
             });
             this.writeMainDeclaration(compilerOptions.target, mainExports);
-            this.emit('log', '[dtsw] done');
-            this.emit('done');
+            this.done();
         });
     }
     listExternals(declarationFiles) {
@@ -244,7 +248,7 @@ class DtsWriter extends events_1.default {
             this.writeExternalDeclaration(declarationFile, currentModule);
         }
         else if (filePath !== ((_b = this.output) === null || _b === void 0 ? void 0 : _b.path)) {
-            this.emit('log', `[dtsw] declare ${currentModule} from text`);
+            this.emit('log:verbose', `[dtsw] declare ${currentModule} from text`);
             this.writeOutputModule(currentModule, declarationFile.text);
             this.emit('log:verbose', `[dtsw] declare ${currentModule} done`);
         }
@@ -253,12 +257,15 @@ class DtsWriter extends events_1.default {
         }
     }
     writeMainDeclaration(buildTarget, mainExports = []) {
+        const main = this.mainModuleId;
+        const declarations = [];
         if (!mainExports.length) {
             return;
         }
-        const main = `${this.options.name}/${this.options.main}`;
-        const declarations = [];
-        this.emit('log', `[dtsw] declare:main ${main}`);
+        if (!main) {
+            return;
+        }
+        this.emit('log:verbose', `[dtsw] declare:main ${main}`);
         if (!buildTarget || buildTarget < typescript_1.ScriptTarget.ES2015) {
             this.emit('log:verbose', '[dtsw] declare:main require');
             declarations.push(`import main = require('${main}');`);
@@ -276,7 +283,7 @@ class DtsWriter extends events_1.default {
             }
         }
         if (!declarations.length) {
-            this.emit('log', '[dtsw] declare:main no valid exports');
+            this.emit('log:verbose', '[dtsw] declare:main no valid exports');
         }
         this.writeOutputModule(this.options.name, declarations.join(EOL));
     }
@@ -306,7 +313,7 @@ class DtsWriter extends events_1.default {
     }
     writeExternalDeclaration(declarationFile, currentModule) {
         const resolvedModuleId = this.resolveModule({ currentModule });
-        this.emit('log', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`);
+        this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`);
         const content = processTree(declarationFile, (node) => {
             if (NodeKinds.isExternalModuleReference(node)) {
                 const expression = node.expression;
@@ -341,20 +348,24 @@ class DtsWriter extends events_1.default {
     writeOutput(message) {
         this.output.write(message + EOL);
     }
-    writeOutputModule(name, contents) {
-        const lines = contents.split(/[\r\n]+|; |;$/)
+    writeOutputModule(moduleId, contents) {
+        const lines = this.filterOutput(contents);
+        if (!lines.length) {
+            return;
+        }
+        this.emit('log', `[dtsw] declared module ${moduleId}`);
+        this.writeOutput(`declare module '${moduleId}' {`);
+        this.writeOutput(lines.join(EOL));
+        this.writeOutput('}');
+    }
+    filterOutput(contents) {
+        return contents.split(/[\r\n]+|; |;$/)
             .filter(line => line && line !== 'export {};')
             .map(line => line.replace(/\t/g, this.ident))
             .map(line => `${this.ident}${line}`.replace(/\s{4}/g, this.ident)
             .replace(/ (\w+)\(/, (all, name) => name !== 'import' ? ` ${name} (` : all)
-            .replace(/^\s+private .+$/, ''))
+            .replace(/^\s+(private|protected) .+$/, ''))
             .filter(Boolean);
-        if (!lines.length) {
-            return;
-        }
-        this.writeOutput(`declare module '${name}' {`);
-        this.writeOutput(lines.join(EOL));
-        this.writeOutput('}');
     }
     resolveModule(resolution) {
         let resolvedId = resolution.currentModule;
@@ -401,8 +412,93 @@ class DtsWriter extends events_1.default {
         var _a;
         (_a = this.output) === null || _a === void 0 ? void 0 : _a.close();
     }
+    done() {
+        this.emit('log', '[dtsw] done');
+        this.emit('done');
+    }
 }
 exports.DtsWriter = DtsWriter;
+class DtsFilterWriter extends DtsWriter {
+    constructor(options, filters) {
+        super(options);
+        this.filters = filters;
+        this.modulePathMap = {};
+        this.moduleDepsMap = {};
+        this.cachedOutputs = {};
+        this.collectModuleDeps = (resolvedModuleId) => {
+            const path = this.modulePathMap[resolvedModuleId];
+            if (!path) {
+                return [];
+            }
+            const deps = this.moduleDepsMap[path] || [];
+            const depDeps = deps.map(depModuleId => this.collectModuleDeps(depModuleId)).flat();
+            return deps.concat(depDeps);
+        };
+    }
+    done() {
+        this.emitOutput();
+        super.done();
+    }
+    emitOutput() {
+        var _a;
+        const filePatterns = ((_a = this.filters.filePatterns) === null || _a === void 0 ? void 0 : _a.map(p => `**/${removeExtension(p)}`)) || [];
+        const moduleIds = Object.keys(this.cachedOutputs);
+        const modulePaths = moduleIds.map(id => this.modulePathMap[id]);
+        let emittedModuleIds = moduleIds;
+        if (filePatterns.length) {
+            emittedModuleIds = [];
+            modulePaths.forEach((path, idx) => {
+                if (path && filePatterns.some(pattern => (0, minimatch_1.minimatch)(path, pattern))) {
+                    emittedModuleIds.push(moduleIds[idx]);
+                }
+            });
+            emittedModuleIds = emittedModuleIds.map(id => [id].concat(this.collectModuleDeps(id)))
+                .flat()
+                .filter((id, idx, ids) => ids.indexOf(id) === idx &&
+                moduleIds.includes(id))
+                .reverse();
+        }
+        const main = this.mainModuleId;
+        if (main && !emittedModuleIds.includes(this.options.name)) {
+            emittedModuleIds.push(this.options.name);
+        }
+        emittedModuleIds.forEach(moduleId => {
+            this.emit('log', `[dtsw] declared module ${moduleId}`);
+            this.writeOutput(this.cachedOutputs[moduleId]);
+        });
+    }
+    writeOutputModule(moduleId, contents) {
+        var _a;
+        const lines = this.filterOutput(contents);
+        if (!lines.length) {
+            return;
+        }
+        const output = [
+            `declare module '${moduleId}' {`,
+            lines.join(EOL),
+            '}'
+        ].join(EOL);
+        if ((_a = this.filters.filePatterns) === null || _a === void 0 ? void 0 : _a.length) {
+            this.cachedOutputs[moduleId] = output;
+            return;
+        }
+        this.writeOutput(output);
+    }
+    resolveModule(resolution) {
+        const resolvedModuleId = super.resolveModule(resolution);
+        this.modulePathMap[resolvedModuleId] = resolution.currentModule;
+        return resolvedModuleId;
+    }
+    resolveImport(resolution) {
+        const resolvedModuleId = super.resolveImport(resolution);
+        if (!this.moduleDepsMap[resolution.currentModule]) {
+            this.moduleDepsMap[resolution.currentModule] = [];
+        }
+        this.moduleDepsMap[resolution.currentModule].push(resolvedModuleId);
+        return resolvedModuleId;
+    }
+}
+exports.DtsFilterWriter = DtsFilterWriter;
 const NodeKinds = {
     isDeclareKeyWord(node) {
         return node && node.kind === typescript_1.SyntaxKind.DeclareKeyword;
@@ -493,7 +589,7 @@ const getTsError = (diagnostics) => {
     error.name = 'EmitterError';
     return error;
 };
-const removeExtension = (filePath) => filePath.replace(/(\.d)?\.ts$/, '');
+const removeExtension = (filePath) => filePath.replace(/(\.d)?\.ts|\.js$/, '');
 
 
 /***/ }),

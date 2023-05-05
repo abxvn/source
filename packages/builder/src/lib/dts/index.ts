@@ -52,7 +52,10 @@ interface IGenerateOptions {
   // if omitted, the full list of files will be loaded
   // from parsed ts configuration
   files?: string[]
+  // external types or path references
   references?: string[]
+  // only emit files matching patterns
+  filePatterns?: string[]
 }
 
 export class Dts extends EventEmitter {
@@ -63,7 +66,8 @@ export class Dts extends EventEmitter {
     projectPath,
     outputPath,
     files = [],
-    references = []
+    references = [],
+    filePatterns = []
   }: IGenerateOptions) {
     let compilerOptions: CompilerOptions = {}
     const inDir = resolver(inputDir)
@@ -120,11 +124,13 @@ export class Dts extends EventEmitter {
     )
 
     await mkdirp(getDir(outputPath))
-    const writer = new DtsWriter({
+    const writer = new DtsFilterWriter({
       outputPath,
       name,
       main,
       references
+    }, {
+      filePatterns
     })
 
     writer.on('log', msg => this.emit('log', msg))
@@ -137,7 +143,7 @@ export class Dts extends EventEmitter {
     )
   }
 
-  async getTsConfig (inputDir: string, projectPath?: string) {
+  private async getTsConfig (inputDir: string, projectPath?: string) {
     const inDir = resolver(inputDir)
     const tsconfigFiles = [
       projectPath && resolver(projectPath).resolve('tsconfig.json'),
@@ -182,11 +188,12 @@ interface IModuleImportResolution {
 }
 
 export class DtsWriter extends EventEmitter {
-  private readonly ident = '  '
-  private readonly options: IDtsWriterOptions
+  readonly ident = '  '
+  readonly options: IDtsWriterOptions
 
-  private externalModules: string[] = []
-  private inDir?: IPathResolver
+  protected mainModuleId = ''
+  protected externalModules: string[] = []
+  protected inDir?: IPathResolver
   private _output?: WriteStream
 
   constructor (options: IDtsWriterOptions) {
@@ -213,6 +220,7 @@ export class DtsWriter extends EventEmitter {
     compilerOptions: CompilerOptions,
     filePaths: string[]
   ) {
+    this.mainModuleId = ''
     this.externalModules = []
     this.emit('start')
     this.emit('log', '[dtsw] start')
@@ -258,18 +266,19 @@ export class DtsWriter extends EventEmitter {
       }
 
       const resolvedModuleId = this.resolveModule({
-        currentModule: inDir.relative(removeExtension(sourceFile.fileName))
+        currentModule: inDir.relative(removeExtension(filePath))
       })
 
       // We can optionally output the main module if there's something to export.
       if (main === resolvedModuleId) {
+        this.mainModuleId = resolvedModuleId
         this.emit('log:verbose', `[dtsw] main found ${main}`)
         mainExports = this.getModuleExports(sourceFile)
       }
 
-      const emitOutput = program.emit(sourceFile, (filePath: string, data: string) => {
+      const emitOutput = program.emit(sourceFile, (emittedPath: string, data: string) => {
         // Compiler is emitting the non-declaration file, which we do not care about
-        if (filePath.slice(-DTSLEN) !== '.d.ts') {
+        if (emittedPath.slice(-DTSLEN) !== '.d.ts') {
           this.emit('log:verbose', `[dtsw] process: ignored d.ts ${filePath}`)
 
           return
@@ -294,8 +303,7 @@ export class DtsWriter extends EventEmitter {
 
     this.writeMainDeclaration(compilerOptions.target, mainExports)
 
-    this.emit('log', '[dtsw] done')
-    this.emit('done')
+    this.done()
   }
 
   private listExternals (declarationFiles: readonly SourceFile[]) {
@@ -349,7 +357,7 @@ export class DtsWriter extends EventEmitter {
     if ((declarationFile as any).externalModuleIndicator) {
       this.writeExternalDeclaration(declarationFile, currentModule)
     } else if (filePath !== this.output?.path) {
-      this.emit('log', `[dtsw] declare ${currentModule} from text`)
+      this.emit('log:verbose', `[dtsw] declare ${currentModule} from text`)
       this.writeOutputModule(currentModule, declarationFile.text)
       this.emit('log:verbose', `[dtsw] declare ${currentModule} done`)
     } else {
@@ -358,14 +366,18 @@ export class DtsWriter extends EventEmitter {
   }
 
   private writeMainDeclaration (buildTarget?: ScriptTarget, mainExports: string[] = []) {
+    const main = this.mainModuleId
+    const declarations: string[] = []
+
     if (!mainExports.length) {
       return
     }
 
-    const main = `${this.options.name}/${this.options.main as string}`
-    const declarations: string[] = []
+    if (!main) {
+      return
+    }
 
-    this.emit('log', `[dtsw] declare:main ${main}`)
+    this.emit('log:verbose', `[dtsw] declare:main ${main}`)
 
     if (!buildTarget || buildTarget < ScriptTarget.ES2015) {
       this.emit('log:verbose', '[dtsw] declare:main require')
@@ -387,7 +399,7 @@ export class DtsWriter extends EventEmitter {
     }
 
     if (!declarations.length) {
-      this.emit('log', '[dtsw] declare:main no valid exports')
+      this.emit('log:verbose', '[dtsw] declare:main no valid exports')
     }
 
     this.writeOutputModule(this.options.name, declarations.join(EOL))
@@ -424,7 +436,7 @@ export class DtsWriter extends EventEmitter {
   private writeExternalDeclaration (declarationFile: SourceFile, currentModule: string) {
     const resolvedModuleId = this.resolveModule({ currentModule })
 
-    this.emit('log', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`)
+    this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} (${declarationFile.fileName})`)
 
     const content = processTree(declarationFile, (node: Node) => {
       if (NodeKinds.isExternalModuleReference(node)) {
@@ -468,12 +480,25 @@ export class DtsWriter extends EventEmitter {
     this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} done`)
   }
 
-  private writeOutput (message: string) {
+  protected writeOutput (message: string) {
     this.output.write(message + EOL)
   }
 
-  private writeOutputModule (name: string, contents: string) {
-    const lines = contents.split(/[\r\n]+|; |;$/)
+  protected writeOutputModule (moduleId: string, contents: string) {
+    const lines = this.filterOutput(contents)
+
+    if (!lines.length) {
+      return
+    }
+
+    this.emit('log', `[dtsw] declared module ${moduleId}`)
+    this.writeOutput(`declare module '${moduleId}' {`)
+    this.writeOutput(lines.join(EOL))
+    this.writeOutput('}')
+  }
+
+  protected filterOutput (contents: string): string[] {
+    return contents.split(/[\r\n]+|; |;$/)
       .filter(line => line && line !== 'export {};') // remove empty lines
       .map(line => line.replace(/\t/g, this.ident)) // convert tabs to 2 space idents
       .map(line =>
@@ -482,20 +507,12 @@ export class DtsWriter extends EventEmitter {
           .replace(/ (\w+)\(/, (all, name: string) =>
             name !== 'import' ? ` ${name} (` : all // add space after function names
           )
-          .replace(/^\s+private .+$/, '') // remove private declarations
+          .replace(/^\s+(private|protected) .+$/, '') // remove private / protected declarations
       )
       .filter(Boolean)
-
-    if (!lines.length) {
-      return
-    }
-
-    this.writeOutput(`declare module '${name}' {`)
-    this.writeOutput(lines.join(EOL))
-    this.writeOutput('}')
   }
 
-  private resolveModule (resolution: IModuleResolution) {
+  protected resolveModule (resolution: IModuleResolution) {
     let resolvedId = resolution.currentModule
 
     if (this.options.resolvedModule) {
@@ -511,7 +528,7 @@ export class DtsWriter extends EventEmitter {
     return resolvedId
   }
 
-  private resolveImport (resolution: IModuleImportResolution) {
+  protected resolveImport (resolution: IModuleImportResolution) {
     const isExternal: boolean = this.externalModules.includes(resolution.importedModule) ||
       !/^\./.test(resolution.importedModule)
     const importedModule = !isExternal
@@ -547,8 +564,123 @@ export class DtsWriter extends EventEmitter {
     return this._output
   }
 
-  private dispose () {
+  protected dispose () {
     this.output?.close()
+  }
+
+  protected done () {
+    this.emit('log', '[dtsw] done')
+    this.emit('done')
+  }
+}
+
+interface IDtsFilters {
+  filePatterns?: string[]
+}
+export class DtsFilterWriter extends DtsWriter {
+  readonly modulePathMap: Record<string, string> = {}
+  readonly moduleDepsMap: Record<string, string[]> = {}
+  readonly cachedOutputs: Record<string, string> = {}
+
+  constructor (options: IDtsWriterOptions, readonly filters: IDtsFilters) {
+    super(options)
+  }
+
+  protected done () {
+    this.emitOutput()
+    super.done()
+  }
+
+  emitOutput () {
+    const filePatterns = this.filters.filePatterns?.map(p => `**/${removeExtension(p)}`) || []
+    const moduleIds = Object.keys(this.cachedOutputs)
+    const modulePaths = moduleIds.map(id => this.modulePathMap[id])
+    let emittedModuleIds = moduleIds
+
+    if (filePatterns.length) {
+      emittedModuleIds = []
+      modulePaths.forEach((path, idx) => {
+        if (path && filePatterns.some(pattern => minimatch(path, pattern))) {
+          emittedModuleIds.push(moduleIds[idx])
+        }
+      })
+
+      // collect module deps along with module ids
+      emittedModuleIds = emittedModuleIds.map(id => [id].concat(this.collectModuleDeps(id)))
+        .flat()
+        .filter((id, idx, ids) =>
+          ids.indexOf(id) === idx && // de-duplicate
+          moduleIds.includes(id) // only take modules with declarations, since deps added
+        )
+        .reverse()
+    }
+
+    const main = this.mainModuleId
+
+    if (main && !emittedModuleIds.includes(this.options.name)) {
+      emittedModuleIds.push(this.options.name)
+    }
+
+    emittedModuleIds.forEach(moduleId => {
+      this.emit('log', `[dtsw] declared module ${moduleId}`)
+      this.writeOutput(this.cachedOutputs[moduleId])
+    })
+  }
+
+  private readonly collectModuleDeps = (resolvedModuleId: string): string[] => {
+    const path = this.modulePathMap[resolvedModuleId]
+
+    if (!path) {
+      return []
+    }
+
+    const deps = this.moduleDepsMap[path] || []
+    const depDeps = deps.map(depModuleId => this.collectModuleDeps(depModuleId)).flat()
+
+    return deps.concat(depDeps)
+  }
+
+  protected writeOutputModule (moduleId: string, contents: string) {
+    const lines = this.filterOutput(contents)
+
+    if (!lines.length) {
+      return
+    }
+
+    const output = [
+      `declare module '${moduleId}' {`,
+      lines.join(EOL),
+      '}'
+    ].join(EOL)
+
+    if (this.filters.filePatterns?.length) {
+      // delay output until the end (done())
+      this.cachedOutputs[moduleId] = output
+
+      return
+    }
+
+    this.writeOutput(output)
+  }
+
+  protected resolveModule (resolution: IModuleResolution): string {
+    const resolvedModuleId = super.resolveModule(resolution)
+
+    this.modulePathMap[resolvedModuleId] = resolution.currentModule
+
+    return resolvedModuleId
+  }
+
+  protected resolveImport (resolution: IModuleImportResolution): string {
+    const resolvedModuleId = super.resolveImport(resolution)
+
+    if (!this.moduleDepsMap[resolution.currentModule]) {
+      this.moduleDepsMap[resolution.currentModule] = []
+    }
+
+    this.moduleDepsMap[resolution.currentModule].push(resolvedModuleId)
+
+    return resolvedModuleId
   }
 }
 
@@ -678,4 +810,4 @@ const getTsError = (diagnostics: Diagnostic[]) => {
   return error
 }
 
-const removeExtension = (filePath: string) => filePath.replace(/(\.d)?\.ts$/, '')
+const removeExtension = (filePath: string) => filePath.replace(/(\.d)?\.ts|\.js$/, '')

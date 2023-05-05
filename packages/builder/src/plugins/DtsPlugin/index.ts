@@ -37,8 +37,8 @@ class DtsPlugin {
       })
     })
 
-    compiler.hooks.afterCompile.tapPromise('[dts] generate definitions', async () => {
-      await Promise.all(builtModulePaths.map(async p => {
+    compiler.hooks.afterCompile.tap('[dts] generate definitions', () => {
+      void Promise.all(builtModulePaths.map(async p => {
         try {
           const packageInfo: any = await readJSON(this.path.resolve(p, 'package.json'))
           const typesFile = packageInfo.types
@@ -66,11 +66,9 @@ class DtsPlugin {
           }
 
           const dts = new Dts()
-          const includeFiles = packageFiles.map(f => this.path.resolve('p', f))
+          const filePatterns = packageFiles.map(f => resolver(projectPath).relative(this.path.resolve(p, f)))
 
-          console.log(includeFiles)
-
-          // dts.on('log', message => { logProgress(message) })
+          dts.on('log', message => { logProgress(message) })
           // dts.on('log:verbose', message => { logProgress(message) })
           logInfo('[dts]', packageName, 'generation started')
 
@@ -79,7 +77,8 @@ class DtsPlugin {
             name: packageName,
             inputDir: projectPath,
             outputPath: typesFilePath,
-            main: removeExt(packageMain.replace(/^(\.\/?)+/, ''))
+            main: removeExt(packageMain.replace(/^(\.\/?)+/, '')),
+            filePatterns
           })
 
           logSuccess('[dts]', packageName, 'declaration at', typesFile)
