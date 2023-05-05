@@ -1,7 +1,5 @@
 import { resolve as _resolve, basename, relative as _relative, join } from 'path'
-import type { IPathResolver } from '../../interfaces'
-
-export { resolve as resolvePath } from 'path'
+import type { IPathResolver } from '../interfaces'
 
 export class PathResolver implements IPathResolver {
   readonly rootPath: string

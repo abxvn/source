@@ -1,11 +1,10 @@
 import type { IBuildEnvironment, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
-import { pathExists, readdir } from 'fs-extra'
+import { pathExists } from 'fs-extra'
 import chalk from 'chalk'
 import ConfigDeps from './ConfigDeps'
-import { resolver } from './lib/paths'
-import { module } from './lib/packages'
+import { moduleFromFile } from './lib/packages'
 
 export const getConfigs = async (
   rootPath: string,
@@ -17,41 +16,23 @@ export const getConfigs = async (
 }> => {
   const deps = new ConfigDeps()
   const editor = new ConfigEditor({ envName, rootPath, deps })
-  const customConfigFile = editor.path.resolve('teku.config.js')
+  const customizerFile = editor.path.resolve('teku.config.js')
 
   addDefaultDeps(deps)
 
-  console.log([
-    editor.path.rootPath,
-    customConfigFile,
-    await pathExists(customConfigFile),
-    __dirname,
-    resolver(__dirname).relative(customConfigFile),
-    await pathExists(resolver(__dirname).relative(customConfigFile))
-  ])
-
-  console.log(await readdir(editor.path.rootPath))
-
-  console.log(await module(customConfigFile))
-
-  console.log([
-    require.resolve(customConfigFile),
-    require.resolve(resolver(__dirname).relative(customConfigFile))
-  ])
-
-  if (await pathExists(customConfigFile)) {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const customConfig = require(`./${resolver(process.cwd()).relative(customConfigFile)}`)
+  if (await pathExists(customizerFile)) {
+    // since nodejs built-in `require` doesn't work with local js file:
+    // - access from folder outside yarn pnp managed workspaces
+    // - access from installed packages with yarn pnp (in zip folders in .yarn/cache)
+    // we need to load code from text file instead
+    const customConfig = await moduleFromFile(customizerFile)
 
     if (customConfig.options) {
       editor.updateOptions(customConfig.options)
     }
 
     if (customConfig.custom && typeof customConfig.custom === 'function') {
-      await customConfig.custom({
-        editor,
-        deps
-      })
+      editor.filter('workspace:custom', customConfig.custom)
     }
   }
 

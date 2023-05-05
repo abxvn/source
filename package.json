@@ -5,6 +5,7 @@
   "scripts": {
     "start": "webpack",
     "build": "webpack --node-env production",
+    "components": "webpack -c webpack.components.config.js",
     "test": "jest",
     "lint": "eslint \"packages/**/*.{ts,tsx}\" -c .eslintrc.js",
     "resolve": "yarn workspace @teku/resolve",

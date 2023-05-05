@@ -7,3 +7,5 @@ const main = (args: any) => {
 }
 
 main(process.argv)
+
+export type { IFilter, IBuilderCustomOptions } from '../src/interfaces'

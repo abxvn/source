@@ -7,22 +7,24 @@ import {
   createCompilerHost,
   createProgram,
   createSourceFile,
-  ScriptTarget,
-  type NamedExports
-  ,
-  type SourceFile,
-  type Node,
-  type Diagnostic,
-  type CompilerOptions,
-  type ImportDeclaration,
-  type ExternalModuleReference,
-  type StringLiteral,
-  type ExportAssignment,
-  type ExportDeclaration,
-  type ModuleDeclaration,
-  type LiteralExpression,
-  type VariableStatement
+  ScriptTarget
 } from 'typescript'
+import type {
+  NamedExports,
+  SourceFile,
+  Node,
+  Diagnostic,
+  CompilerOptions,
+  ImportDeclaration,
+  ExternalModuleReference,
+  StringLiteral,
+  ExportAssignment,
+  ExportDeclaration,
+  ModuleDeclaration,
+  LiteralExpression,
+  VariableStatement
+} from 'typescript'
+
 import { minimatch } from 'minimatch'
 import EventEmitter from 'events'
 import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from 'fs-extra'
@@ -91,9 +93,15 @@ export class Dts extends EventEmitter {
     // compilerOptions.moduleResolution = compilerOptions.moduleResolution
     compilerOptions.outDir = compilerOptions.outDir || outDir.rootPath
 
+    const writeInputDirPath = inDir.rootPath || compilerOptions.rootDir || projectPath
+
+    if (!writeInputDirPath) {
+      throw Error('[dts] input dir path is required')
+    }
+
     // TODO should compilerOptions.baseDir come into play?
-    const writeInputDir = resolver(compilerOptions.rootDir || projectPath || inDir.rootPath)
-    const writeOutputDir = compilerOptions.outDir || outDir.rootPath
+    const writeInputDir = resolver(writeInputDirPath)
+    const writeOutputDir = outDir.rootPath || compilerOptions.outDir
     const generatedFiles = files
 
     const params = [
@@ -177,7 +185,6 @@ export class DtsWriter extends EventEmitter {
   private readonly options: IDtsWriterOptions
 
   private externalModules: string[] = []
-  private outDir?: IPathResolver
   private output?: WriteStream
   private inDir?: IPathResolver
 
@@ -211,7 +218,6 @@ export class DtsWriter extends EventEmitter {
     const host = createCompilerHost(compilerOptions)
     const program = createProgram(filePaths, compilerOptions, host)
     const sourceFiles = program.getSourceFiles()
-    const outDir = resolver(outputPath).dir()
     const inDir = resolver(inputDir)
     const main = `${this.options.name}/${this.options.main?.replace(/^\/+/, '') || 'index'}`
     let mainExports: string[] = []
@@ -219,7 +225,6 @@ export class DtsWriter extends EventEmitter {
     this.listExternals(sourceFiles)
 
     this.inDir = inDir
-    this.outDir = outDir
     this.output = createWriteStream(outputPath, { mode: parseInt('644', 8) })
 
     this.emit('log', '[dtsw] process files')
@@ -344,7 +349,7 @@ export class DtsWriter extends EventEmitter {
       this.writeExternalDeclaration(declarationFile, currentModule)
     } else if (filePath !== this.output?.path) {
       this.emit('log', `[dtsw] declare ${currentModule} from text`)
-      this.writeOutputModule(currentModule, [declarationFile.text])
+      this.writeOutputModule(currentModule, declarationFile.text)
       this.emit('log:verbose', `[dtsw] declare ${currentModule} done`)
     } else {
       this.emit('log:verbose', `[dtsw] declare ignored ${currentModule}`)
@@ -384,7 +389,7 @@ export class DtsWriter extends EventEmitter {
       this.emit('log', '[dtsw] declare:main no valid exports')
     }
 
-    this.writeOutputModule(this.options.name, declarations)
+    this.writeOutputModule(this.options.name, declarations.join(EOL))
   }
 
   private getModuleExports (sourceFile: SourceFile) {
@@ -458,11 +463,7 @@ export class DtsWriter extends EventEmitter {
       return undefined
     })
 
-    const declarationLines = content.join('')
-      .split(/[\r\n]+/)
-      .filter(line => line && line !== 'export {};')
-
-    this.writeOutputModule(resolvedModuleId, declarationLines)
+    this.writeOutputModule(resolvedModuleId, content.join(''))
     this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} done`)
   }
 
@@ -474,13 +475,26 @@ export class DtsWriter extends EventEmitter {
     this.output.write(message + EOL)
   }
 
-  private writeOutputModule (name: string, lines: string[] = []) {
+  private writeOutputModule (name: string, contents: string) {
+    const lines = contents.split(/[\r\n]+|; |;$/)
+      .filter(line => line && line !== 'export {};') // remove empty lines
+      .map(line => line.replace(/\t/g, this.ident)) // convert tabs to 2 space idents
+      .map(line =>
+        `${this.ident}${line}`.replace(/\s{4}/g, this.ident) // fix double indents (4 spaces)
+          // .replace(/;$/, '') // removed last semicolon already
+          .replace(/ (\w+)\(/, (all, name: string) =>
+            name !== 'import' ? ` ${name} (` : all // add space after function names
+          )
+          .replace(/^\s+private .+$/, '') // remove private declarations
+      )
+      .filter(Boolean)
+
     if (!lines.length) {
       return
     }
 
     this.writeOutput(`declare module '${name}' {`)
-    this.writeOutput(lines.map(line => `${this.ident}${line}`.replace(/\s{4}/g, this.ident)).join(EOL))
+    this.writeOutput(lines.join(EOL))
     this.writeOutput('}')
   }
 
@@ -529,7 +543,7 @@ export class DtsWriter extends EventEmitter {
   }
 }
 
-export const NodeKinds = {
+const NodeKinds = {
   isDeclareKeyWord (node: Node): node is ImportDeclaration {
     return node && node.kind === SyntaxKind.DeclareKeyword
   },

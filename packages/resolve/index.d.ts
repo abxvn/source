@@ -36,18 +36,18 @@ declare module '@teku/resolve/src/lib/packages' {
   export const yarnGlobalPackageDir: string;
   export const isGlobal: (path: string) => Promise<boolean>;
   export const isLocalMatch: (path: string) => boolean;
-  export const listModuleDirs: (fullPath: string) => any[];
+  export const listModuleDirs: (fullPath: string) => string[];
 }
 declare module '@teku/resolve/src/lib/pnp' {
   import type { PnpApi } from '@teku/resolve/src/interfaces';
-  export const pnpApi: PnpApi;
+  export const pnpApi: PnpApi | null;
   export const isPnpEnabled: () => boolean;
 }
 declare module '@teku/resolve/src/lib/asyncFs' {
   import type { IFsPathType } from '@teku/resolve/src/interfaces';
   export const resolveFromFsPath: (fsPath: string, callerPath: string) => Promise<string>;
   export const getFsPathType: (fsPath: string, callerPath: string) => Promise<IFsPathType>;
-  export const getJsonData: (jsonFilePath: string, key: string) => Promise<string>;
+  export const getJsonData: (jsonFilePath: string, key: string) => Promise<string | null>;
 }
 declare module '@teku/resolve/src/lib/syncFs' {
   import type { IFsPathType } from '@teku/resolve/src/interfaces';
@@ -76,15 +76,12 @@ declare module '@teku/resolve/src/resolveSync' {
   import type { IResolveOptions } from '@teku/resolve/src/interfaces';
   export const resolveSync: (path: string, options?: IResolveOptions) => string;
 }
-declare module '@teku/resolve/index' {
+declare module '@teku/resolve/resolve/index' {
   export { resolve } from '@teku/resolve/src/resolve';
   export { resolveModule } from '@teku/resolve/src/resolveModule';
   export { resolveSync } from '@teku/resolve/src/resolveSync';
   export type { IModule, IResolveOptions } from '@teku/resolve/src/interfaces';
 }
-declare module 'tests/mocks/mockScript' {
-  
-}
 declare module '@teku/resolve' {
-  export * from '@teku/resolve/index';
+  export * from '@teku/resolve/index'
 }

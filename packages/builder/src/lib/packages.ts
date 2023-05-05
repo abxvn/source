@@ -1,5 +1,5 @@
 import execa from 'execa'
-import { Module } from 'module'
+import Module from 'module'
 import { resolve } from './paths'
 import { readFile } from 'fs-extra'
 
@@ -40,15 +40,13 @@ export const installSdk = async (name: string) => {
   await subProcess
 }
 
-console.log((Module as any)._cache)
+const moduleCaches: Record<string, any> = (Module as any)._cache || {}
 
-const moduleCaches: Record<string, typeof Module> = (Module as any)._cache || {}
-
-export const module = async (path: string): Promise<typeof Module> => {
+export const moduleFromFile = async (path: string): Promise<any> => {
   const resolvedPath = resolve(path)
 
   if (moduleCaches[resolvedPath]) {
-    return (moduleCaches[resolvedPath] as any).exports
+    return moduleCaches[resolvedPath].exports
   }
 
   const fileCode = await readFile(resolvedPath, 'utf8')
@@ -56,10 +54,16 @@ export const module = async (path: string): Promise<typeof Module> => {
   return moduleFromText(resolvedPath, fileCode)
 }
 
-export const moduleFromText = (name: string, code: string): typeof Module => {
-  const m = new Module(name)
+type IModuleCompile = (code: string, path: string) => void
+export const moduleFromText = (name: string, code: string): any => {
+  const moduleObject = new Module(name)
+  const moduleCompile: IModuleCompile = (moduleObject as any)._compile
 
-  (m)._compile(code)
+  if (!moduleCompile) {
+    throw Error('module _compiler is not function')
+  }
 
-  return m.exports
+  moduleCompile.apply(moduleObject, [code, name])
+
+  return moduleObject.exports
 }

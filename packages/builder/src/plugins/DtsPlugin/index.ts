@@ -1,7 +1,7 @@
 import type { Compiler } from 'webpack'
 import { pathExists, readJSON } from 'fs-extra'
 
-import { Dts } from '../../lib/dts'
+import { Dts } from '../../lib/dts/index.js'
 import { logError, logInfo, logProgress, logSuccess, logWarn } from '../../lib/logger'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver } from '../../lib/paths'
@@ -45,11 +45,17 @@ class DtsPlugin {
           const packageName: string = packageInfo.name
           const projectPath = this.path.resolve(p)
           const typesFilePath = this.path.resolve(p, typesFile)
-          const tsconfigPath = this.path.resolve(p, 'tsconfig.json')
           const packageMain: string = packageInfo.main || 'index'
 
           if (!typesFile) {
             return
+          }
+
+          let tsconfigPath = this.path.resolve(p, 'tsconfig.json')
+
+          if (!await pathExists(tsconfigPath)) {
+            // fallback to root tsconfig.json
+            tsconfigPath = this.path.resolve('tsconfig.json')
           }
 
           if (!await pathExists(tsconfigPath)) {
@@ -65,6 +71,7 @@ class DtsPlugin {
           logInfo('[dts]', packageName, 'generation started')
 
           await dts.generate({
+            projectPath: tsconfigPath,
             name: packageName,
             inputDir: projectPath,
             outputPath: typesFilePath,

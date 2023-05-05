@@ -1,9 +1,10 @@
 {
   "name": "@teku/builder",
-  "version": "0.0.22",
+  "version": "0.0.24",
   "description": "Build web and game components at Teku",
   "main": "./cli/index.js",
   "bin": "./cli/index.js",
+  "types": "index.d.ts",
   "dependencies": {
     "@teku/resolve": "workspace:^",
     "chalk": "^4",
@@ -32,6 +33,8 @@
   },
   "files": [
     "cli/index.js",
+    "src/**/index.js",
+    "index.d.ts",
     "config",
     "README.md"
   ]

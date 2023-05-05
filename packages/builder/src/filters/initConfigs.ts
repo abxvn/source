@@ -69,10 +69,10 @@ export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => 
     ...config,
     output: {
       ...config.output,
-      libraryTarget: 'commonjs2',
-      library: {
-        type: 'commonjs2'
-      }
+      libraryTarget: 'commonjs2'
+      // library: {
+      //   type: 'commonjs2'
+      // }
     },
     target: 'node',
     externalsPresets: {
@@ -87,11 +87,11 @@ export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
   return {
     ...config,
     output: {
-      ...config.output,
-      libraryTarget: 'umd',
-      library: {
-        type: 'umd'
-      }
+      ...config.output
+      // libraryTarget: 'var'
+      // library: {
+      //   type: 'var'
+      // }
     },
     target: 'web',
     externalsPresets: {

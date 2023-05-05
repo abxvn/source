@@ -1,5 +1,5 @@
 import { Command, type Option } from 'commander'
-import pkg from '../package.json'
+// import pkg from '../package.json'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'
@@ -14,9 +14,9 @@ export default class App extends Command {
   constructor () {
     super()
 
-    this.name(pkg.name)
-      .version(pkg.version)
-      .description(pkg.description)
+    // this.name(pkg.name)
+    //   .version(pkg.version)
+    //   .description(pkg.description)
 
     this.registerCommands({
       dev,

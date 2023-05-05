@@ -10,6 +10,7 @@ export interface IBuilderOptions {
   replacements: IReplacementOption[]
 }
 
+export type IBuilderCustomOptions = Partial<IBuilderOptions>
 export interface IConfigCustomizer {
   updateEntries: (entryFilter: IEntryFilter) => void
   updateOptions: (customOptions: Partial<IBuilderOptions>) => void
@@ -58,7 +59,8 @@ export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
 
 export type IWebpackConfigs = Record<string, IWebpackConfig>
 
-export type ITargetedExpandedEntries = Partial<Record<IBuildTarget, IEntries>>
+// export type IExpandedEntries = Record<IBuildTarget, IEntries>
+export type ITargetedExpandedEntries = Record<string, IEntries>
 export type IEntries = Record<string, IEntry>
 export interface IEntry {
   import: string
