@@ -7,9 +7,9 @@ import {
   isBuiltin,
   isPnpEnabled,
   pnpApi,
-  getCallerPath,
-  resolveFromFsPath
+  getCallerPath
 } from './lib'
+import { resolveFromFsPath } from './lib/fs/asyncFs'
 
 export const resolve = async (path: string, options?: IResolveOptions): Promise<string> => {
   if (isBuiltin(path)) {

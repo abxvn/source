@@ -7,9 +7,11 @@ import {
   isBuiltin,
   isPnpEnabled,
   pnpApi,
-  getCallerPath,
-  resolveFromFsPathSync
+  getCallerPath
 } from './lib'
+import {
+  resolveFromFsPathSync as resolveFromFsPath
+} from './lib/fs/syncFs'
 
 export const resolveSync = (path: string, options?: IResolveOptions): string => {
   if (isBuiltin(path)) {
@@ -36,7 +38,7 @@ export const resolveSync = (path: string, options?: IResolveOptions): string => 
     }
 
     for (const moduleDir of moduleDirs) {
-      const fsPath = resolveFromFsPathSync(`${moduleDir}/${path}`, '')
+      const fsPath = resolveFromFsPath(`${moduleDir}/${path}`, '')
 
       if (fsPath) {
         return fsPath
@@ -44,5 +46,5 @@ export const resolveSync = (path: string, options?: IResolveOptions): string => 
     }
   }
 
-  return resolveFromFsPathSync(path, callerPath)
+  return resolveFromFsPath(path, callerPath)
 }

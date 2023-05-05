@@ -1,8 +1,5 @@
-export { pathExists, readJSON } from 'fs-extra'
 export * from './lib/packages'
 export * from './lib/pnp'
-export * from './lib/asyncFs'
-export * from './lib/syncFs'
 
 export const getDirPath = (path: string) => path.replace(/[\\/][^\\/]+$/, '')
 export const getCallerPath = (): string => {

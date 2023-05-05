@@ -1,5 +1,4 @@
 import { npm, yarn } from 'global-dirs'
-import { pathExists } from 'fs-extra'
 
 export { isBuiltin } from 'module'
 
@@ -7,12 +6,6 @@ const normalizePath = (path: string) => path.replace(/\\/g, '/')
 
 export const npmGlobalPackageDir = normalizePath(npm.packages)
 export const yarnGlobalPackageDir = normalizePath(yarn.packages)
-export const isGlobal = async (path: string): Promise<boolean> => {
-  return await Promise.race([
-    pathExists(`${npmGlobalPackageDir}/${path}`),
-    pathExists(`${yarnGlobalPackageDir}/${path}`)
-  ])
-}
 
 const FS_PATH_MODULE_REGEX = /^([A-Za-z]:)?(\.\.?(\/|$)|\/)/
 const isWindowsFullPath = (path: string) => /^[A-Za-z]:/.test(path)
