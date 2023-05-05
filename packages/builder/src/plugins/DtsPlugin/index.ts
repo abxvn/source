@@ -46,6 +46,7 @@ class DtsPlugin {
           const projectPath = this.path.resolve(p)
           const typesFilePath = this.path.resolve(p, typesFile)
           const packageMain: string = packageInfo.main || 'index'
+          const packageFiles: string[] = packageInfo.files || ''
 
           if (!typesFile) {
             return
@@ -65,8 +66,11 @@ class DtsPlugin {
           }
 
           const dts = new Dts()
+          const includeFiles = packageFiles.map(f => this.path.resolve('p', f))
 
-          dts.on('log', message => { logProgress(message) })
+          console.log(includeFiles)
+
+          // dts.on('log', message => { logProgress(message) })
           // dts.on('log:verbose', message => { logProgress(message) })
           logInfo('[dts]', packageName, 'generation started')
 

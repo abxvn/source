@@ -121,6 +121,7 @@ export class Dts extends EventEmitter {
 
     await mkdirp(getDir(outputPath))
     const writer = new DtsWriter({
+      outputPath,
       name,
       main,
       references
@@ -131,7 +132,6 @@ export class Dts extends EventEmitter {
 
     await writer.write(
       writeInputDir.rootPath,
-      outputPath,
       compilerOptions,
       generatedFiles
     )
@@ -158,8 +158,9 @@ export class Dts extends EventEmitter {
 }
 
 interface IDtsWriterOptions {
-  main?: string
   name: string
+  main?: string
+  outputPath: string
 
   references?: string[]
   // exclude files
@@ -185,14 +186,13 @@ export class DtsWriter extends EventEmitter {
   private readonly options: IDtsWriterOptions
 
   private externalModules: string[] = []
-  private output?: WriteStream
   private inDir?: IPathResolver
+  private _output?: WriteStream
 
   constructor (options: IDtsWriterOptions) {
     super()
 
     this.options = {
-      main: 'index',
       references: [],
       excludedPatterns: [
         '**/node_modules/**/*.d.ts',
@@ -204,15 +204,17 @@ export class DtsWriter extends EventEmitter {
     if (!this.options.main) {
       this.options.main = 'index'
     }
+
+    this.on('done', () => { this.dispose() })
   }
 
   async write (
     inputDir: string,
-    outputPath: string,
     compilerOptions: CompilerOptions,
     filePaths: string[]
   ) {
     this.externalModules = []
+    this.emit('start')
     this.emit('log', '[dtsw] start')
 
     const host = createCompilerHost(compilerOptions)
@@ -225,7 +227,6 @@ export class DtsWriter extends EventEmitter {
     this.listExternals(sourceFiles)
 
     this.inDir = inDir
-    this.output = createWriteStream(outputPath, { mode: parseInt('644', 8) })
 
     this.emit('log', '[dtsw] process files')
 
@@ -293,8 +294,8 @@ export class DtsWriter extends EventEmitter {
 
     this.writeMainDeclaration(compilerOptions.target, mainExports)
 
-    this.output.close()
     this.emit('log', '[dtsw] done')
+    this.emit('done')
   }
 
   private listExternals (declarationFiles: readonly SourceFile[]) {
@@ -467,11 +468,7 @@ export class DtsWriter extends EventEmitter {
     this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId} done`)
   }
 
-  private writeOutput (message: string, postIdentChange = 0) {
-    if (!this.output) {
-      throw Error('[dtsw] output stream not set')
-    }
-
+  private writeOutput (message: string) {
     this.output.write(message + EOL)
   }
 
@@ -540,6 +537,18 @@ export class DtsWriter extends EventEmitter {
     this.emit('log:verbose', `[dtsw] resolve:import ${resolvedId}${isExternal ? ' (external)' : ''} (${resolution.currentModule}, ${resolution.importedModule})`)
 
     return resolvedId
+  }
+
+  private get output (): WriteStream {
+    if (!this._output) {
+      this._output = createWriteStream(this.options.outputPath, { mode: parseInt('644', 8) })
+    }
+
+    return this._output
+  }
+
+  private dispose () {
+    this.output?.close()
   }
 }
 

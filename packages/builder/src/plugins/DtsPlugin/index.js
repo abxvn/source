@@ -1,1 +1,275 @@
-(()=>{"use strict";var e={559:function(e,o,t){var r=this&&this.__importDefault||function(e){return e&&e.__esModule?e:{default:e}};Object.defineProperty(o,"__esModule",{value:!0}),o.logEntries=o.logSuccess=o.logError=o.logWarn=o.logProgress=o.logInfo=o.log=void 0;const i=r(t(22)),{bold:s,red:n,gray:l}=i.default;o.log=console.log.bind(console),o.logInfo=(...e)=>{console.info(s.blueBright("ℹ"),...e)},o.logProgress=(...e)=>{console.info(l("➤"),...e)},o.logWarn=(...e)=>{console.info(n("△"),...e)},o.logError=(...e)=>{e.forEach((e=>{console.error(s.underline.redBright("✘"),e)}))},o.logSuccess=(...e)=>{console.info(s.greenBright("✔"),...e)},o.logEntries=e=>{(0,o.logInfo)(s.cyanBright("Building entries:")),e.forEach((({name:e,target:t,entry:r})=>{(0,o.log)(`   ${e} (${i.default.italic(t)}):`),Object.keys(r).forEach((e=>{(0,o.log)(`     ${e}`)}))}))}},584:(e,o,t)=>{Object.defineProperty(o,"__esModule",{value:!0}),o.removeExt=o.merge=o.resolve=o.resolver=o.getName=o.getDir=o.normalize=o.PathResolver=void 0;const r=t(17);class i{constructor(e){this.rootPath=(0,o.normalize)((0,r.resolve)(e))}relative(e){return(0,o.normalize)((0,r.relative)(this.rootPath,(0,o.normalize)(e)))}relativeList(e){return e.map((e=>this.relative(e)))}includes(e){return 0===(0,o.normalize)(e).indexOf(this.rootPath)}resolve(...e){return(0,o.normalize)((0,r.resolve)(this.rootPath,...e.filter(Boolean).map((e=>e.replace(/^\/+/,"")))))}resolveList(e){return e.map((e=>this.resolve(e)))}dir(){return(0,o.resolver)((0,o.getDir)(this.rootPath))}res(...e){return(0,o.resolver)(this.resolve(...e))}}o.PathResolver=i,o.normalize=e=>(null==e?void 0:e.replace(/\\/g,"/"))||"",o.getDir=e=>(0,o.normalize)(e).replace(/\/[^/]+\/?$/,""),o.getName=e=>(0,r.basename)((0,o.normalize)(e)),o.resolver=e=>new i(e),o.resolve=e=>(0,o.normalize)((0,r.resolve)(e)),o.merge=(...e)=>(0,o.normalize)((0,r.join)(...e)),o.removeExt=e=>null==e?void 0:e.replace(/\.([^/]+)$/,"")},163:function(e,o,t){var r=this&&this.__awaiter||function(e,o,t,r){return new(t||(t=Promise))((function(i,s){function n(e){try{a(r.next(e))}catch(e){s(e)}}function l(e){try{a(r.throw(e))}catch(e){s(e)}}function a(e){var o;e.done?i(e.value):(o=e.value,o instanceof t?o:new t((function(e){e(o)}))).then(n,l)}a((r=r.apply(e,o||[])).next())}))};Object.defineProperty(o,"__esModule",{value:!0});const i=t(470),s=t(644),n=t(559),l=t(584),a=/([^/]+\/[^/]+)/;o.default=class{constructor(e){this.rootPath=e,this.path=(0,l.resolver)(e)}apply(e){let o=[];e.hooks.beforeCompile.tapPromise("[dts] start collecting built modules",(()=>r(this,void 0,void 0,(function*(){o=[]})))),e.hooks.compilation.tap("[dts] setup compilation",(e=>{e.hooks.succeedModule.tap("[dts] collect built module",(e=>{if("NormalModule"!==e.constructor.name)return;const t=this.path.relative(e.context||""),r=!t.includes("node_modules")&&!t.includes(".yarn")&&t.match(a);r&&!o.includes(r[0])&&o.push(r[0])}))})),e.hooks.afterCompile.tapPromise("[dts] generate definitions",(()=>r(this,void 0,void 0,(function*(){yield Promise.all(o.map((e=>r(this,void 0,void 0,(function*(){try{const o=yield(0,i.readJSON)(this.path.resolve(e,"package.json")),t=o.types,r=o.name,a=this.path.resolve(e),c=this.path.resolve(e,t),u=o.main||"index";if(!t)return;let d=this.path.resolve(e,"tsconfig.json");if((yield(0,i.pathExists)(d))||(d=this.path.resolve("tsconfig.json")),!(yield(0,i.pathExists)(d)))return void(0,n.logWarn)("[dts]",r," generation ignored, required tsconfig");const h=new s.Dts;h.on("log",(e=>{(0,n.logProgress)(e)})),(0,n.logInfo)("[dts]",r,"generation started"),yield h.generate({projectPath:d,name:r,inputDir:a,outputPath:c,main:(0,l.removeExt)(u.replace(/^(\.\/?)+/,""))}),(0,n.logSuccess)("[dts]",r,"declaration at",t)}catch(e){(0,n.logError)(`[dts] ${e.message}`)}})))))}))))}}},22:e=>{e.exports=require("chalk")},470:e=>{e.exports=require("fs-extra")},644:e=>{e.exports=require("../../lib/dts/index.js")},17:e=>{e.exports=require("path")}},o={},t=function t(r){var i=o[r];if(void 0!==i)return i.exports;var s=o[r]={exports:{}};return e[r].call(s.exports,s,s.exports,t),s.exports}(163);module.exports=t})();
+
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./packages/builder/src/lib/logger.ts":
+/*!********************************************!*\
+  !*** ./packages/builder/src/lib/logger.ts ***!
+  \********************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.logEntries = exports.logSuccess = exports.logError = exports.logWarn = exports.logProgress = exports.logInfo = exports.log = void 0;
+const chalk_1 = __importDefault(__webpack_require__(/*! chalk */ "chalk"));
+const { bold, red, gray } = chalk_1.default;
+exports.log = console.log.bind(console);
+const logInfo = (...items) => {
+    console.info(bold.blueBright('ℹ'), ...items);
+};
+exports.logInfo = logInfo;
+const logProgress = (...items) => {
+    console.info(gray('➤'), ...items);
+};
+exports.logProgress = logProgress;
+const logWarn = (...items) => {
+    console.info(red('△'), ...items);
+};
+exports.logWarn = logWarn;
+const logError = (...items) => {
+    items.forEach(item => {
+        console.error(bold.underline.redBright('✘'), item);
+    });
+};
+exports.logError = logError;
+const logSuccess = (...items) => {
+    console.info(bold.greenBright('✔'), ...items);
+};
+exports.logSuccess = logSuccess;
+const logEntries = (configs) => {
+    (0, exports.logInfo)(bold.cyanBright('Building entries:'));
+    configs.forEach(({ name, target, entry }) => {
+        (0, exports.log)(`   ${name} (${chalk_1.default.italic(target)}):`);
+        Object.keys(entry).forEach(entryName => { (0, exports.log)(`     ${entryName}`); });
+    });
+};
+exports.logEntries = logEntries;
+
+
+/***/ }),
+
+/***/ "./packages/builder/src/lib/paths.ts":
+/*!*******************************************!*\
+  !*** ./packages/builder/src/lib/paths.ts ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.removeExt = exports.merge = exports.resolve = exports.resolver = exports.getName = exports.getDir = exports.normalize = exports.PathResolver = void 0;
+const path_1 = __webpack_require__(/*! path */ "path");
+class PathResolver {
+    constructor(rootPath) {
+        this.rootPath = (0, exports.normalize)((0, path_1.resolve)(rootPath));
+    }
+    relative(fullPath) {
+        return (0, exports.normalize)((0, path_1.relative)(this.rootPath, (0, exports.normalize)(fullPath)));
+    }
+    relativeList(fullPaths) {
+        return fullPaths.map(fullPath => this.relative(fullPath));
+    }
+    includes(fullPath) {
+        return (0, exports.normalize)(fullPath).indexOf(this.rootPath) === 0;
+    }
+    resolve(...paths) {
+        return (0, exports.normalize)((0, path_1.resolve)(this.rootPath, ...paths.filter(Boolean).map(p => p.replace(/^\/+/, ''))));
+    }
+    resolveList(paths) {
+        return paths.map(path => this.resolve(path));
+    }
+    dir() {
+        return (0, exports.resolver)((0, exports.getDir)(this.rootPath));
+    }
+    res(...paths) {
+        return (0, exports.resolver)(this.resolve(...paths));
+    }
+}
+exports.PathResolver = PathResolver;
+const normalize = (path) => (path === null || path === void 0 ? void 0 : path.replace(/\\/g, '/')) || '';
+exports.normalize = normalize;
+const getDir = (path) => (0, exports.normalize)(path).replace(/\/[^/]+\/?$/, '');
+exports.getDir = getDir;
+const getName = (path) => (0, path_1.basename)((0, exports.normalize)(path));
+exports.getName = getName;
+const resolver = (rootPath) => new PathResolver(rootPath);
+exports.resolver = resolver;
+const resolve = (path) => (0, exports.normalize)((0, path_1.resolve)(path));
+exports.resolve = resolve;
+const merge = (...paths) => (0, exports.normalize)((0, path_1.join)(...paths));
+exports.merge = merge;
+const removeExt = (path) => path === null || path === void 0 ? void 0 : path.replace(/\.([^/]+)$/, '');
+exports.removeExt = removeExt;
+
+
+/***/ }),
+
+/***/ "./packages/builder/src/plugins/DtsPlugin/index.ts":
+/*!*********************************************************!*\
+  !*** ./packages/builder/src/plugins/DtsPlugin/index.ts ***!
+  \*********************************************************/
+/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs_extra_1 = __webpack_require__(/*! fs-extra */ "fs-extra");
+const index_js_1 = __webpack_require__(/*! ../../lib/dts/index.js */ "../../lib/dts/index.js");
+const logger_1 = __webpack_require__(/*! ../../lib/logger */ "./packages/builder/src/lib/logger.ts");
+const paths_1 = __webpack_require__(/*! ../../lib/paths */ "./packages/builder/src/lib/paths.ts");
+const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/;
+class DtsPlugin {
+    constructor(rootPath) {
+        this.rootPath = rootPath;
+        this.path = (0, paths_1.resolver)(rootPath);
+    }
+    apply(compiler) {
+        let builtModulePaths = [];
+        compiler.hooks.beforeCompile.tapPromise('[dts] start collecting built modules', () => __awaiter(this, void 0, void 0, function* () {
+            builtModulePaths = [];
+        }));
+        compiler.hooks.compilation.tap('[dts] setup compilation', (compilation) => {
+            compilation.hooks.succeedModule.tap('[dts] collect built module', (module) => {
+                if (module.constructor.name !== 'NormalModule') {
+                    return;
+                }
+                const fileSubPath = this.path.relative(module.context || '');
+                const matches = !fileSubPath.includes('node_modules') && !fileSubPath.includes('.yarn') && fileSubPath.match(MODULE_PATH_REGEX);
+                if (matches && !builtModulePaths.includes(matches[0])) {
+                    builtModulePaths.push(matches[0]);
+                }
+            });
+        });
+        compiler.hooks.afterCompile.tapPromise('[dts] generate definitions', () => __awaiter(this, void 0, void 0, function* () {
+            yield Promise.all(builtModulePaths.map((p) => __awaiter(this, void 0, void 0, function* () {
+                try {
+                    const packageInfo = yield (0, fs_extra_1.readJSON)(this.path.resolve(p, 'package.json'));
+                    const typesFile = packageInfo.types;
+                    const packageName = packageInfo.name;
+                    const projectPath = this.path.resolve(p);
+                    const typesFilePath = this.path.resolve(p, typesFile);
+                    const packageMain = packageInfo.main || 'index';
+                    const packageFiles = packageInfo.files || '';
+                    if (!typesFile) {
+                        return;
+                    }
+                    let tsconfigPath = this.path.resolve(p, 'tsconfig.json');
+                    if (!(yield (0, fs_extra_1.pathExists)(tsconfigPath))) {
+                        tsconfigPath = this.path.resolve('tsconfig.json');
+                    }
+                    if (!(yield (0, fs_extra_1.pathExists)(tsconfigPath))) {
+                        (0, logger_1.logWarn)('[dts]', packageName, ' generation ignored, required tsconfig');
+                        return;
+                    }
+                    const dts = new index_js_1.Dts();
+                    const includeFiles = packageFiles.map(f => this.path.resolve('p', f));
+                    console.log(includeFiles);
+                    (0, logger_1.logInfo)('[dts]', packageName, 'generation started');
+                    yield dts.generate({
+                        projectPath: tsconfigPath,
+                        name: packageName,
+                        inputDir: projectPath,
+                        outputPath: typesFilePath,
+                        main: (0, paths_1.removeExt)(packageMain.replace(/^(\.\/?)+/, ''))
+                    });
+                    (0, logger_1.logSuccess)('[dts]', packageName, 'declaration at', typesFile);
+                }
+                catch (err) {
+                    (0, logger_1.logError)(`[dts] ${err.message}`);
+                }
+            })));
+        }));
+    }
+}
+exports["default"] = DtsPlugin;
+
+
+/***/ }),
+
+/***/ "chalk":
+/*!************************!*\
+  !*** external "chalk" ***!
+  \************************/
+/***/ ((module) => {
+
+module.exports = require("chalk");
+
+/***/ }),
+
+/***/ "fs-extra":
+/*!***************************!*\
+  !*** external "fs-extra" ***!
+  \***************************/
+/***/ ((module) => {
+
+module.exports = require("fs-extra");
+
+/***/ }),
+
+/***/ "../../lib/dts/index.js":
+/*!*****************************************!*\
+  !*** external "../../lib/dts/index.js" ***!
+  \*****************************************/
+/***/ ((module) => {
+
+module.exports = require("../../lib/dts/index.js");
+
+/***/ }),
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/***/ ((module) => {
+
+module.exports = require("path");
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("./packages/builder/src/plugins/DtsPlugin/index.ts");
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
+/******/ })()
+;

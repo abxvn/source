@@ -184,7 +184,7 @@ declare module '@teku/builder/src/filters/replaceImports' {
   export default replaceImports;
 }
 declare module '@teku/builder/src/lib/dts/index' {
-  import { type CompilerOptions } from 'typescript';
+  import type { CompilerOptions } from 'typescript';
   import EventEmitter from 'events';
   interface IGenerateOptions {
     name: string;
@@ -203,8 +203,9 @@ declare module '@teku/builder/src/lib/dts/index' {
     }>;
   }
   interface IDtsWriterOptions {
-    main?: string;
     name: string;
+    main?: string;
+    outputPath: string;
     references?: string[];
     excludedPatterns?: string[];
     resolvedModule?: (resolution: IModuleResolution) => string;
@@ -220,7 +221,7 @@ declare module '@teku/builder/src/lib/dts/index' {
   }
   export class DtsWriter extends EventEmitter {
     constructor (options: IDtsWriterOptions);
-    write (inputDir: string, outputPath: string, compilerOptions: CompilerOptions, filePaths: string[]): Promise<void>;
+    write (inputDir: string, compilerOptions: CompilerOptions, filePaths: string[]): Promise<void>;
   }
 }
 declare module '@teku/builder/src/plugins/DtsPlugin/index' {
