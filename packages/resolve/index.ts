@@ -1,3 +1,4 @@
+export { isPnpEnabled, pnpApi } from './src/lib/pnp'
 export { resolve } from './src/resolve'
 export { resolveModule } from './src/resolveModule'
 export { resolveSync } from './src/resolveSync'

@@ -1,4 +1,5 @@
 import { npm, yarn } from 'global-dirs'
+import { isAbsolute } from 'path'
 
 export { isBuiltin } from 'module'
 
@@ -10,7 +11,7 @@ export const yarnGlobalPackageDir = normalizePath(yarn.packages)
 const FS_PATH_MODULE_REGEX = /^([A-Za-z]:)?(\.\.?(\/|$)|\/)/
 const isWindowsFullPath = (path: string) => /^[A-Za-z]:/.test(path)
 
-export const isLocalMatch = (path: string) => FS_PATH_MODULE_REGEX.test(path)
+export const isLocalMatch = (path: string) => FS_PATH_MODULE_REGEX.test(path) || isAbsolute(path)
 
 // List node_nodules dirs up to root dir, hoisting behavior of nodejs
 // double slash \\ imports is deprecated, see: https://nodejs.org/api/all.html#DEP0166

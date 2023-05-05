@@ -1,6 +1,6 @@
 {
   "name": "@teku/resolve",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Teku's async resolve",
   "main": "index.js",
   "bin": "./cli/index.js",

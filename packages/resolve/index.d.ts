@@ -42,7 +42,13 @@ declare module '@teku/resolve/src/resolve' {
   import type { IResolveOptions } from '@teku/resolve/src/interfaces';
   export const resolve: (path: string, options?: IResolveOptions) => Promise<string>;
 }
+declare module '@teku/resolve/src/lib/pnp' {
+  import type { PnpApi } from '@teku/resolve/src/interfaces';
+  export const pnpApi: PnpApi | null;
+  export const isPnpEnabled: () => boolean;
+}
 declare module '@teku/resolve/index' {
+  export { isPnpEnabled, pnpApi } from '@teku/resolve/src/lib/pnp';
   export { resolve } from '@teku/resolve/src/resolve';
   export { resolveModule } from '@teku/resolve/src/resolveModule';
   export { resolveSync } from '@teku/resolve/src/resolveSync';
