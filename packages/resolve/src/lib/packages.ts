@@ -1,7 +1,5 @@
-// import { parse as parsePath, resolve as resolvePath, dirname } from 'path'
 import { npm, yarn } from 'global-dirs'
 import { pathExists } from 'fs-extra'
-// import { pnpApi } from './pnp'
 
 export { isBuiltin } from 'module'
 

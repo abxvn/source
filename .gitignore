@@ -109,7 +109,7 @@ dist
 !.yarn/releases
 !.yarn/patches
 # .yarn/plugins
-# .yarn/sdks
+!.yarn/sdks
 # .yarn/versions
 # Documentation here: https://yarnpkg.com/features/zero-installs
 # .yarn/cache
@@ -119,3 +119,13 @@ dist
 **/*.cache
 **/.env
 **/index.js
+!packages/builder/src/lib/dts/index.js
+!packages/builder/src/lib/paths/index.js
+!packages/builder/src/plugins/DtsPlugin/index.js
+
+tmp/
+**/tmp
+
+
+## only for this repo
+!packages/resolve/tests/mocks/**/index.js

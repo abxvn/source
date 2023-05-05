@@ -2,7 +2,8 @@ const { BannerPlugin } = require('webpack')
 const webpackNodeExternals = require('webpack-node-externals')
 const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
-const DtsGeneratorPlugin = require('./config/plugins/DtsGeneratorPlugin')
+
+const { default: DtsPlugin } = require('./packages/builder/src/plugins/DtsPlugin')
 
 const rootPath = __dirname.replace(/\\/g, '/')
 const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
@@ -11,6 +12,9 @@ const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
 const envName = process.env.NODE_ENV || 'development'
 
 const entry = {
+  '/packages/builder/cli/index.ts': {
+    import: resolvePath('packages/builder/cli/index.ts')
+  },
   '/packages/resolve/index.ts': {
     import: resolvePath('packages/resolve/index.ts')
   },
@@ -30,7 +34,9 @@ exports = module.exports = {
     filename: data => {
       return data.chunk.name.replace(/\.tsx?$/, '.js') // change index.ts to index.js
     },
-    libraryTarget: 'commonjs2'
+    library: {
+      type: 'commonjs2'
+    }
   },
   resolve: {
     extensions: [
@@ -47,7 +53,10 @@ exports = module.exports = {
           {
             loader: require.resolve('ts-loader'),
             options: {
-              configFile: resolvePath('config/ts/tsconfig.packages.json')
+              configFile: resolvePath('./tsconfig.json'),
+              compilerOptions: {
+                projectDir: __dirname
+              }
             }
           }
         ],
@@ -64,8 +73,8 @@ exports = module.exports = {
       },
       raw: true
     }),
-    new DtsGeneratorPlugin(rootPath)
-  ],
+    envName === 'production' && new DtsPlugin(rootPath)
+  ].filter(Boolean),
   watch: envName === 'development',
   watchOptions: {
     ignored: [
@@ -78,6 +87,7 @@ exports = module.exports = {
   devtool: false,
   target: 'node',
   externals: [
+    /\/index\.js$/,
     webpackNodeExternals(),
     WebpackPnpExternals()
   ],

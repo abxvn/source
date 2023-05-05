@@ -1,0 +1,6 @@
+{
+  "name": "dummy-cli",
+  "private": true,
+  "main": "cli/index.js",
+  "bin": "cli/index.js"
+}
