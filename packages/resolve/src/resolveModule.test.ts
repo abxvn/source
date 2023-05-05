@@ -1,7 +1,8 @@
 import { realpathSync } from 'fs-extra'
 import { resolve as resolvePath } from 'path'
-import { isPnpEnabled, listModuleDirs, readJSON, pnpApi } from './lib'
+import { isPnpEnabled, listModuleDirs, pnpApi } from './lib'
 import { resolveModule } from './resolveModule'
+import { readJSON } from './lib/fs/asyncFs'
 
 const mockDir = realpathSync(resolvePath(__dirname, '../tests/mocks')).replace(/\\/g, '/')
 const resolveMockPath = (path: string) => resolvePath(mockDir, path)

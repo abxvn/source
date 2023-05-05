@@ -36,12 +36,11 @@ export interface PnpApi {
     issuer: string | null,
     options?: PnpResolveRequestOptions
   ) => string | null
-
 }
 
-// PnpApi
+// UNUSED DEFS FOR PnpApi
+// These parts mostly for reusing of other packages
 // getPackageInformation: (locator: IPackageLocator) => PackageInformation
-//
 // resolveToUnqualified: (
 //   request: string,
 //   issuer: string | null,

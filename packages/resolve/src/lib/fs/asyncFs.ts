@@ -1,7 +1,9 @@
 import { createReadStream, stat, realpath, pathExists } from 'fs-extra'
 import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'
-import type { IFsPathType, IResolvedFileType } from '../interfaces'
+import type { IFsPathType, IResolvedFileType } from '../../interfaces'
+
+export { readJSON } from 'fs-extra'
 
 const RELATIVE_PATH_REGEX = /^\.\.?(\/|\\|$)/
 

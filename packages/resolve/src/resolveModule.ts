@@ -1,6 +1,7 @@
 import { resolve } from './resolve'
-import { readJSON, getDirPath } from './lib'
+import { getDirPath } from './lib'
 import type { IModule, IResolveOptions } from './interfaces'
+import { readJSON } from './lib/fs/asyncFs'
 
 export const resolveModule = async (moduleOrDirPath: string, options?: IResolveOptions): Promise<IModule> => {
   const module: IModule = {

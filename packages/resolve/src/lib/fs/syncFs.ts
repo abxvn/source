@@ -1,5 +1,5 @@
 import { resolve as resolvedPath } from 'path'
-import type { IFsPathType, IResolvedFileType } from '../interfaces'
+import type { IFsPathType, IResolvedFileType } from '../../interfaces'
 import { realpathSync, statSync, readJSONSync, pathExistsSync } from 'fs-extra'
 
 const RELATIVE_PATH_REGEX = /^\.\.?(\/|\\|$)/
