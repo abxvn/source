@@ -7,6 +7,7 @@ import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver } from '../../lib/paths'
 
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
+let counterId = 0
 
 class DtsPlugin {
   readonly path: IPathResolver
@@ -39,6 +40,8 @@ class DtsPlugin {
 
     compiler.hooks.afterCompile.tap('[dts] generate definitions', () => {
       void Promise.all(builtModulePaths.map(async p => {
+        const id = counterId += 1
+
         try {
           const packageInfo: any = await readJSON(this.path.resolve(p, 'package.json'))
           const typesFile = packageInfo.types
@@ -60,7 +63,7 @@ class DtsPlugin {
           }
 
           if (!await pathExists(tsconfigPath)) {
-            logWarn('[dts]', packageName, ' generation ignored, required tsconfig')
+            logWarn(`[dts ${id}]`, packageName, ' generation ignored, required tsconfig')
 
             return
           }
@@ -68,9 +71,9 @@ class DtsPlugin {
           const dts = new Dts()
           const filePatterns = packageFiles.map(f => resolver(projectPath).relative(this.path.resolve(p, f)))
 
-          dts.on('log', message => { logProgress(message) })
+          dts.on('log', message => { logProgress(message.replace(/^\[(dtsw?)\]/, `[$1 ${id}]`)) })
           // dts.on('log:verbose', message => { logProgress(message) })
-          logInfo('[dts]', packageName, 'generation started')
+          logInfo(`[dts ${id}]`, packageName, 'generation started')
 
           await dts.generate({
             projectPath: tsconfigPath,
@@ -81,9 +84,9 @@ class DtsPlugin {
             filePatterns
           })
 
-          logSuccess('[dts]', packageName, 'declaration at', typesFile)
+          logSuccess(`[dts ${id}]`, packageName, 'declaration at', typesFile)
         } catch (err: any) {
-          logError(`[dts] ${err.message as string}`)
+          logError(`[dts ${id}] ${err.message as string}`)
         }
       }))
     })
