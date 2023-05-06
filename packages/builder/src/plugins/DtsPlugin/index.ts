@@ -2,7 +2,7 @@ import type { Compiler } from 'webpack'
 import { pathExists, readJSON } from 'fs-extra'
 
 import { Dts } from '@teku/builder/src/lib/dts/index.js'
-import { logError, logInfo, logProgress, logSuccess, logWarn } from '../../lib/logger'
+import { logError, logInfo, logProgress, logSuccess, logWarn, colorIndex } from '../../lib/logger'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver } from '../../lib/paths'
 
@@ -63,7 +63,7 @@ class DtsPlugin {
           }
 
           if (!await pathExists(tsconfigPath)) {
-            logWarn(`[dts ${id}]`, packageName, ' generation ignored, required tsconfig')
+            logWarn(this.log(id, packageName, 'generation ignored, required tsconfig'))
 
             return
           }
@@ -71,9 +71,9 @@ class DtsPlugin {
           const dts = new Dts()
           const filePatterns = packageFiles.map(f => resolver(projectPath).relative(this.path.resolve(p, f)))
 
-          dts.on('log', message => { logProgress(message.replace(/^\[(dtsw?)\]/, `[$1 ${id}]`)) })
+          dts.on('log', message => { logProgress(this.log(id, message)) })
           // dts.on('log:verbose', message => { logProgress(message) })
-          logInfo(`[dts ${id}]`, packageName, 'generation started')
+          logInfo(this.log(id, packageName, 'generation started'))
 
           await dts.generate({
             projectPath: tsconfigPath,
@@ -84,12 +84,25 @@ class DtsPlugin {
             filePatterns
           })
 
-          logSuccess(`[dts ${id}]`, packageName, 'declaration at', typesFile)
+          logSuccess(this.log(id, packageName, 'declaration at', typesFile))
         } catch (err: any) {
-          logError(`[dts ${id}] ${err.message as string}`)
+          logError(this.log(id, err.message))
         }
       }))
     })
+  }
+
+  private log (id: number, ...messages: string[]) {
+    let message = messages.join(' ')
+
+    // add prefix automatically
+    if (message.indexOf('[dts') !== 0) {
+      message = `[dts] ${message}`
+    }
+
+    return message.replace(/^\[(dtsw?)\]/, (_, prefix: string) =>
+      colorIndex(`[${prefix} ${id}]`, id)
+    )
   }
 }
 

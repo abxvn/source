@@ -1,5 +1,5 @@
 import type { IConfigDeps } from '../../interfaces'
-import { logInfo } from '../../lib/logger'
+import { badge, logInfo } from '../../lib/logger'
 import { install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
@@ -32,17 +32,17 @@ export const installPackages = async ({ answers, deps }: IInstallPackagesParams)
   })
 
   if (mainDependencies.length) {
-    logInfo('[init] install', mainDependencies.join(' '))
+    logInfo(badge('init'), 'install', mainDependencies.join(' '))
     await install(...mainDependencies)
   }
 
   if (devDependencies.length) {
-    logInfo('[init] install dev', devDependencies.join(' '))
+    logInfo(badge('init'), 'install dev', devDependencies.join(' '))
     await install('--dev', ...devDependencies)
   }
 
   if (answers.sdk) {
-    logInfo('[init] install sdk')
+    logInfo(badge('init'), 'install sdk')
     await installSdk('vscode')
   }
 }
