@@ -79,7 +79,7 @@ exports = module.exports = {
   devtool: false,
   target: 'node',
   externals: [
-    /\/index\.js$/,
+    /^[^./]+\/([^/]+\/)*index\.js$/,
     webpackNodeExternals(),
     WebpackPnpExternals()
   ],

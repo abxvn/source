@@ -1,6 +1,6 @@
 import { map } from '../lib/helpers'
 import type { IFilter } from '../interfaces'
-import DtsPlugin from '../plugins/DtsPlugin/index.js'
+import DtsPlugin from '@teku/builder/src/plugins/DtsPlugin/index.js'
 
 const generateDts: IFilter = async ({ editor }) => {
   return {

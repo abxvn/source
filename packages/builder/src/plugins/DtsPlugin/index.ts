@@ -1,7 +1,7 @@
 import type { Compiler } from 'webpack'
 import { pathExists, readJSON } from 'fs-extra'
 
-import { Dts } from '../../lib/dts/index.js'
+import { Dts } from '@teku/builder/src/lib/dts/index.js'
 import { logError, logInfo, logProgress, logSuccess, logWarn } from '../../lib/logger'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver } from '../../lib/paths'
@@ -12,7 +12,7 @@ let counterId = 0
 class DtsPlugin {
   readonly path: IPathResolver
 
-  constructor (private readonly rootPath: string) {
+  constructor (rootPath: string) {
     this.path = resolver(rootPath)
   }
 
