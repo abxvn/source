@@ -1,4 +1,4 @@
-import { logError, logInfo, logSuccess } from '../lib/logger'
+import { badge, logError, logInfo, logSuccess } from '../lib/logger'
 import { path } from './options'
 import { getConfigs } from '../configs'
 import {
@@ -37,7 +37,7 @@ const init = async (options: any) => {
   await copyConfigs({ answers, deps, editor })
   await updatePackageJson({ editor, deps })
 
-  logSuccess('[init] done')
+  logSuccess(badge('init', 'greenBright'), 'done')
 
   logInfo(`You may also need to enabled / install recommended VSCode extensions
   and agree if editor confirms for using workspace typescript`)

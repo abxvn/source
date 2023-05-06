@@ -1,6 +1,6 @@
 import { copy } from 'fs-extra'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
-import { logInfo, logProgress } from '../../lib/logger'
+import { badge, logInfo, logProgress } from '../../lib/logger'
 import { resolver } from '../../lib/paths'
 import { type IEditorConfigsAnswer } from '../questions'
 
@@ -32,12 +32,12 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
     return
   }
 
-  logInfo('[init] copy configs...')
+  logInfo(badge('init'), 'copy configs...')
   const sourcePaths = configSource.resolveList(copies)
   const destPaths = editor.path.resolveList(copies.map(p => p.replace(/\/?_/g, '/')))
 
   await Promise.all(destPaths.map(async (dest, idx) => {
-    logProgress(`[init] copy ${dest}`)
+    logProgress(badge('init'), `copy ${dest}`)
     await copy(sourcePaths[idx], dest)
   }))
 }
