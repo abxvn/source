@@ -191,7 +191,8 @@ export class DtsWriter extends EventEmitter {
   readonly ident = '  '
   readonly options: IDtsWriterOptions
 
-  protected mainModuleId = ''
+  protected mainId = ''
+  protected resolvedMainId = ''
   protected externalModules: string[] = []
   protected inDir?: IPathResolver
   private _output?: WriteStream
@@ -220,7 +221,8 @@ export class DtsWriter extends EventEmitter {
     compilerOptions: CompilerOptions,
     filePaths: string[]
   ) {
-    this.mainModuleId = ''
+    this.mainId = ''
+    this.resolvedMainId = ''
     this.externalModules = []
     this.emit('start')
     this.emit('log', '[dtsw] start')
@@ -229,15 +231,13 @@ export class DtsWriter extends EventEmitter {
     const program = createProgram(filePaths, compilerOptions, host)
     const sourceFiles = program.getSourceFiles()
     const inDir = resolver(inputDir)
-    const main = `${this.options.name}/${this.options.main?.replace(/^\/+/, '') || 'index'}`
     let mainExports: string[] = []
 
-    this.listExternals(sourceFiles)
-
+    this.mainId = this.resolveMainId()
     this.inDir = inDir
 
+    this.listExternals(sourceFiles)
     this.emit('log', '[dtsw] process files')
-
     this.writeReferences()
 
     sourceFiles.some(sourceFile => {
@@ -270,9 +270,9 @@ export class DtsWriter extends EventEmitter {
       })
 
       // We can optionally output the main module if there's something to export.
-      if (main === resolvedModuleId) {
-        this.mainModuleId = resolvedModuleId
-        this.emit('log:verbose', `[dtsw] main found ${main}`)
+      if (this.mainId === resolvedModuleId) {
+        this.resolvedMainId = resolvedModuleId
+        this.emit('log:verbose', `[dtsw] main found ${resolvedModuleId}`)
         mainExports = this.getModuleExports(sourceFile)
       }
 
@@ -366,7 +366,7 @@ export class DtsWriter extends EventEmitter {
   }
 
   private writeMainDeclaration (buildTarget?: ScriptTarget, mainExports: string[] = []) {
-    const main = this.mainModuleId
+    const main = this.resolvedMainId
     const declarations: string[] = []
 
     if (!mainExports.length) {
@@ -518,10 +518,10 @@ export class DtsWriter extends EventEmitter {
     if (this.options.resolvedModule) {
       resolvedId = this.options.resolvedModule(resolution) || resolvedId
     } else {
-      resolvedId = resolvedId.replace(/^.+\/src/, 'src')
+      resolvedId = this.resolveModuleDefault(resolvedId)
     }
 
-    resolvedId = `${this.options.name}/${resolvedId}`
+    resolvedId = this.prefixModule(resolvedId)
 
     this.emit('log:verbose', `[dtsw] resolve ${resolvedId} (${resolution.currentModule})`)
 
@@ -544,16 +544,36 @@ export class DtsWriter extends EventEmitter {
         isExternal
       }) || resolvedId
     } else {
-      resolvedId = resolvedId.replace(/^.+\/src/, 'src')
+      resolvedId = this.resolveModuleDefault(resolvedId)
     }
 
-    resolvedId = !isExternal
-      ? `${this.options.name}/${resolvedId}`
-      : resolvedId
+    resolvedId = this.prefixModule(resolvedId, isExternal)
 
     this.emit('log:verbose', `[dtsw] resolve:import ${resolvedId}${isExternal ? ' (external)' : ''} (${resolution.currentModule}, ${resolution.importedModule})`)
 
     return resolvedId
+  }
+
+  protected resolveModuleDefault (moduleId: string) {
+    const resolvedId = moduleId.replace(/^.+\/src/, 'src') // shorten path to `src`
+    const removedIndexId = resolvedId.replace(/\/index$/, '')
+
+    if (
+      this.mainId !== this.prefixModule(resolvedId) && // keep main id
+      removedIndexId !== this.options.name // avoid collision with package name
+    ) {
+      return removedIndexId
+    }
+
+    return resolvedId
+  }
+
+  protected resolveMainId () {
+    return `${this.options.name}/${this.options.main?.replace(/^\/+/, '') || 'index'}`
+  }
+
+  protected prefixModule (moduleId: string, isExternal = false) {
+    return !isExternal ? `${this.options.name}/${moduleId}` : moduleId
   }
 
   private get output (): WriteStream {
@@ -615,7 +635,7 @@ export class DtsFilterWriter extends DtsWriter {
         .reverse()
     }
 
-    const main = this.mainModuleId
+    const main = this.resolvedMainId
 
     if (main && !emittedModuleIds.includes(this.options.name)) {
       emittedModuleIds.push(this.options.name)

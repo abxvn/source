@@ -1,7 +1,7 @@
 declare module '@teku/builder/cli/index' {
   export type { IFilter, IBuilderCustomOptions } from '@teku/builder/src/interfaces';
 }
-declare module '@teku/builder/src/plugins/DtsPlugin/index' {
+declare module '@teku/builder/src/plugins/DtsPlugin' {
   import type { Compiler } from 'webpack';
   import type { IPathResolver } from '@teku/builder/src/interfaces'
   class DtsPlugin {
@@ -106,7 +106,7 @@ declare module '@teku/builder/src/interfaces' {
     unset: (name: string) => void;
   }
 }
-declare module '@teku/builder/src/lib/dts/index' {
+declare module '@teku/builder/src/lib/dts' {
   /// <reference types="node" />
   import type { CompilerOptions } from 'typescript';
   import EventEmitter from 'events';
