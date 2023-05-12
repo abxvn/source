@@ -1,5 +1,10 @@
 @abux/resolve
 =====
+![build][badge-build]
+[![version][npm-version-badge]][npm-url]
+[![downloads][npm-downloads-badge]][npm-url]
+[![code style][code-style-badge]][code-style-url]
+
 Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modules.html#modules_all_together), with **extra features:**
   - ⚡ Blazingly faster comparing to vanilla [require.resolve](https://nodejs.org/api/moduleshtml#modules_require_resolve_request_options) ([bench](#benchmarks)) (Especially when you need to work with large amount of modules)
   - 🌟 Supports resolving with [Yarn PnP API](https://yarnpkg.com/features/pnp)
@@ -165,3 +170,10 @@ If you have any other suggestions, you can even open new issues with `type: enha
 -----
 
 🍻 Cheers
+
+[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abux/resolve
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/resolve
+[npm-version-badge]: https://img.shields.io/npm/v/@abux/resolve
+[code-style-badge]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[code-style-url]: https://standardjs.com

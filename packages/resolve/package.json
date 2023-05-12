@@ -1,6 +1,6 @@
 {
   "name": "@abux/resolve",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Async resolve with pnp supports",
   "license": "MIT",
   "main": "index.js",
