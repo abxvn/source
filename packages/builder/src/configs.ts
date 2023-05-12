@@ -1,7 +1,7 @@
 import type { IBuildEnvironment, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
-import { pathExists } from './lib/helpers/vendors'
+import { pathExists } from './lib/vendors'
 import chalk from 'chalk'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'

@@ -1,7 +1,7 @@
 import { DefinePlugin } from 'webpack'
-import { map } from '../../lib/helpers/data'
+import { map } from '../../lib/data'
 import type { IEntries, IFilter, IWebpackConfig } from '../../interfaces'
-import { readFile } from '../../lib/helpers/vendors'
+import { readFile } from '../../lib/vendors'
 import { parse } from 'dotenv'
 
 const replaceVars: IFilter = async ({ editor }) => {

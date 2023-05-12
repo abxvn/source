@@ -17,7 +17,7 @@ import replaceImports from './filters/replaceImports'
 import generateDts from './filters/generateDts'
 import devServer from './filters/devServer'
 import { resolver } from './lib/paths'
-import { expandEntries } from './lib/helpers/entries'
+import { expandEntries } from './lib/entries'
 import ConfigDeps from './ConfigDeps'
 
 const defaultFilters = {

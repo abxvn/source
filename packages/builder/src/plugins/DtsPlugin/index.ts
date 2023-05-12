@@ -1,12 +1,10 @@
 import type { Compiler } from 'webpack'
-import { pathExists, readJSON } from '../../lib/helpers/vendors'
-
 import { Dts } from '@abux/builder/src/lib/dts/index.js'
+import { pathExists, readJSON } from '../../lib/vendors'
 import { logError, logInfo, logProgress, logSuccess, logWarn, colorIndex } from '../../lib/logger'
 import type { IPathResolver } from '../../interfaces'
-import { removeExt, resolver } from '../../lib/paths'
+import { removeExt, resolver, getLocalPackagePath } from '../../lib/paths'
 
-const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 let counterId = 0
 
 export class DtsPlugin {
@@ -30,10 +28,10 @@ export class DtsPlugin {
         }
 
         const fileSubPath = this.path.relative(module.context || '')
-        const matches = !fileSubPath.includes('node_modules') && !fileSubPath.includes('.yarn') && fileSubPath.match(MODULE_PATH_REGEX)
+        const localPackagePath = getLocalPackagePath(fileSubPath)
 
-        if (matches && !builtModulePaths.includes(matches[0])) {
-          builtModulePaths.push(matches[0])
+        if (localPackagePath && !builtModulePaths.includes(localPackagePath)) {
+          builtModulePaths.push(localPackagePath)
         }
       })
     })

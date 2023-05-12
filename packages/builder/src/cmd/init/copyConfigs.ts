@@ -1,4 +1,4 @@
-import { copy } from '../../lib/helpers/vendors'
+import { copy } from '../../lib/vendors'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { badge, logInfo, logProgress } from '../../lib/logger'
 import { resolver } from '../../lib/paths'

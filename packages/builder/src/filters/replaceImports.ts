@@ -1,4 +1,4 @@
-import { map } from '../lib/helpers/data'
+import { map } from '../lib/data'
 import type { IFilter } from '../interfaces'
 import ImportReplacementPlugin from '../plugins/ImportReplacementPlugin'
 

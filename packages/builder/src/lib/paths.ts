@@ -44,3 +44,15 @@ export const resolver = (rootPath: string): IPathResolver => new PathResolver(ro
 export const resolve = (path: string) => normalize(_resolve(path))
 export const merge = (...paths: string[]) => normalize(join(...paths))
 export const removeExt = (path: string) => path?.replace(/\.([^/]+)$/, '')
+
+const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
+
+export const getLocalPackagePath = (relativePath: string): string => {
+  if (relativePath.includes('node_modules') || relativePath.includes('.yarn')) {
+    return ''
+  }
+
+  const match = relativePath.match(MODULE_PATH_REGEX)
+
+  return match ? match[1] : ''
+}
