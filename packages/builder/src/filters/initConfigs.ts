@@ -1,4 +1,4 @@
-import { map } from '../lib/helpers'
+import { map } from '../lib/helpers/data'
 import type { IBuildTarget, IConfigEditor, IEntries, IFilter, IWebpackConfig } from '../interfaces'
 import { resolve } from '@abux/resolve'
 

@@ -1,7 +1,7 @@
 import { DefinePlugin } from 'webpack'
-import { map } from '../lib/helpers'
-import type { IEntries, IFilter, IWebpackConfig } from '../interfaces'
-import fs from 'fs-extra'
+import { map } from '../../lib/helpers/data'
+import type { IEntries, IFilter, IWebpackConfig } from '../../interfaces'
+import { readFile } from '../../lib/helpers/vendors'
 import { parse } from 'dotenv'
 
 const replaceVars: IFilter = async ({ editor }) => {
@@ -42,7 +42,7 @@ const defineEnvPerEntries = async (entries: IEntries): Promise<EntryEnvs> => {
     Object.keys(packages).map(async (path) => {
       try {
         const packageName: string = packages[path]
-        const envText = await fs.readFile(`${path}/.env`)
+        const envText = await readFile(`${path}/.env`)
         const envs = parse(envText)
 
         for (const envName in envs) {

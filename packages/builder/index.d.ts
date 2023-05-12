@@ -3,13 +3,12 @@ declare module '@abux/builder/cli/index' {
 }
 declare module '@abux/builder/src/plugins/DtsPlugin' {
   import type { Compiler } from 'webpack';
-  import type { IPathResolver } from '@abux/builder/src/interfaces'
-  class DtsPlugin {
+  import type { IPathResolver } from '@abux/builder/src/interfaces';
+  export class DtsPlugin {
     readonly path: IPathResolver;
     constructor (rootPath: string);
     apply (compiler: Compiler): void;
   }
-  export default DtsPlugin;
 }
 declare module '@abux/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';

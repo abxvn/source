@@ -27,7 +27,7 @@ import type {
 
 import { minimatch } from 'minimatch'
 import EventEmitter from 'events'
-import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from 'fs-extra'
+import { type WriteStream, createWriteStream, readFile, pathExists, mkdirp } from '../helpers/vendors'
 
 import { getDir, merge, normalize, resolve, resolver } from '../paths'
 import { type IPathResolver } from '../../interfaces'

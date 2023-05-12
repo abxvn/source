@@ -1,7 +1,7 @@
 import execa from 'execa'
 import Module from 'module'
 import { resolve } from './paths'
-import { readFile } from 'fs-extra'
+import { readFile } from './helpers/vendors'
 
 const cliOptions = {
   env: {

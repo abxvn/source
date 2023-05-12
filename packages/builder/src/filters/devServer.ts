@@ -1,5 +1,5 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { extractMatch, filter, map } from '../lib/helpers'
+import { extractMatch, filter, map } from '../lib/helpers/data'
 import type { IFilter, IWebpackConfig, IWebpackConfigs } from '../interfaces'
 
 const devServer: IFilter = async ({ editor }) => {

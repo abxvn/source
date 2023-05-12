@@ -1,5 +1,5 @@
 import type { Compiler } from 'webpack'
-import { pathExists, readJSON } from 'fs-extra'
+import { pathExists, readJSON } from '../../lib/helpers/vendors'
 
 import { Dts } from '@abux/builder/src/lib/dts/index.js'
 import { logError, logInfo, logProgress, logSuccess, logWarn, colorIndex } from '../../lib/logger'

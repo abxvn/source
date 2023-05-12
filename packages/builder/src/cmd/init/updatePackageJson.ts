@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { badge, logInfo, logProgress, logWarn } from '../../lib/logger'
-import { pathExists, readJSON, writeJSON } from 'fs-extra'
+import { pathExists, readJSON, writeJSON } from '../../lib/helpers/vendors'
 
 interface IUpdatePackageJsonParams {
   modify?: boolean
