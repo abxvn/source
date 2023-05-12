@@ -1,6 +1,6 @@
-import { type IWebpackConfigs } from '../interfaces'
-import { getMockConfig } from '../../tests/mocks/mockConfigs'
-import replaceVars from './replaceVars'
+import { type IWebpackConfigs } from '../../interfaces'
+import { getMockConfig } from '../../../tests/mocks/mockConfigs'
+import replaceVars from '.'
 import { DefinePlugin } from 'webpack'
 
 describe('replaceVars#configs', () => {

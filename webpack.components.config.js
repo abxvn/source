@@ -15,6 +15,9 @@ const entry = {
   },
   '/packages/builder/src/plugins/DtsPlugin/index.ts': {
     import: resolvePath('packages/builder/src/plugins/DtsPlugin/index.ts')
+  },
+  '/packages/builder/src/filters/replaceVars/index.ts': {
+    import: resolvePath('packages/builder/src/filters/replaceVars/index.ts')
   }
 }
 

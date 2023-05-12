@@ -1,7 +1,7 @@
 import type { IBuildEnvironment, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
-import { pathExists } from 'fs-extra'
+import { pathExists } from './lib/vendors'
 import chalk from 'chalk'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'
@@ -16,7 +16,7 @@ export const getConfigs = async (
 }> => {
   const deps = new ConfigDeps()
   const editor = new ConfigEditor({ envName, rootPath, deps })
-  const customizerFile = editor.path.resolve('teku.config.js')
+  const customizerFile = editor.path.resolve('abux.config.js')
 
   addDefaultDeps(deps)
 

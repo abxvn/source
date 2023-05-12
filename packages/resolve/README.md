@@ -1,4 +1,4 @@
-@teku/resolve
+@abux/resolve
 =====
 Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modules.html#modules_all_together), with **extra features:**
   - ⚡ Blazingly faster comparing to vanilla [require.resolve](https://nodejs.org/api/moduleshtml#modules_require_resolve_request_options) ([bench](#benchmarks)) (Especially when you need to work with large amount of modules)
@@ -22,11 +22,11 @@ Installation
 -----
 Install using `yarn` or `npm`:
 ```
-yarn add @teku/resolve
+yarn add @abux/resolve
 ```
 
 ```
-npm add @teku/resolve
+npm add @abux/resolve
 ```
 
 Usage
@@ -37,7 +37,7 @@ The `resolve` supports asynchronously resolving:
 - or a module's main (entry) path, to be used with `require`
 
 ```ts
-import { resolve } from `@teku/resolve`
+import { resolve } from `@abux/resolve`
 
 // Entry point / main to require
 // pnp: <dir>/.yarn/cache/.../packageA/index.js
@@ -57,7 +57,7 @@ console.log(resolve('../localWorkspaceB'))
 The `resolveModule` supports asynchronously resolving module metadata
 
 ```ts
-import { resolveModule } from `@teku/resolve`
+import { resolveModule } from `@abux/resolve`
 
 console.log(resolveModule('packageA')) // => IModule
 console.log(resolveModule('workspaceA')) // => IModule
@@ -90,7 +90,7 @@ interface IModule {
 We can pass custom options into the resolver:
 
 ```js
-import { resolve } from `@teku/resolve`
+import { resolve } from `@abux/resolve`
 
 resolve('moduleB', options)
 ```
@@ -112,7 +112,7 @@ resolve <...paths>
 if you want CLI to search for module metadata, please call with flag `-m` or `--metadata`, for example:
 
 ```bash
-resolve @teku/resolve lodash -m
+resolve @abux/resolve lodash -m
 ```
 
 ### Resolve in classic way
@@ -121,7 +121,7 @@ You can also `resolve` in classic, I mean synchronously resolving, but with this
 - Custom list of node_modules dirs for searching
 
 ```ts
-import { resolveSync } from `@teku/resolve`
+import { resolveSync } from `@abux/resolve`
 
 // Entry point / main to require
 // pnp: <dir>/.yarn/cache/.../packageA/index.js

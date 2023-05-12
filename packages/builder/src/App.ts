@@ -14,9 +14,9 @@ export default class App extends Command {
   constructor () {
     super()
 
-    // this.name(pkg.name)
-    //   .version(pkg.version)
-    //   .description(pkg.description)
+    this.name(process.env.BUILDER_PACKAGE_NAME as string)
+      .version(process.env.BUILDER_PACKAGE_VERSION as string)
+      .description(process.env.BUILDER_PACKAGE_DESCRIPTION as string)
 
     this.registerCommands({
       dev,

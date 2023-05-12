@@ -1,38 +1,4 @@
 import kindOf from 'kind-of'
-import glob from 'fast-glob'
-import type {
-  ITargetedExpandedEntries,
-  IPathResolver
-} from '../interfaces'
-import { resolve } from './paths'
-
-export { stat, copy } from 'fs-extra'
-
-export const expandTargetedEntries = async (
-  path: IPathResolver,
-  patterns: string[]
-): Promise<ITargetedExpandedEntries> => {
-  const files = await glob(patterns.map(pattern => path.resolve(pattern)))
-
-  return files.reduce<ITargetedExpandedEntries>(
-    (targetedEntries, f: string) => {
-      const relativePath = path.relative(f)
-      const fullPath = resolve(path.relative(f))
-      const target = /\/(scripts|dev|web)\//.test(relativePath) ? 'web' : 'node'
-
-      return {
-        ...targetedEntries,
-        [target]: {
-          ...targetedEntries[target],
-          [relativePath]: {
-            import: fullPath
-          }
-        }
-      }
-    },
-    {}
-  )
-}
 
 export const map = async (iterable: any, transform: (item: any, key: number | string) => Promise<any>): Promise<any> => {
   switch (kindOf(iterable)) {

@@ -1,12 +1,34 @@
 {
-  "name": "@teku/builder",
-  "version": "0.0.28",
-  "description": "Build web and game components at Teku",
+  "name": "@abux/builder",
+  "version": "0.0.29",
+  "description": "Build web and game components",
+  "license": "MIT",
   "main": "./cli/index.js",
   "bin": "./cli/index.js",
   "types": "index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abuxvn/source.git",
+    "directory": "packages/builder"
+  },
+  "keywords": [
+    "abux",
+    "builder",
+    "web",
+    "game",
+    "react",
+    "node"
+  ],
+  "author": {
+    "name": "Hung Luu",
+    "email": "hungluu2106@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Abuilder%22"
+  },
+  "homepage": "https://github.com/abuxvn/source/tree/main/packages/builder#readme",
   "dependencies": {
-    "@teku/resolve": "workspace:^",
+    "@abux/resolve": "workspace:^",
     "chalk": "^4",
     "commander": "^10.0.1",
     "dotenv": "^16.0.3",
@@ -36,6 +58,7 @@
     "src/**/index.js",
     "index.d.ts",
     "config",
-    "README.md"
+    "README.md",
+    "LICENSE"
   ]
 }

@@ -6,7 +6,7 @@ module.exports = {
   transform: {
     '^.+\\.tsx?$': [
       'ts-jest'
-      // { tsconfig: require('@teku/resolve').resolve('./custom.config.json') }
+      // { tsconfig: require('@abux/resolve').resolve('./custom.config.json') }
     ]
   }
 }

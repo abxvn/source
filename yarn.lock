@@ -5,6 +5,52 @@ __metadata:
   version: 6
   cacheKey: 8
 
+"@abux/builder@workspace:packages/builder":
+  version: 0.0.0-use.local
+  resolution: "@abux/builder@workspace:packages/builder"
+  dependencies:
+    "@abux/resolve": "workspace:^"
+    "@types/fs-extra": ^11.0.1
+    "@types/inquirer": ^9.0.3
+    "@types/kind-of": ^6.0.0
+    "@types/webpack": ^5.28.0
+    "@types/webpack-node-externals": ^3.0.0
+    chalk: ^4
+    commander: ^10.0.1
+    dotenv: ^16.0.3
+    execa: ^5.1.1
+    fast-glob: ^3.2.12
+    fs-extra: ^11.1.1
+    html-loader: ^4.2.0
+    html-webpack-plugin: ^5.5.1
+    inquirer: ^8.0.0
+    kind-of: ^6.0.3
+    minimatch: ^9.0.0
+    ts-loader: ^9.4.2
+    typescript: ^5.0.2
+    webpack: ^5.76.3
+    webpack-dev-server: ^4.13.3
+    webpack-node-externals: ^3.0.0
+  bin:
+    builder: ./cli/index.js
+  languageName: unknown
+  linkType: soft
+
+"@abux/resolve@workspace:^, @abux/resolve@workspace:packages/resolve":
+  version: 0.0.0-use.local
+  resolution: "@abux/resolve@workspace:packages/resolve"
+  dependencies:
+    "@types/fs-extra": ^11.0.1
+    "@types/jest": ^29.5.1
+    "@types/node": ^18.16.0
+    commander: ^10.0.1
+    fs-extra: ^11.1.1
+    global-dirs: ^3.0.1
+  bin:
+    resolve: ./cli/index.js
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.2.1
   resolution: "@ampproject/remapping@npm:2.2.1"
@@ -878,52 +924,6 @@ __metadata:
   checksum: c62aa98e7cefda8dedc101ce227abc888dc46b8ff9706c5f0a8dfd9c3ada97d0a5611384738d9ba0b26b59f99c2ba24efece8e779bb08329e9e87358fa309824
   languageName: node
   linkType: hard
-
-"@teku/builder@workspace:packages/builder":
-  version: 0.0.0-use.local
-  resolution: "@teku/builder@workspace:packages/builder"
-  dependencies:
-    "@teku/resolve": "workspace:^"
-    "@types/fs-extra": ^11.0.1
-    "@types/inquirer": ^9.0.3
-    "@types/kind-of": ^6.0.0
-    "@types/webpack": ^5.28.0
-    "@types/webpack-node-externals": ^3.0.0
-    chalk: ^4
-    commander: ^10.0.1
-    dotenv: ^16.0.3
-    execa: ^5.1.1
-    fast-glob: ^3.2.12
-    fs-extra: ^11.1.1
-    html-loader: ^4.2.0
-    html-webpack-plugin: ^5.5.1
-    inquirer: ^8.0.0
-    kind-of: ^6.0.3
-    minimatch: ^9.0.0
-    ts-loader: ^9.4.2
-    typescript: ^5.0.2
-    webpack: ^5.76.3
-    webpack-dev-server: ^4.13.3
-    webpack-node-externals: ^3.0.0
-  bin:
-    builder: ./cli/index.js
-  languageName: unknown
-  linkType: soft
-
-"@teku/resolve@workspace:^, @teku/resolve@workspace:packages/resolve":
-  version: 0.0.0-use.local
-  resolution: "@teku/resolve@workspace:packages/resolve"
-  dependencies:
-    "@types/fs-extra": ^11.0.1
-    "@types/jest": ^29.5.1
-    "@types/node": ^18.16.0
-    commander: ^10.0.1
-    fs-extra: ^11.1.1
-    global-dirs: ^3.0.1
-  bin:
-    resolve: ./cli/index.js
-  languageName: unknown
-  linkType: soft
 
 "@tootallnate/once@npm:2":
   version: 2.0.0
@@ -2878,14 +2878,6 @@ __metadata:
   checksum: afcf03f373d7a6d62c7e9afea6328e62851d627a4e73f2e12d0a8deae1cd375892004f3021883f8aec85932cd2834b091f568ced92b4774625b321db83b827f8
   languageName: node
   linkType: hard
-
-"dummy@workspace:packages/dummy":
-  version: 0.0.0-use.local
-  resolution: "dummy@workspace:packages/dummy"
-  dependencies:
-    "@teku/resolve": "workspace:^"
-  languageName: unknown
-  linkType: soft
 
 "ee-first@npm:1.1.1":
   version: 1.1.1

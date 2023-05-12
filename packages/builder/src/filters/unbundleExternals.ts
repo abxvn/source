@@ -1,6 +1,6 @@
 import webpackNodeExternals from 'webpack-node-externals'
 import webpackPnpExternals from '../plugins/webpackPnpExternals'
-import { map } from '../lib/helpers'
+import { map } from '../lib/data'
 import type { IFilter, IWebpackConfig } from '../interfaces'
 
 const unbundleExternals: IFilter = async ({ editor }) => {

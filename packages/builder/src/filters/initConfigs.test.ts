@@ -1,5 +1,5 @@
 import { type IWebpackConfigs } from '../interfaces'
-import { extractPattern } from '../lib/helpers'
+import { extractPattern } from '../lib/data'
 import { getMockConfig } from '../../tests/mocks/mockConfigs'
 
 const webEntries = {

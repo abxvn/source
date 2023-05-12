@@ -1,8 +1,8 @@
 import { Command } from 'commander'
-import { resolve, resolveModule } from '@teku/resolve'
+import { resolve, resolveModule } from '@abux/resolve'
 
 const main = async (args: any) => {
-  const app = new Command('@teku/resolve')
+  const app = new Command('@abux/resolve')
 
   app.argument('<paths...>', 'modules or paths to resolve from current working dir')
   app.description('Resolving files, module entry paths or metadata')

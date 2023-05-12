@@ -17,7 +17,7 @@ import replaceImports from './filters/replaceImports'
 import generateDts from './filters/generateDts'
 import devServer from './filters/devServer'
 import { resolver } from './lib/paths'
-import { expandTargetedEntries } from './lib/helpers'
+import { expandEntries } from './lib/entries'
 import ConfigDeps from './ConfigDeps'
 
 const defaultFilters = {
@@ -88,7 +88,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   }
 
   async init () {
-    let entries = await expandTargetedEntries(this.path, this.options.entryPatterns)
+    let entries = await expandEntries(this.path, this.options.entryPatterns)
 
     for await (const entryFilter of this.entryFilters) {
       entries = await entryFilter(entries)
