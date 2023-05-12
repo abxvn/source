@@ -19,10 +19,17 @@ yarn init -2
 
 Run this command for the builder to setup necessary dependencies and code base:
 
-````
+```
 yarn dlx @abux/builder init
-````
+```
 
+#### Commands
+
+_Documentation coming soon_
+
+#### Customization
+
+_Documentation coming soon_
 
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abux/builder
