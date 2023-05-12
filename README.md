@@ -1,40 +1,11 @@
-# labs
+Source tools
+=====
 
-### Init source code
-```
-yarn init -2
-yarn add webpack typescript eslint
-yarn dlx @yarnpkg/sdks vscode
-```
+![build][badge-build]
 
-Copy these files / folders:
-- .vscode
-- .editorconfig
-- .gitattributes
-- .gitignore
+### Tool List:
 
-Enable / install recommended VSCode extensions
+- **`@abux/resolve`**: Provide an performant async [`require.resolve`](https://nodejs.org/api/modules.html#modules_all_together) function with pnp supports
+- **`@abux/builder`**: Quick scaffolding code base to build web apps and games
 
-Copy `config/ts` folder and `.eslintignore`, `.eslintrc.js`
-
-Add workspaces into `package.json`
-
-```
-yarn add -D jest @types/jest
-yarn add -D eslint-plugin-jest
-```
-
-Jest Config:
-```
-/** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
-  preset: 'ts-jest',
-  // testEnvironment: 'node'
-  transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest',
-      { tsconfig: require.resolve('./config/ts/tsconfig.packages.json') }
-    ]
-  }
-}
-```
+[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
