@@ -50,6 +50,7 @@ export interface IReplacementOption {
 }
 
 export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
+  name: string
   entry: IEntries
   target?: IBuildTarget
   plugins: WebpackPluginInstance[]
@@ -57,7 +58,7 @@ export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
   externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>
 }
 
-export type IWebpackConfigs = Record<string, IWebpackConfig>
+export type IWebpackConfigs = IWebpackConfig[]
 
 // export type IExpandedEntries = Record<IBuildTarget, IEntries>
 export type ITargetedExpandedEntries = Record<string, IEntries>

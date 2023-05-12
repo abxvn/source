@@ -19,8 +19,8 @@ describe('replaceImports#configs', () => {
   })
 
   it('should add replacement import plugins if requirements provided', () => {
-    const devPlugins = devConfigs.web.plugins || []
-    const prodPlugins = prodConfigs.web.plugins || []
+    const devPlugins = devConfigs[0].plugins || []
+    const prodPlugins = prodConfigs[0].plugins || []
 
     expect(devPlugins.some(p => p instanceof ImportReplacementPlugin)).toBe(true)
     expect(prodPlugins.some(p => p instanceof ImportReplacementPlugin)).toBe(true)

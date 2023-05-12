@@ -13,8 +13,8 @@ describe('replaceVars#configs', () => {
   })
 
   it('should add defined vars', () => {
-    const devPlugins = devConfigs.web.plugins || []
-    const prodPlugins = prodConfigs.web.plugins || []
+    const devPlugins = devConfigs[0].plugins || []
+    const prodPlugins = prodConfigs[1].plugins || []
 
     expect(devPlugins.some(p => p instanceof DefinePlugin)).toBe(true)
     expect(prodPlugins.some(p => p instanceof DefinePlugin)).toBe(true)

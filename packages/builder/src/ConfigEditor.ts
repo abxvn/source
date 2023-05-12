@@ -30,7 +30,7 @@ const defaultFilters = {
 
 export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   readonly path: IPathResolver
-  private _configs: IWebpackConfigs = {}
+  private _configs: IWebpackConfigs = []
   private _entries: ITargetedExpandedEntries = {}
   private _options: IBuilderOptions
   private readonly filters: Record<string, IFilter | null>

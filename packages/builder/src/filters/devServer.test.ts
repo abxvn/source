@@ -22,8 +22,8 @@ describe('generateDts#configs', () => {
   })
 
   it('should remove dev entries for normal builds', () => {
-    expect(devConfigs.web.entry).toEqual(nonDevWebEntries)
-    expect(prodConfigs.web.entry).toEqual(nonDevWebEntries)
+    expect(devConfigs[0].entry).toEqual(nonDevWebEntries)
+    expect(prodConfigs[0].entry).toEqual(nonDevWebEntries)
   })
 
   it('should remove non dev entries for dev builds', () => {
@@ -31,10 +31,10 @@ describe('generateDts#configs', () => {
   })
 
   it('should add config for dev builds', () => {
-    expect(devDevConfigs).toEqual(expect.objectContaining({
-      'web:dev:web/dev/': expect.objectContaining({
+    expect(devDevConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
         devServer: expect.any(Object)
       })
-    }))
+    ]))
   })
 })

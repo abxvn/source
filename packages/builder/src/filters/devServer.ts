@@ -9,7 +9,7 @@ const devServer: IFilter = async ({ editor }) => {
     }
   }
 
-  const newDevConfigs: Record<string, IWebpackConfig> = {}
+  const newDevConfigs: IWebpackConfig[] = []
   const filteredConfigs = filter(editor.configs, (config: IWebpackConfig) => {
     if (config.devServer) {
       return true // avoid overriding dev server config
@@ -29,8 +29,9 @@ const devServer: IFilter = async ({ editor }) => {
 
       const newConfigName = `${config.target as string}:dev:${devDirPath}`
 
-      newDevConfigs[newConfigName] = {
+      newDevConfigs.push({
         ...config,
+        name: newConfigName,
         plugins: [
           ...config.plugins,
           new HtmlWebpackPlugin({
@@ -54,14 +55,14 @@ const devServer: IFilter = async ({ editor }) => {
             publicPath: '/'
           }
         }
-      }
+      })
     })
 
     return false // remove this config
   })
 
   return {
-    configs: Object.assign({}, filteredConfigs, newDevConfigs)
+    configs: [...filteredConfigs, ...newDevConfigs]
   }
 }
 

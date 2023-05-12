@@ -105,13 +105,14 @@ declare module '@abux/builder/src/interfaces' {
     map: IImportReplacementMap;
   }
   export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
+    name: string;
     entry: IEntries;
     target?: IBuildTarget;
     plugins: WebpackPluginInstance[];
     devServer?: WebpackOptionsNormalized['devServer'];
     externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>;
   }
-  export type IWebpackConfigs = Record<string, IWebpackConfig>;
+  export type IWebpackConfigs = IWebpackConfig[];
   export type ITargetedExpandedEntries = Record<string, IEntries>;
   export type IEntries = Record<string, IEntry>;
   export interface IEntry {

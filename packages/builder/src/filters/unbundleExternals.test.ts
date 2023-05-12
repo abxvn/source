@@ -12,10 +12,10 @@ describe('unbundleExternals#configs', () => {
   })
 
   it('should unbundle externals for node builds only', () => {
-    const devWebExtenals = devConfigs.web.externals || []
-    const devNodeExtenals = devConfigs.node.externals || []
-    const prodWebExtenals = prodConfigs.web.externals || []
-    const prodNodeExtenals = prodConfigs.node.externals || []
+    const devWebExtenals = devConfigs[0].externals || []
+    const devNodeExtenals = devConfigs[1].externals || []
+    const prodWebExtenals = prodConfigs[0].externals || []
+    const prodNodeExtenals = prodConfigs[1].externals || []
 
     expect(devWebExtenals).toHaveLength(0)
     expect(prodWebExtenals).toHaveLength(0)
