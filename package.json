@@ -8,8 +8,8 @@
     "components": "webpack -c webpack.components.config.js",
     "test": "jest",
     "lint": "eslint \"packages/**/*.{ts,tsx}\" -c .eslintrc.js",
-    "resolve": "yarn workspace @teku/resolve",
-    "builder": "yarn workspace @teku/builder"
+    "resolve": "yarn workspace @abux/resolve",
+    "builder": "yarn workspace @abux/builder"
   },
   "dependencies": {
     "typescript": "^5.0.4",

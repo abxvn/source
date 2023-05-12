@@ -1,7 +1,7 @@
 {
-  "name": "@teku/resolve",
+  "name": "@abux/resolve",
   "version": "1.0.3",
-  "description": "Teku's async resolve",
+  "description": "Async resolve with pnp supports",
   "main": "index.js",
   "bin": "./cli/index.js",
   "types": "index.d.ts",
@@ -23,11 +23,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tekuasia/labs.git",
+    "url": "git+https://github.com/abuxasia/labs.git",
     "directory": "packages/resolve"
   },
   "keywords": [
-    "teku",
+    "abux",
     "labs",
     "resolve",
     "fast",
@@ -39,7 +39,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/tekuasia/labs/issues"
+    "url": "https://github.com/abuxasia/labs/issues"
   },
-  "homepage": "https://github.com/tekuasia/labs/tree/main/packages/resolve#readme"
+  "homepage": "https://github.com/abuxasia/labs/tree/main/packages/resolve#readme"
 }

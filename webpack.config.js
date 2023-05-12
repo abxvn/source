@@ -20,9 +20,6 @@ const entry = {
   },
   '/packages/resolve/cli/index.ts': {
     import: resolvePath('packages/resolve/cli/index.ts')
-  },
-  '/packages/dummy/cli/index.ts': {
-    import: resolvePath('packages/dummy/cli/index.ts')
   }
 }
 

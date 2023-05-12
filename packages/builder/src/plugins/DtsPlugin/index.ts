@@ -1,7 +1,7 @@
 import type { Compiler } from 'webpack'
 import { pathExists, readJSON } from 'fs-extra'
 
-import { Dts } from '@teku/builder/src/lib/dts/index.js'
+import { Dts } from '@abux/builder/src/lib/dts/index.js'
 import { logError, logInfo, logProgress, logSuccess, logWarn, colorIndex } from '../../lib/logger'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver } from '../../lib/paths'

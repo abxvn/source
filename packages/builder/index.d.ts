@@ -1,9 +1,9 @@
-declare module '@teku/builder/cli/index' {
-  export type { IFilter, IBuilderCustomOptions } from '@teku/builder/src/interfaces';
+declare module '@abux/builder/cli/index' {
+  export type { IFilter, IBuilderCustomOptions } from '@abux/builder/src/interfaces';
 }
-declare module '@teku/builder/src/plugins/DtsPlugin' {
+declare module '@abux/builder/src/plugins/DtsPlugin' {
   import type { Compiler } from 'webpack';
-  import type { IPathResolver } from '@teku/builder/src/interfaces'
+  import type { IPathResolver } from '@abux/builder/src/interfaces'
   class DtsPlugin {
     readonly path: IPathResolver;
     constructor (rootPath: string);
@@ -11,7 +11,7 @@ declare module '@teku/builder/src/plugins/DtsPlugin' {
   }
   export default DtsPlugin;
 }
-declare module '@teku/builder/src/interfaces' {
+declare module '@abux/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';
   export type IBuildEnvironment = 'development' | 'production';
   export type IBuildTarget = 'web' | 'node';
@@ -106,11 +106,11 @@ declare module '@teku/builder/src/interfaces' {
     unset: (name: string) => void;
   }
 }
-declare module '@teku/builder/src/lib/dts' {
+declare module '@abux/builder/src/lib/dts' {
   /// <reference types="node" />
   import type { CompilerOptions } from 'typescript';
   import EventEmitter from 'events';
-  import { type IPathResolver } from '@teku/builder/src/interfaces';
+  import { type IPathResolver } from '@abux/builder/src/interfaces';
   interface IGenerateOptions {
     name: string;
     inputDir: string;
@@ -159,6 +159,6 @@ declare module '@teku/builder/src/lib/dts' {
     emitOutput (): void;
   }
 }
-declare module '@teku/builder' {
-  export * from '@teku/builder/cli/index'
+declare module '@abux/builder' {
+  export * from '@abux/builder/cli/index'
 }

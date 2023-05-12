@@ -1,6 +1,6 @@
 import { map } from '../lib/helpers'
 import type { IBuildTarget, IConfigEditor, IEntries, IFilter, IWebpackConfig } from '../interfaces'
-import { resolve } from '@teku/resolve'
+import { resolve } from '@abux/resolve'
 
 const initConfigs: IFilter = async ({ editor }) => {
   return {

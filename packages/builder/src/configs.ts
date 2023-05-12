@@ -16,7 +16,7 @@ export const getConfigs = async (
 }> => {
   const deps = new ConfigDeps()
   const editor = new ConfigEditor({ envName, rootPath, deps })
-  const customizerFile = editor.path.resolve('teku.config.js')
+  const customizerFile = editor.path.resolve('abux.config.js')
 
   addDefaultDeps(deps)
 
