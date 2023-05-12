@@ -1,7 +1,7 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { extractMatch, filter, map } from '../lib/data'
+import { extractMatch, filter, map, matchPattern } from '../lib/data'
 import { pathExists } from '../lib/vendors'
-import type { IFilter, IWebpackConfig, IWebpackConfigs } from '../interfaces'
+import type { IDevServerOptions, IFilter, IWebpackConfig, IWebpackConfigs } from '../interfaces'
 
 const devServer: IFilter = async ({ editor }) => {
   if (!process.env.WEBPACK_SERVE || editor.options.envName !== 'development') {
@@ -10,6 +10,7 @@ const devServer: IFilter = async ({ editor }) => {
     }
   }
 
+  const { devs } = editor.options
   const newDevConfigs: IWebpackConfig[] = []
   const filteredConfigs = await filter(editor.configs, async (config: IWebpackConfig) => {
     if (config.devServer) {
@@ -39,7 +40,29 @@ const devServer: IFilter = async ({ editor }) => {
         continue
       }
 
-      const newConfigName = `${config.target as string}:dev:${devDirPath}`
+      const newConfigName = `${config.target as string}:dev:${editor.path.relative(devDirPath)}`
+      const baseDevOptions = {
+        open: false,
+        host: '0.0.0.0',
+        port: 0, // random port
+        historyApiFallback: false,
+        compress: true,
+        static: devDirPath, // public serve folder
+        hot: true,
+        devMiddleware: {
+          publicPath: '/'
+        }
+      }
+      const devOptions = devs.reduce<IDevServerOptions>((resultOptions, { pattern, options }) => {
+        if (matchPattern(entry.import, pattern)) {
+          return {
+            ...resultOptions,
+            ...options
+          }
+        } else {
+          return resultOptions
+        }
+      }, baseDevOptions)
 
       newDevConfigs.push({
         ...config,
@@ -55,18 +78,7 @@ const devServer: IFilter = async ({ editor }) => {
           [entryName]: entry
         },
         watch: false,
-        devServer: {
-          open: false,
-          host: '0.0.0.0',
-          port: 0, // random port
-          historyApiFallback: false,
-          compress: true,
-          static: devDirPath, // public serve folder
-          hot: true,
-          devMiddleware: {
-            publicPath: '/'
-          }
-        }
+        devServer: devOptions
       })
     }
 

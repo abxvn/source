@@ -2,7 +2,7 @@ import { Compilation, sources } from 'webpack'
 import type { Compiler } from 'webpack'
 import type { IImportReplacementMap } from '../interfaces'
 import { logInfo } from '../lib/logger'
-import { minimatch } from 'minimatch'
+import { matchPattern } from '../lib/data'
 
 class ImportReplacementPlugin {
   constructor (readonly replacementMap: IImportReplacementMap, readonly pattern?: string | RegExp) {}
@@ -41,19 +41,7 @@ class ImportReplacementPlugin {
   }
 
   private matchAsset (name: string): boolean {
-    if (!this.pattern) {
-      return true
-    }
-
-    if (this.pattern instanceof RegExp) {
-      return this.pattern.test(name)
-    }
-
-    if (typeof this.pattern === 'string') {
-      return minimatch(name, this.pattern)
-    }
-
-    return false
+    return matchPattern(name, this.pattern)
   }
 }
 

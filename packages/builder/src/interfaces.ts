@@ -3,9 +3,11 @@ import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, Ex
 export type IBuildEnvironment = 'development' | 'production'
 export type IBuildTarget = 'web' | 'node'
 
+export type IDevServerOptions = WebpackOptionsNormalized['devServer']
+
 export interface IDevServerCustomOption {
-  pattern?: RegExp | string
-  options: Partial<WebpackOptionsNormalized['devServer']>
+  pattern: RegExp | string
+  options: Partial<IDevServerOptions>
 }
 
 export interface IReplacementOption {
@@ -60,7 +62,7 @@ export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
   entry: IEntries
   target?: IBuildTarget
   plugins: WebpackPluginInstance[]
-  devServer?: WebpackOptionsNormalized['devServer']
+  devServer?: IDevServerOptions
   externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>
 }
 

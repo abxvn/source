@@ -1,4 +1,5 @@
 import kindOf from 'kind-of'
+import { minimatch } from 'minimatch'
 
 export const map = async (iterable: any, transform: (item: any, key: number | string) => Promise<any>): Promise<any> => {
   switch (kindOf(iterable)) {
@@ -56,4 +57,16 @@ export const extractMatch = (str: string, regex: RegExp): string => {
   const match = str.match(regex)
 
   return match ? str.slice(0, (match.index ?? 0) + match[0].length) : ''
+}
+
+export const matchPattern = (str: string, pattern: RegExp | string | undefined) => {
+  if (!pattern) {
+    return true
+  } else if (pattern instanceof RegExp) {
+    return pattern.test(str)
+  } else if (typeof pattern === 'string') {
+    return minimatch(str, pattern)
+  } else {
+    return true
+  }
 }
