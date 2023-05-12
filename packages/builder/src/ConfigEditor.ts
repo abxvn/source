@@ -1,4 +1,5 @@
 import type {
+  IBuilderCustomOptions,
   IBuilderOptions,
   IConfigCustomizer,
   IConfigDeps,
@@ -30,7 +31,7 @@ const defaultFilters = {
 
 export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   readonly path: IPathResolver
-  private _configs: IWebpackConfigs = {}
+  private _configs: IWebpackConfigs = []
   private _entries: ITargetedExpandedEntries = {}
   private _options: IBuilderOptions
   private readonly filters: Record<string, IFilter | null>
@@ -49,6 +50,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
       envName,
       entryPatterns: ['packages/**/index.ts'],
       rootPath,
+      devs: [],
       replacements: [
         {
           map: { react: 'preact/compat', 'react-dom': 'preact/compat' },
@@ -80,7 +82,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
     this.entryFilters.push(entryFilter)
   }
 
-  updateOptions (customOptions: Partial<IBuilderOptions>) {
+  updateOptions (customOptions: IBuilderCustomOptions) {
     this._options = {
       ...this._options,
       ...customOptions

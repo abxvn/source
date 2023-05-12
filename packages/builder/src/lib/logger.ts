@@ -11,26 +11,23 @@ import {
 } from 'chalk'
 import type { IWebpackConfig } from '../interfaces'
 
-export const log = console.log.bind(console)
+export { bold } from 'chalk'
 
+export const log = console.log.bind(console)
 export const logInfo = (...items: any[]) => {
   console.info(bold.blueBright('ℹ'), ...items)
 }
-
 export const logProgress = (...items: any[]) => {
   console.info(gray('➤'), ...items)
 }
-
 export const logWarn = (...items: any[]) => {
   console.info(red('△'), ...items)
 }
-
 export const logError = (...items: any[]) => {
   items.forEach(item => {
     console.error(bold.underline.redBright('✘'), item)
   })
 }
-
 export const logSuccess = (...items: any[]) => {
   console.info(bold.greenBright('✔'), ...items)
 }
@@ -39,7 +36,7 @@ export const logEntries = (configs: IWebpackConfig[]) => {
   logInfo(bold.cyanBright('Building entries:'))
 
   configs.forEach(({ name, target, entry }) => {
-    log(`   ${name as string} (${italic(target)}):`)
+    log(`   ${name} (${italic(target)}):`)
     Object.keys(entry).forEach(entryName => { log(`     ${entryName}`) })
   })
 }

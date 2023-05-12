@@ -26,23 +26,27 @@ describe('initConfigs#configs', () => {
   })
 
   it('should add configs for entries per target', () => {
-    expect(devConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining({
-        entry: webEntries
+    expect(devConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        entry: webEntries,
+        target: 'web'
       }),
-      node: expect.objectContaining({
-        entry: nodeEntries
+      expect.objectContaining({
+        entry: nodeEntries,
+        target: 'node'
       })
-    }))
+    ]))
 
-    expect(prodConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining({
+    expect(prodConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        target: 'web',
         entry: webEntries
       }),
-      node: expect.objectContaining({
+      expect.objectContaining({
+        target: 'node',
         entry: nodeEntries
       })
-    }))
+    ]))
   })
 
   it('should resolve required extensions', () => {
@@ -52,41 +56,57 @@ describe('initConfigs#configs', () => {
       })
     }
 
-    expect(devConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining(resolvedExtensions),
-      node: expect.objectContaining(resolvedExtensions)
-    }))
-    expect(prodConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining(resolvedExtensions),
-      node: expect.objectContaining(resolvedExtensions)
-    }))
+    expect(devConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        ...resolvedExtensions,
+        target: 'web'
+      }),
+      expect.objectContaining({
+        ...resolvedExtensions,
+        target: 'node'
+      })
+    ]))
+    expect(prodConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        ...resolvedExtensions,
+        target: 'web'
+      }),
+      expect.objectContaining({
+        ...resolvedExtensions,
+        target: 'node'
+      })
+    ]))
   })
 
   it('should have rule to process js, ts, tsx', () => {
-    const devRules = devConfigs.web.module?.rules || []
-    const prodRules = devConfigs.web.module?.rules || []
+    const devRules = devConfigs[0].module?.rules || []
+    const prodRules = prodConfigs[0].module?.rules || []
 
     expect(devRules.some((rule: any) => extractPattern(rule.test).includes('js|tsx'))).toBe(true)
     expect(prodRules.some((rule: any) => extractPattern(rule.test).includes('js|tsx'))).toBe(true)
   })
 
   it('should watch during development only', () => {
-    expect(devConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining({
-        watch: true
+    expect(devConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        watch: true,
+        target: 'web'
       }),
-      node: expect.objectContaining({
-        watch: true
+      expect.objectContaining({
+        watch: true,
+        target: 'node'
       })
-    }))
+    ]))
 
-    expect(prodConfigs).toEqual(expect.objectContaining({
-      web: expect.objectContaining({
-        watch: false
+    expect(prodConfigs).toEqual(expect.arrayContaining([
+      expect.objectContaining({
+        watch: false,
+        target: 'web'
       }),
-      node: expect.objectContaining({
-        watch: false
+      expect.objectContaining({
+        watch: false,
+        target: 'node'
       })
-    }))
+    ]))
   })
 })

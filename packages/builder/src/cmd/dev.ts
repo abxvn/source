@@ -8,7 +8,12 @@ import { path } from './options'
 const dev = async (options: any): Promise<void> => {
   const envName = 'development'
   const { configs } = await getConfigs(options.path, envName)
-  const compiler: MultiCompiler = webpack(configs as Configuration[])
+  const compiler: MultiCompiler = webpack(configs.map(config => {
+    return {
+      ...config,
+      stats: 'summary'
+    }
+  }) as Configuration[])
 
   await Promise.all(configs.map(async (config, idx) => {
     const id = idx + 1

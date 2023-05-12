@@ -5,9 +5,31 @@
 [![downloads][npm-downloads-badge]][npm-url]
 [![code style][code-style-badge]][code-style-url]
 
-Quick scaffolding code base to build web apps and games
+Quick scaffolding code base to build web apps and games. Designed to work with Yarn Berry, Yarn SDKs, monorepos, typescript...
 
-_(Docs coming soon)_
+### Usage
+
+#### Scaffold new code base
+
+Optionally, if you start with an empty repo, you can setup yarn berry by:
+
+```
+yarn init -2
+```
+
+Run this command for the builder to setup necessary dependencies and code base:
+
+```
+yarn dlx @abux/builder init
+```
+
+#### Commands
+
+_Documentation coming soon_
+
+#### Customization
+
+_Documentation coming soon_
 
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abux/builder

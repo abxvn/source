@@ -1,5 +1,5 @@
 import ConfigEditor from '../../src/ConfigEditor'
-import type { IFilter, IBuilderOptions } from '../../src/interfaces'
+import type { IFilter, IBuilderCustomOptions } from '../../src/interfaces'
 
 const webEntries = {
   'web/index.ts': {
@@ -25,7 +25,7 @@ class MockConfigEditor extends ConfigEditor {
 }
 
 export const getMockConfig = async (
-  options?: Partial<IBuilderOptions>,
+  options?: IBuilderCustomOptions,
   filters?: Record<string, IFilter>
 ) => {
   const editor = new MockConfigEditor({

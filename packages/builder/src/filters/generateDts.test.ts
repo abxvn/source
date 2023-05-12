@@ -13,8 +13,8 @@ describe('generateDts#configs', () => {
   })
 
   it('should add dts plugin to production build only', () => {
-    const devPlugins = devConfigs.web.plugins || []
-    const prodPlugins = prodConfigs.web.plugins || []
+    const devPlugins = devConfigs[0].plugins || []
+    const prodPlugins = prodConfigs[0].plugins || []
 
     expect(devPlugins.some(p => p instanceof DtsPlugin)).toBe(false)
     expect(prodPlugins.some(p => p instanceof DtsPlugin)).toBe(true)

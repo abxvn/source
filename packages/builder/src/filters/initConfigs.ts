@@ -3,10 +3,15 @@ import type { IBuildTarget, IConfigEditor, IEntries, IFilter, IWebpackConfig } f
 import { resolve } from '@abux/resolve'
 
 const initConfigs: IFilter = async ({ editor }) => {
+  const targetedEntries = editor.entries
+  const targets = Object.keys(targetedEntries)
+
   return {
-    configs: await map(editor.entries, async (entries, target) =>
-      await getConfig(target as IBuildTarget, entries, editor)
-    )
+    configs: await map(targets, async target => {
+      const entries = targetedEntries[target]
+
+      return await getConfig(target as IBuildTarget, entries, editor)
+    })
   }
 }
 
@@ -19,6 +24,7 @@ export const getConfig = async (
 ): Promise<IWebpackConfig> => {
   const { envName = 'development' } = editor.options
   const config: IWebpackConfig = {
+    name: target,
     entry: entries,
     mode: envName,
     output: {
@@ -52,9 +58,7 @@ export const getConfig = async (
     },
     externals: [],
     plugins: [],
-    stats: {
-      logging: true
-    },
+    stats: 'normal',
     watch: envName === 'development',
     devtool: envName === 'development' && 'inline-source-map'
   }

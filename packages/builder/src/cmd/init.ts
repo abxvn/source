@@ -14,6 +14,7 @@ import { getYarnVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
 import { copyConfigs } from './init/copyConfigs'
 import { updatePackageJson } from './init/updatePackageJson'
+import type { IApp } from '../interfaces'
 
 interface IAnswers {
   components: IComponentAnswer
@@ -21,7 +22,7 @@ interface IAnswers {
   editorConfigs: IEditorConfigsAnswer
 }
 
-const init = async (options: any) => {
+const init = async function (this: IApp, options: any) {
   const envName = 'development'
   const { editor, deps } = await getConfigs(options.path, envName)
 
@@ -33,7 +34,7 @@ const init = async (options: any) => {
     editorConfigs
   })
 
-  await installPackages({ answers, deps })
+  await installPackages({ answers, deps }, this)
   await copyConfigs({ answers, deps, editor })
   await updatePackageJson({ editor, deps })
 
