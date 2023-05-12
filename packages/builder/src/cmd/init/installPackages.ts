@@ -1,4 +1,4 @@
-import type { IConfigDeps } from '../../interfaces'
+import type { IApp, IConfigDeps } from '../../interfaces'
 import { badge, logInfo } from '../../lib/logger'
 import { install, installSdk } from '../../lib/packages'
 import {
@@ -11,8 +11,8 @@ interface IInstallPackagesParams {
   answers: { components: IComponentAnswer, sdk: ISdkAnswer }
   deps: IConfigDeps
 }
-export const installPackages = async ({ answers, deps }: IInstallPackagesParams) => {
-  deps.set('@abux/builder', { version: '*' })
+export const installPackages = async ({ answers, deps }: IInstallPackagesParams, app: IApp) => {
+  deps.set('@abux/builder', { version: app.appVersion || '*' })
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
       deps.unset(name)

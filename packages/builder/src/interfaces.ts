@@ -122,3 +122,8 @@ export interface IConfigDeps {
   set: (name: string, data: IConfigDepsSetData) => IDepWithDeps
   unset: (name: string) => void
 }
+
+export interface IApp {
+  readonly appName: string
+  readonly appVersion: string
+}
