@@ -12,7 +12,7 @@ import type {
 } from './interfaces'
 import initConfigs from './filters/initConfigs'
 import unbundleExternals from './filters/unbundleExternals'
-import replaceVars from './filters/replaceVars/replaceVars'
+import replaceVars from './filters/replaceVars'
 import replaceImports from './filters/replaceImports'
 import generateDts from './filters/generateDts'
 import devServer from './filters/devServer'

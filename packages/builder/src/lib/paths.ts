@@ -45,7 +45,7 @@ export const resolve = (path: string) => normalize(_resolve(path))
 export const merge = (...paths: string[]) => normalize(join(...paths))
 export const removeExt = (path: string) => path?.replace(/\.([^/]+)$/, '')
 
-const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
+const MODULE_PATH_REGEX = /([^/.]+\/[^/.]+)/
 
 export const getLocalPackagePath = (relativePath: string): string => {
   if (relativePath.includes('node_modules') || relativePath.includes('.yarn')) {

@@ -10,6 +10,59 @@ declare module '@abux/builder/src/plugins/DtsPlugin' {
     apply (compiler: Compiler): void;
   }
 }
+declare module '@abux/builder/src/lib/dts' {
+  /// <reference types="node" />
+  import type { CompilerOptions } from 'typescript';
+  import EventEmitter from 'events';
+  import { type IPathResolver } from '@abux/builder/src/interfaces';
+  interface IGenerateOptions {
+    name: string;
+    inputDir: string;
+    main?: string;
+    projectPath?: string;
+    outputPath?: string;
+    files?: string[];
+    references?: string[];
+    filePatterns?: string[];
+  }
+  export class Dts extends EventEmitter {
+    generate ({ name, main, inputDir, projectPath, outputPath, files, references, filePatterns }: IGenerateOptions): Promise<void>;
+  }
+  interface IDtsWriterOptions {
+    name: string;
+    main?: string;
+    outputPath: string;
+    references?: string[];
+    excludedPatterns?: string[];
+    resolvedModule?: (resolution: IModuleResolution) => string;
+    resolvedImport?: (resolution: IModuleImportResolution) => string;
+  }
+  interface IModuleResolution {
+    currentModule: string;
+  }
+  interface IModuleImportResolution {
+    currentModule: string;
+    importedModule: string;
+    isExternal?: boolean;
+  }
+  export class DtsWriter extends EventEmitter {
+    readonly ident = "  ";
+    readonly options: IDtsWriterOptions;
+    constructor (options: IDtsWriterOptions);
+    write (inputDir: string, compilerOptions: CompilerOptions, filePaths: string[]): Promise<void>;
+  }
+  interface IDtsFilters {
+    filePatterns?: string[];
+  }
+  export class DtsFilterWriter extends DtsWriter {
+    readonly filters: IDtsFilters;
+    readonly modulePathMap: Record<string, string>;
+    readonly moduleDepsMap: Record<string, string[]>;
+    readonly cachedOutputs: Record<string, string>;
+    constructor (options: IDtsWriterOptions, filters: IDtsFilters);
+    emitOutput (): void;
+  }
+}
 declare module '@abux/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';
   export type IBuildEnvironment = 'development' | 'production';
@@ -105,58 +158,10 @@ declare module '@abux/builder/src/interfaces' {
     unset: (name: string) => void;
   }
 }
-declare module '@abux/builder/src/lib/dts' {
-  /// <reference types="node" />
-  import type { CompilerOptions } from 'typescript';
-  import EventEmitter from 'events';
-  import { type IPathResolver } from '@abux/builder/src/interfaces';
-  interface IGenerateOptions {
-    name: string;
-    inputDir: string;
-    main?: string;
-    projectPath?: string;
-    outputPath?: string;
-    files?: string[];
-    references?: string[];
-    filePatterns?: string[];
-  }
-  export class Dts extends EventEmitter {
-    generate ({ name, main, inputDir, projectPath, outputPath, files, references, filePatterns }: IGenerateOptions): Promise<void>;
-  }
-  interface IDtsWriterOptions {
-    name: string;
-    main?: string;
-    outputPath: string;
-    references?: string[];
-    excludedPatterns?: string[];
-    resolvedModule?: (resolution: IModuleResolution) => string;
-    resolvedImport?: (resolution: IModuleImportResolution) => string;
-  }
-  interface IModuleResolution {
-    currentModule: string;
-  }
-  interface IModuleImportResolution {
-    currentModule: string;
-    importedModule: string;
-    isExternal?: boolean;
-  }
-  export class DtsWriter extends EventEmitter {
-    readonly ident = "  ";
-    readonly options: IDtsWriterOptions;
-    constructor (options: IDtsWriterOptions);
-    write (inputDir: string, compilerOptions: CompilerOptions, filePaths: string[]): Promise<void>;
-  }
-  interface IDtsFilters {
-    filePatterns?: string[];
-  }
-  export class DtsFilterWriter extends DtsWriter {
-    readonly filters: IDtsFilters;
-    readonly modulePathMap: Record<string, string>;
-    readonly moduleDepsMap: Record<string, string[]>;
-    readonly cachedOutputs: Record<string, string>;
-    constructor (options: IDtsWriterOptions, filters: IDtsFilters);
-    emitOutput (): void;
-  }
+declare module '@abux/builder/src/filters/replaceVars' {
+  import type { IFilter } from '@abux/builder/src/interfaces'
+  const replaceVars: IFilter;
+  export default replaceVars;
 }
 declare module '@abux/builder' {
   export * from '@abux/builder/cli/index'
