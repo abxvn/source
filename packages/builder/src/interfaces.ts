@@ -3,17 +3,28 @@ import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, Ex
 export type IBuildEnvironment = 'development' | 'production'
 export type IBuildTarget = 'web' | 'node'
 
+export interface IDevServerCustomOption {
+  pattern?: RegExp | string
+  options: Partial<WebpackOptionsNormalized['devServer']>
+}
+
+export interface IReplacementOption {
+  pattern?: RegExp | string
+  map: IImportReplacementMap
+}
+
 export interface IBuilderOptions {
   envName: IBuildEnvironment
   rootPath: string
   entryPatterns: string[]
   replacements: IReplacementOption[]
+  devs: IDevServerCustomOption[]
 }
 
 export type IBuilderCustomOptions = Partial<IBuilderOptions>
 export interface IConfigCustomizer {
   updateEntries: (entryFilter: IEntryFilter) => void
-  updateOptions: (customOptions: Partial<IBuilderOptions>) => void
+  updateOptions: (customOptions: IBuilderCustomOptions) => void
 
   // config filter
   filter: (filterName: string, filter: IFilter | null) => void
@@ -43,11 +54,6 @@ export interface IFilterOutput {
   configs: IWebpackConfigs
 }
 export type IFilter = (options: IFilterOptions) => Promise<IFilterOutput>
-
-export interface IReplacementOption {
-  pattern?: RegExp | string
-  map: IImportReplacementMap
-}
 
 export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
   name: string

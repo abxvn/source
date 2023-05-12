@@ -20,18 +20,31 @@ export const map = async (iterable: any, transform: (item: any, key: number | st
   }
 }
 
-export const filter = (iterable: any, filter: (item: any, key: number | string) => boolean): any => {
+export const filter = async (iterable: any, filter: (item: any, key: number | string) => Promise<boolean>): Promise<any> => {
+  let result: any
+
   switch (kindOf(iterable)) {
     case 'object':
-      return Object.keys(iterable).reduce((newObj: any, key) => {
-        if (filter(iterable[key], key)) {
-          newObj[key] = iterable[key]
-        }
+      result = {}
+      await Promise.all(Object.keys(iterable).map(async key => {
+        const value = iterable[key]
 
-        return newObj
-      }, {})
+        if (await filter(value, key)) {
+          result[key] = value
+        }
+      }))
+
+      return result
     case 'array':
-      return iterable.filter(filter)
+      result = []
+
+      await Promise.all(iterable.map(async (value: any, idx: number) => {
+        if (await filter(value, idx)) {
+          result.push(value)
+        }
+      }))
+
+      return result
     default:
       throw Error('Please provide object or array input')
   }

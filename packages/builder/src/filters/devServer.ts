@@ -1,5 +1,6 @@
 import HtmlWebpackPlugin from 'html-webpack-plugin'
 import { extractMatch, filter, map } from '../lib/data'
+import { pathExists } from '../lib/vendors'
 import type { IFilter, IWebpackConfig, IWebpackConfigs } from '../interfaces'
 
 const devServer: IFilter = async ({ editor }) => {
@@ -10,7 +11,7 @@ const devServer: IFilter = async ({ editor }) => {
   }
 
   const newDevConfigs: IWebpackConfig[] = []
-  const filteredConfigs = filter(editor.configs, (config: IWebpackConfig) => {
+  const filteredConfigs = await filter(editor.configs, async (config: IWebpackConfig) => {
     if (config.devServer) {
       return true // avoid overriding dev server config
     }
@@ -19,12 +20,23 @@ const devServer: IFilter = async ({ editor }) => {
       return false // remove 'node' targets
     }
 
-    Object.keys(config.entry).forEach(entryName => {
+    const entryNames = Object.keys(config.entry)
+
+    for (let idx = 0; idx < entryNames.length; idx++) {
+      const entryName = entryNames[idx]
       const entry = config.entry[entryName]
-      const devDirPath = getDevDirPath(entry)
+      let devDirPath = getDevDirPath(entry)
 
       if (!devDirPath) {
-        return
+        continue
+      }
+
+      devDirPath = devDirPath.replace(/\/$/, '')
+      const devDivIndex = `${devDirPath}/index.html`
+
+      if (!await pathExists(devDivIndex)) {
+        console.log(devDivIndex)
+        continue
       }
 
       const newConfigName = `${config.target as string}:dev:${devDirPath}`
@@ -36,7 +48,7 @@ const devServer: IFilter = async ({ editor }) => {
           ...config.plugins,
           new HtmlWebpackPlugin({
             inject: true,
-            template: `${devDirPath}/index.html`
+            template: devDivIndex
           })
         ],
         entry: {
@@ -56,7 +68,7 @@ const devServer: IFilter = async ({ editor }) => {
           }
         }
       })
-    })
+    }
 
     return false // remove this config
   })
@@ -69,7 +81,7 @@ const devServer: IFilter = async ({ editor }) => {
 const removeUnusedDevEntries = async (configs: IWebpackConfigs): Promise<IWebpackConfigs> =>
   await map(configs, async config => ({
     ...config,
-    entry: filter(config.entry, entry => !getDevDirPath(entry))
+    entry: await filter(config.entry, async entry => !getDevDirPath(entry))
   }))
 
 const getDevDirPath = (entry: any): string => extractMatch(entry.import, /\/dev\//)
