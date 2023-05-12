@@ -67,16 +67,26 @@ declare module '@abux/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';
   export type IBuildEnvironment = 'development' | 'production';
   export type IBuildTarget = 'web' | 'node';
+  export type IDevServerOptions = WebpackOptionsNormalized['devServer'];
+  export interface IDevServerCustomOption {
+    pattern: RegExp | string;
+    options: Partial<IDevServerOptions>;
+  }
+  export interface IReplacementOption {
+    pattern?: RegExp | string;
+    map: IImportReplacementMap;
+  }
   export interface IBuilderOptions {
     envName: IBuildEnvironment;
     rootPath: string;
     entryPatterns: string[];
     replacements: IReplacementOption[];
+    devs: IDevServerCustomOption[];
   }
   export type IBuilderCustomOptions = Partial<IBuilderOptions>;
   export interface IConfigCustomizer {
     updateEntries: (entryFilter: IEntryFilter) => void;
-    updateOptions: (customOptions: Partial<IBuilderOptions>) => void;
+    updateOptions: (customOptions: IBuilderCustomOptions) => void;
     filter: (filterName: string, filter: IFilter | null) => void;
   }
   export interface IConfigEditorParams {
@@ -100,16 +110,12 @@ declare module '@abux/builder/src/interfaces' {
     configs: IWebpackConfigs;
   }
   export type IFilter = (options: IFilterOptions) => Promise<IFilterOutput>;
-  export interface IReplacementOption {
-    pattern?: RegExp | string;
-    map: IImportReplacementMap;
-  }
   export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
     name: string;
     entry: IEntries;
     target?: IBuildTarget;
     plugins: WebpackPluginInstance[];
-    devServer?: WebpackOptionsNormalized['devServer'];
+    devServer?: IDevServerOptions;
     externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>;
   }
   export type IWebpackConfigs = IWebpackConfig[];
@@ -157,6 +163,10 @@ declare module '@abux/builder/src/interfaces' {
     get: (name: string) => IDepWithDeps | undefined;
     set: (name: string, data: IConfigDepsSetData) => IDepWithDeps;
     unset: (name: string) => void;
+  }
+  export interface IApp {
+    readonly appName: string;
+    readonly appVersion: string;
   }
 }
 declare module '@abux/builder/src/filters/replaceVars' {
