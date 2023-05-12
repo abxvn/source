@@ -3,7 +3,7 @@ const webpackNodeExternals = require('webpack-node-externals')
 const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
 
-const { default: DtsPlugin } = require('./packages/builder/src/plugins/DtsPlugin')
+const { DtsPlugin } = require('./packages/builder/src/plugins/DtsPlugin')
 
 const rootPath = __dirname.replace(/\\/g, '/')
 const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')

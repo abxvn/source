@@ -9,7 +9,7 @@ import { removeExt, resolver } from '../../lib/paths'
 const MODULE_PATH_REGEX = /([^/]+\/[^/]+)/
 let counterId = 0
 
-class DtsPlugin {
+export class DtsPlugin {
   readonly path: IPathResolver
 
   constructor (rootPath: string) {
@@ -105,5 +105,3 @@ class DtsPlugin {
     )
   }
 }
-
-export default DtsPlugin
