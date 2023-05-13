@@ -1,11 +1,15 @@
 {
-  "name": "@abux/cli-collapse",
+  "name": "@abux/logger",
   "version": "0.0.1",
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
-    "index.js"
+    "index.js",
+    "cli/index.js"
   ],
+  "dependencies": {
+    "chalk": "^4"
+  },
   "devDependencies": {
     "@types/node": "^20.1.3"
   }
