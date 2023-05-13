@@ -12,6 +12,7 @@
     "builder": "yarn workspace @abux/builder"
   },
   "dependencies": {
+    "@changesets/cli": "^2.26.1",
     "typescript": "^5.0.4",
     "webpack": "^5.80.0"
   },
