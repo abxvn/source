@@ -11,7 +11,7 @@ const dev = async (options: any): Promise<void> => {
   const compiler: MultiCompiler = webpack(configs.map(config => {
     return {
       ...config,
-      stats: 'summary'
+      stats: 'minimal'
     }
   }) as Configuration[])
 

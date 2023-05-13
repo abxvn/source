@@ -1,0 +1,12 @@
+{
+  "name": "@abux/cli-collapse",
+  "version": "0.0.1",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js"
+  ],
+  "devDependencies": {
+    "@types/node": "^20.1.3"
+  }
+}

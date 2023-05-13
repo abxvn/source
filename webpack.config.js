@@ -21,6 +21,9 @@ const entry = {
   },
   '/packages/resolve/cli/index.ts': {
     import: resolvePath('packages/resolve/cli/index.ts')
+  },
+  '/packages/cli-collapse/index.ts': {
+    import: resolvePath('packages/cli-collapse/index.ts')
   }
 }
 
