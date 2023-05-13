@@ -3,6 +3,8 @@
 ---
 
 Fix commands output:
++ `build`:
+  - Allow alias flag for production build as `--production` (alias to `--node-env production`)
 + `dev`:
   - convert from minimal to normal webpack output
   - collapsible defailted output

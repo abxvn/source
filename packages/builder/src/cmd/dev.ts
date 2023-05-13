@@ -2,7 +2,7 @@ import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import type { Configuration, MultiCompiler } from 'webpack'
 import { getConfigs } from '../configs'
-import { badge, logError, logInfo } from '../lib/logger'
+import { badge, logError, logInfo } from '@abux/logger'
 import { path } from './options'
 
 const dev = async (options: any): Promise<void> => {

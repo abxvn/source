@@ -1,7 +1,7 @@
 import chalk from 'chalk'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
-import { logInfo } from '../../lib/logger'
+import { logInfo } from '@abux/logger'
 import { logProgress, logStep, logWarn } from './loggers'
 
 interface IUpdatePackageJsonParams {

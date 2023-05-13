@@ -3,7 +3,7 @@ import {
   logProgress as _logProgress,
   logSuccess as _logSuccess,
   logInfo
-} from '../../lib/logger'
+} from '@abux/logger'
 
 export const logStep = (...messages: string[]) => {
   logInfo(badge('init', 'blueBright', 'whiteBright'), ...messages)

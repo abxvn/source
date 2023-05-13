@@ -1,4 +1,4 @@
-import { logError, logInfo } from '../lib/logger'
+import { logError, logInfo } from '@abux/logger'
 import { path } from './options'
 import { getConfigs } from '../configs'
 import {

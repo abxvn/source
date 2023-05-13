@@ -1,4 +1,4 @@
-import { collapser } from '@abux/cli-collapse'
+import { collapser } from '@abux/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
 import { install, installSdk } from '../../lib/packages'
 import {
