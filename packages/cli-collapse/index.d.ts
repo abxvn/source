@@ -1,6 +1,7 @@
 declare module '@abux/cli-collapse/lib/interfaces' {
-  export interface ICollapser {
-    write: (message: string) => void;
+  /// <reference types="node" />
+  import type { Writable } from 'stream';
+  export interface ICollapser extends Writable {
     expand: () => void;
     collapse: (clean?: boolean) => void;
   }

@@ -1,11 +1,14 @@
 import readline from 'readline'
 import type { ICollapser } from './interfaces'
+import { Writable } from 'stream'
 
 const EOL = '\n'
 
-export class Collapser implements ICollapser {
+export class Collapser extends Writable implements ICollapser {
   private lines: string[] = []
-  constructor (readonly stream: NodeJS.WriteStream = process.stdout) {}
+  constructor (readonly stream: NodeJS.WriteStream = process.stdout) {
+    super()
+  }
 
   collapse (clean = false) {
     if (!this.isCollapsible) {
@@ -13,7 +16,7 @@ export class Collapser implements ICollapser {
     }
 
     const lineCount = this.lines.length
-    const moveUp = lineCount - 1
+    const moveUp = lineCount
 
     readline.cursorTo(this.stream, 0) // cursor to line start
     readline.moveCursor(this.stream, 0, -moveUp) // move up some lines
@@ -37,8 +40,13 @@ export class Collapser implements ICollapser {
     this.stream.write(this.lines.join(EOL))
   }
 
-  write (message: string) {
-    let lines = message.split(EOL).filter(Boolean)
+  _write (chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
+    const message = chunk?.toString() || ''
+    let lines: string[] = message.split(EOL).filter(Boolean)
+
+    if (!lines.length) {
+      return
+    }
 
     if (this.isCollapsible) { // collapsible
       lines = lines.map(line => line.substring(0, this.width))
@@ -46,7 +54,7 @@ export class Collapser implements ICollapser {
 
     lines.forEach(line => this.lines.push(line))
 
-    this.stream.write(lines.join(EOL))
+    this.stream._write(Buffer.from(lines.join(EOL) + EOL, 'utf-8'), encoding, callback)
   }
 
   get isCollapsible (): boolean {
