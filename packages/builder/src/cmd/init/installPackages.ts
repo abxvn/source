@@ -1,11 +1,12 @@
+import { collapser } from '@abux/cli-collapse'
 import type { IApp, IConfigDeps } from '../../interfaces'
-import { badge, logInfo } from '../../lib/logger'
 import { install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,
   type ISdkAnswer
 } from '../questions'
+import { logProgress, logStep } from './loggers'
 
 interface IInstallPackagesParams {
   answers: { components: IComponentAnswer, sdk: ISdkAnswer }
@@ -31,18 +32,31 @@ export const installPackages = async ({ answers, deps }: IInstallPackagesParams,
     }
   })
 
+  const outputStream = collapser(process.stdout)
+  const errorStream = collapser(process.stderr)
+
+  if (mainDependencies.length || devDependencies.length) {
+    logStep('install dependencies')
+  }
+
   if (mainDependencies.length) {
-    logInfo(badge('init'), 'install', mainDependencies.join(' '))
-    await install(...mainDependencies)
+    logProgress('install', mainDependencies.join(' '))
+    await install(mainDependencies, { outputStream, errorStream })
+    outputStream.collapse(true)
+    errorStream.collapse(true)
   }
 
   if (devDependencies.length) {
-    logInfo(badge('init'), 'install dev', devDependencies.join(' '))
-    await install('--dev', ...devDependencies)
+    logProgress('install dev', devDependencies.join(' '))
+    await install(devDependencies, { dev: true, outputStream, errorStream })
+    outputStream.collapse(true)
+    errorStream.collapse(true)
   }
 
   if (answers.sdk) {
-    logInfo(badge('init'), 'install sdk')
-    await installSdk('vscode')
+    logStep('install sdk vscode')
+    await installSdk('vscode', { outputStream, errorStream })
+    outputStream.collapse(true)
+    errorStream.collapse(true)
   }
 }

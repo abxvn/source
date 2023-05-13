@@ -81,7 +81,21 @@ export const colorIndex = (message: string, colorIndex = 0) => {
 }
 
 type IBadgeColorName = keyof typeof BadgeColors
-export const badge = (message: string, color: IBadgeColorName = 'blueBright') => {
+export const badge = (
+  message: string,
+  color: IBadgeColorName = 'blueBright',
+  textColor?: ITextColorName | 'white' | 'whiteBright' | 'black'
+) => {
   // eslint-disable-next-line no-irregular-whitespace
-  return color ? BadgeColors[color](` ${bold(message)} `) : message
+  if (!color) {
+    return message
+  }
+
+  let painter = BadgeColors[color]
+
+  if (textColor) {
+    painter = painter[textColor]
+  }
+
+  return painter(` ${bold(message)} `)
 }

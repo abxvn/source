@@ -1,8 +1,8 @@
 import { copy } from '../../lib/vendors'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
-import { badge, logInfo, logProgress } from '../../lib/logger'
 import { resolver } from '../../lib/paths'
 import { type IEditorConfigsAnswer } from '../questions'
+import { logProgress, logStep } from './loggers'
 
 const configSource = resolver(__dirname).res('../config')
 
@@ -32,12 +32,12 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
     return
   }
 
-  logInfo(badge('init'), 'copy configs...')
+  logStep('copy configs...')
   const sourcePaths = configSource.resolveList(copies)
   const destPaths = editor.path.resolveList(copies.map(p => p.replace(/\/?_/g, '/')))
 
   await Promise.all(destPaths.map(async (dest, idx) => {
-    logProgress(badge('init'), `copy ${dest}`)
+    logProgress(`copy ${dest}`)
     await copy(sourcePaths[idx], dest)
   }))
 }

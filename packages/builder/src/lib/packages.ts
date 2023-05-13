@@ -9,19 +9,47 @@ const cliOptions = {
   }
 }
 
-export const install = async (...packages: string[]) => {
-  const subProcess = execa('yarn', ['add', '--silent', ...packages], cliOptions)
+interface IWritable {
+  write: (message: string) => void
+}
 
-  // Filter out specific messages and pipe remaining output to process.stdout
-  subProcess.stdout?.on('data', (chunk: Buffer) => {
-    const line = chunk.toString()
+interface IInstallOptions {
+  dev?: boolean
+  outputStream?: IWritable
+  errorStream?: IWritable
+}
 
-    if (!line.includes('fetched from')) {
-      process.stdout.write(line)
-    }
-  })
+export const install = async (
+  packages: string[],
+  options?: IInstallOptions
+) => {
+  const {
+    dev = false,
+    outputStream = process.stdout,
+    errorStream = process.stderr
+  } = options || {}
 
-  subProcess.stderr?.pipe(process.stderr)
+  const subProcess = execa('yarn', [
+    'add',
+    '--silent',
+    dev ? '--dev' : '',
+    ...packages
+  ].filter(Boolean), cliOptions)
+
+  if (outputStream) {
+    // Filter out specific messages and pipe remaining output to process.stdout
+    subProcess.stdout?.on('data', (chunk: Buffer) => {
+      const line = chunk.toString()
+
+      if (!line.includes('fetched from')) {
+        outputStream.write(line)
+      }
+    })
+  }
+
+  if (errorStream) {
+    subProcess.stderr?.pipe(errorStream as NodeJS.WritableStream)
+  }
 
   await subProcess
 }
@@ -32,10 +60,27 @@ export const getYarnVersion = async (): Promise<string> => {
   return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
 }
 
-export const installSdk = async (name: string) => {
+export const installSdk = async (name: string, options?: Omit<IInstallOptions, 'dev'>) => {
+  const {
+    outputStream = process.stdout,
+    errorStream = process.stderr
+  } = options || {}
   const subProcess = execa('yarn', ['dlx', '@yarnpkg/sdks', name], cliOptions)
 
-  subProcess.stdout?.pipe(process.stdout)
+  if (outputStream) {
+    // Filter out specific messages and pipe remaining output to process.stdout
+    subProcess.stdout?.on('data', (chunk: Buffer) => {
+      const line = chunk.toString()
+
+      if (!line.includes('fetched from')) {
+        outputStream.write(line)
+      }
+    })
+  }
+
+  if (errorStream) {
+    subProcess.stderr?.pipe(errorStream as NodeJS.WritableStream)
+  }
 
   await subProcess
 }
