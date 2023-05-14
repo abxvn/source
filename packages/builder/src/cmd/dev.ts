@@ -17,7 +17,9 @@ const dev = async (options: any): Promise<void> => {
   const streams: ICollapsible[] = []
 
   compiler.hooks.done.tap('setuplogCleaner', () => { // clean error logs after each compilation
-    streams.forEach(stream => stream.collapse())
+    streams.forEach(stream => {
+      stream.collapse()
+    })
     Object.keys(ports).forEach(name => {
       logInfo(`${badge(name, 'blue', 'white')} dev port ${ports[name]}, bundling...`)
     })
