@@ -95,5 +95,5 @@ export const badge = (
     painter = painter[textColor]
   }
 
-  return painter(` ${bold(message) as string} `)
+  return painter(` ${bold(message)} `)
 }

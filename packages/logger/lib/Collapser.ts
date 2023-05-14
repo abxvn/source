@@ -8,6 +8,7 @@ const EOL = '\n'
 export class Collapser extends Writable implements ICollapsible, IWritable {
   private lines: string[] = []
   private isWriting = false
+
   constructor (readonly stream: NodeJS.WriteStream = process.stdout, watchStream = false) {
     super()
 
@@ -15,7 +16,7 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
       throw Error('[collapser] please provide stream')
     }
 
-    if (watchStream) { // install watcher
+    if (watchStream && this.isCollapsible) { // install watcher
       watch(stream, (data: Buffer) => { this.watchOnData(data) })
     }
   }
@@ -25,9 +26,14 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
       return
     }
 
-    const lineCount = this.lines.length
-    const moveUp = lineCount
+    const lines = this.lines
+    const moveUp = lines.length
 
+    if (moveUp === 0) {
+      return
+    }
+
+    this.isWriting = true
     cursorTo(this.stream, 0) // cursor to line start
     moveCursor(this.stream, 0, -moveUp) // move up some lines
     for (let x = 0; x < moveUp; x++) {
@@ -36,6 +42,7 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
     }
     moveCursor(this.stream, 0, -moveUp) // move back up some lines
     cursorTo(this.stream, 0) // cursor to line start
+    this.isWriting = false
 
     if (clean) {
       this.lines = []
@@ -47,39 +54,28 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
       return
     }
 
+    this.isWriting = true
     this.stream.write(this.lines.join(EOL))
+    this.isWriting = false
   }
 
   _write (chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
     const message = chunk?.toString() || ''
+    const lines = message.split(EOL).filter(Boolean)
+
+    if (!lines.length) {
+      return
+    }
 
     this.isWriting = true
     this.stream._write(
-      Buffer.from(this.getLines(message).join(EOL) + EOL, 'utf-8'),
+      Buffer.from(this.collectLines(lines).join(EOL) + EOL, 'utf-8'),
       encoding,
-      callback
+      (error) => {
+        this.isWriting = false
+        callback(error)
+      }
     )
-    this.isWriting = false
-  }
-
-  private getLines (message: string) {
-    const lines: string[] = message.split(EOL)
-
-    if (!lines.length) {
-      return lines
-    }
-
-    if (this.isCollapsible) { // collapsible
-      lines.forEach(line => {
-        this.chunks(line, this.width).forEach(chunk => {
-          this.lines.push(chunk)
-        })
-      })
-    }
-
-    lines.forEach(line => this.lines.push(line))
-
-    return lines
   }
 
   private watchOnData (data: Buffer) {
@@ -87,7 +83,9 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
       return
     }
 
-    this.getLines(data.toString()).forEach(line => this.lines.push(line))
+    const lines = data.toString().split(EOL)
+
+    this.collectLines(lines)
   }
 
   get isCollapsible (): boolean {
@@ -104,6 +102,22 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
     return this.lines.length
   }
 
+  private collectLines (lines: string[]) {
+    if (!lines.length) {
+      return lines
+    }
+
+    if (this.isCollapsible) { // collapsible
+      lines.forEach(line => {
+        this.interactLineChunks(line, this.width).forEach(chunk => {
+          this.lines.push(chunk)
+        })
+      })
+    }
+
+    return lines
+  }
+
   private chunks (str: string, chunkSize: number): string[] {
     const chunks: string[] = []
     let start = 0
@@ -116,5 +130,40 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
     }
 
     return chunks
+  }
+
+  private interactLineChunks (line: string, chunkSize: number): string[] {
+    // \1xB is ANSI escape code, follow with these modifiers:
+    // end with 'm' to modify colors and styles
+    // cursor line A up, B down, E down start, F up start
+    // cursor position C right, D left, G start
+    // n;mH to exact position
+    // J to clear screen
+    // K to clear line
+    // scroll S up T down
+    // eslint-disable-next-line no-control-regex
+    const ansiRegex = /\x1B(?:\[(\d+)([ABEF]))/g
+    let match = ansiRegex.exec(line)
+
+    while (match) {
+      const count = +match[1]
+      const mod = match[2]
+      const isUp = mod === 'A' || mod === 'F'
+
+      if (isUp) {
+        console.log('Moved up', count)
+        this.lines = this.lines.slice(0, -count)
+      } else {
+        console.log('Moved down', match[1], count)
+        this.lines = this.lines.concat(Array(count).fill(''))
+      }
+
+      match = ansiRegex.exec(line)
+    }
+
+    // clear possible ansi escape codes
+    line = line.replace(/\x1B(\[[\d;]+[mABCDEFGHJKST])/ug, '') // eslint-disable-line no-control-regex
+
+    return this.chunks(line, chunkSize)
   }
 }
