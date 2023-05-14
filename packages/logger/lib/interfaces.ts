@@ -24,4 +24,5 @@ export interface ICollapsible extends Writable {
   collapse: (clean?: boolean) => void
   isCollapsible: boolean
   width: number
+  count: number
 }

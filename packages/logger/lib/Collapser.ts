@@ -63,14 +63,18 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
   }
 
   private getLines (message: string) {
-    let lines: string[] = message.split(EOL).filter(Boolean)
+    const lines: string[] = message.split(EOL)
 
     if (!lines.length) {
       return lines
     }
 
     if (this.isCollapsible) { // collapsible
-      lines = lines.map(line => line.substring(0, this.width))
+      lines.forEach(line => {
+        this.chunks(line, this.width).forEach(chunk => {
+          this.lines.push(chunk)
+        })
+      })
     }
 
     lines.forEach(line => this.lines.push(line))
@@ -94,5 +98,23 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
   get width (): number {
     // set max width to 80 in tty-mode and 200 in notty-mode
     return this.stream.columns || (this.stream.isTTY ? 80 : 200)
+  }
+
+  get count (): number {
+    return this.lines.length
+  }
+
+  private chunks (str: string, chunkSize: number): string[] {
+    const chunks: string[] = []
+    let start = 0
+    let end = chunkSize
+
+    while (start < str.length) {
+      chunks.push(str.substring(start, end))
+      start = end
+      end += chunkSize
+    }
+
+    return chunks
   }
 }
