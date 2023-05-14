@@ -1,9 +1,11 @@
 declare module '@abux/logger/lib/interfaces' {
   /// <reference types="node" />
   import type { Writable } from 'stream';
-  export interface ICollapser extends Writable {
+  export interface ICollapsible extends Writable {
     expand: () => void;
     collapse: (clean?: boolean) => void;
+    isCollapsible: boolean;
+    width: number;
   }
 }
 declare module '@abux/logger/cli' {
@@ -11,9 +13,10 @@ declare module '@abux/logger/cli' {
   /// <reference types="node" />
   /// <reference types="node" />
   /// <reference types="node" />
-  import type { ICollapser } from '@abux/logger/lib/interfaces';
-  export const collapser: (stream?: NodeJS.WriteStream) => ICollapser;
-  export const collapse: ICollapser;
+  import type { ICollapsible } from '@abux/logger/lib/interfaces';
+  export type { ICollapsible } from '@abux/logger/lib/interfaces';
+  export const collapsible: (stream?: NodeJS.WriteStream, collectFromStream?: boolean) => ICollapsible;
+  export const collapse: ICollapsible;
 }
 declare module '@abux/logger/lib/loggers' {
   export { bold, italic, underline } from 'chalk';

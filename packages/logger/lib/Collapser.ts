@@ -1,16 +1,26 @@
-import readline from 'readline'
-import type { ICollapser } from './interfaces'
+import { cursorTo, moveCursor, clearLine } from 'readline'
+import type { ICollapsible, IWritable } from './interfaces'
 import { Writable } from 'stream'
+import { watch } from './CollapserWatcher'
 
 const EOL = '\n'
 
-export class Collapser extends Writable implements ICollapser {
+export class Collapser extends Writable implements ICollapsible, IWritable {
   private lines: string[] = []
-  constructor (readonly stream: NodeJS.WriteStream = process.stdout) {
+  private isWriting = false
+  constructor (readonly stream: NodeJS.WriteStream = process.stdout, watchStream = false) {
     super()
+
+    if (!this.stream) {
+      throw Error('[collapser] please provide stream')
+    }
+
+    if (watchStream) { // install watcher
+      watch(stream, (data: Buffer) => { this.watchOnData(data) })
+    }
   }
 
-  collapse (clean = false) {
+  collapse (clean = true) {
     if (!this.isCollapsible) {
       return
     }
@@ -18,14 +28,14 @@ export class Collapser extends Writable implements ICollapser {
     const lineCount = this.lines.length
     const moveUp = lineCount
 
-    readline.cursorTo(this.stream, 0) // cursor to line start
-    readline.moveCursor(this.stream, 0, -moveUp) // move up some lines
+    cursorTo(this.stream, 0) // cursor to line start
+    moveCursor(this.stream, 0, -moveUp) // move up some lines
     for (let x = 0; x < moveUp; x++) {
-      readline.clearLine(this.stream, 0) // clear current line
-      readline.moveCursor(this.stream, 0, 1) // move to next line
+      clearLine(this.stream, 0) // clear current line
+      moveCursor(this.stream, 0, 1) // move to next line
     }
-    readline.moveCursor(this.stream, 0, -moveUp) // move back up some lines
-    readline.cursorTo(this.stream, 0) // cursor to line start
+    moveCursor(this.stream, 0, -moveUp) // move back up some lines
+    cursorTo(this.stream, 0) // cursor to line start
 
     if (clean) {
       this.lines = []
@@ -42,10 +52,21 @@ export class Collapser extends Writable implements ICollapser {
 
   _write (chunk: any, encoding: BufferEncoding, callback: (error?: Error | null) => void) {
     const message = chunk?.toString() || ''
+
+    this.isWriting = true
+    this.stream._write(
+      Buffer.from(this.getLines(message).join(EOL) + EOL, 'utf-8'),
+      encoding,
+      callback
+    )
+    this.isWriting = false
+  }
+
+  private getLines (message: string) {
     let lines: string[] = message.split(EOL).filter(Boolean)
 
     if (!lines.length) {
-      return
+      return lines
     }
 
     if (this.isCollapsible) { // collapsible
@@ -54,7 +75,15 @@ export class Collapser extends Writable implements ICollapser {
 
     lines.forEach(line => this.lines.push(line))
 
-    this.stream._write(Buffer.from(lines.join(EOL) + EOL, 'utf-8'), encoding, callback)
+    return lines
+  }
+
+  private watchOnData (data: Buffer) {
+    if (this.isWriting) {
+      return
+    }
+
+    this.getLines(data.toString()).forEach(line => this.lines.push(line))
   }
 
   get isCollapsible (): boolean {

@@ -1,7 +1,11 @@
 import { Collapser } from '../lib/Collapser'
-import type { ICollapser } from '../lib/interfaces'
+import type { ICollapsible } from '../lib/interfaces'
 
-export const collapser = (stream: NodeJS.WriteStream = process.stdout): ICollapser =>
-  new Collapser(stream)
+export type { ICollapsible } from '../lib/interfaces'
 
-export const collapse = collapser()
+export const collapsible = (
+  stream: NodeJS.WriteStream = process.stdout,
+  collectFromStream = false
+): ICollapsible => new Collapser(stream, collectFromStream)
+
+export const collapse = collapsible()
