@@ -1,26 +1,31 @@
 @abux/logger
 =====
-
-![build][badge-build]
+[![build][badge-build]][changelog]
+[![version][npm-version-badge]][npm-url]
+[![downloads][npm-downloads-badge]][npm-url]
 
 An utility logger for CLI and web, to be reused in our projects
 
 **Table of contents**
-+ [Features](#features)
-+ [Example: collapsible console logs](#example-collapsible-console-logs)
-+ [Example: collapsible streams](#example-collapsible-streams)
-+ [Example: manipulate other streams](#example-manipulate-other-streams)
-+ [Example: styled loggers](#example-styled-loggers)
+* [Features:](#features)
+* [Examples](#examples)
+  + [Collapsible console logs](#collapsible-console-logs)
+  + [Collapsible streams](#collapsible-streams)
+  + [Manipulate other streams](#manipulate-other-streams)
+  + [Styled loggers](#styled-loggers)
+* [Changelog](#changelog)
 
-### Features:
-
+Features:
+-----
 - Designed to work as a log stream
 - Stream writer can be piped and collapsed (replace previous lines with new data)
 - Add watcher to collapse other streams (supports process.stdout and process.stderr too)
 - Handle ANSI escape codes
 - Some helper method for styled loggers
 
-### Example: collapsible console logs
+Examples
+-----
+### Collapsible console logs
 
 ```typescript
 import { collapse } from '@abux/logger/cli'
@@ -33,7 +38,7 @@ collapse.write(`B`)
 collapse.collapse()
 ```
 
-### Example: collapsible streams
+### Collapsible streams
 
 ```typescript
 import { collapsible } from '@abux/logger/cli'
@@ -43,7 +48,7 @@ collapsible(process.stderr)
 collapsible(<anyWritableStream>)
 ```
 
-### Example: manipulate other streams
+### Manipulate other streams
 
 ```typescript
 import { collapsible } from '@abux/logger/cli'
@@ -55,7 +60,7 @@ const stream = collapsible(process.stdout, true)
 stream.collapse()
 ```
 
-### Example: styled loggers
+### Styled loggers
 
 ```typescript
 import { 
@@ -69,4 +74,15 @@ bold('bold-text')
 underline('underlined-text')
 ```
 
+Changelog
+-----
+See [CHANGELOG.md][changelog]
+
+-----
+Cheers 🍻
+
+[changelog]: https://github.com/abuxvn/source/blob/main/packages/logger/CHANGELOG.md
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abux/logger
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/logger
+[npm-version-badge]: https://img.shields.io/npm/v/@abux/logger

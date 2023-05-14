@@ -1,15 +1,22 @@
 @abux/builder
 =====
-![build][badge-build]
+[![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
 [![downloads][npm-downloads-badge]][npm-url]
 [![code style][code-style-badge]][code-style-url]
 
 Quick scaffolding code base to build web apps and games. Designed to work with Yarn Berry, Yarn SDKs, monorepos, typescript...
 
-### Usage
+**Table of contents**
++ [Usage](#usage)
+  - [Scaffold new code base](#scaffold-new-code-base)
+  - [Commands](#commands)
+  - [Customization](#customization)
++ [Changelog](#changelog)
 
-#### Scaffold new code base
+Usage
+-----
+### Scaffold new code base
 
 Optionally, if you start with an empty repo, you can setup yarn berry by:
 
@@ -23,14 +30,22 @@ Run this command for the builder to setup necessary dependencies and code base:
 yarn dlx @abux/builder init
 ```
 
-#### Commands
+### Commands
 
 _Documentation coming soon_
 
-#### Customization
+### Customization
 
 _Documentation coming soon_
 
+Changelog
+-----
+See [CHANGELOG.md][changelog]
+
+-----
+Cheers 🍻
+
+[changelog]: https://github.com/abuxvn/source/blob/main/packages/builder/CHANGELOG.md
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abux/builder
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/builder
