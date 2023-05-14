@@ -1,7 +1,7 @@
 import type { Compiler } from 'webpack'
 import { Dts } from '@abux/builder/src/lib/dts/index.js'
 import { pathExists, readJSON } from '../../lib/vendors'
-import { logError, logInfo, logProgress, logSuccess, logWarn, colorIndex } from '../../lib/logger'
+import { logError, logInfo, logProgress, logSuccess, logWarn, color } from '@abux/logger'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver, getLocalPackagePath } from '../../lib/paths'
 
@@ -99,7 +99,7 @@ export class DtsPlugin {
     }
 
     return message.replace(/^\[(dtsw?)\]/, (_, prefix: string) =>
-      colorIndex(`[${prefix} ${id}]`, id)
+      color(`[${prefix} ${id}]`, id)
     )
   }
 }

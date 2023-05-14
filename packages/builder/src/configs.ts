@@ -1,4 +1,4 @@
-import type { IBuildEnvironment, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
+import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
 import { pathExists } from './lib/vendors'
@@ -6,9 +6,14 @@ import chalk from 'chalk'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'
 
+interface IConfigCustom {
+  options: IBuilderCustomOptions
+}
+
 export const getConfigs = async (
   rootPath: string,
-  envName: IBuildEnvironment = 'development'
+  envName: IBuildEnvironment = 'development',
+  custom?: IConfigCustom
 ): Promise<{
   deps: IConfigDeps
   editor: IConfigEditor
@@ -19,6 +24,10 @@ export const getConfigs = async (
   const customizerFile = editor.path.resolve('abux.config.js')
 
   addDefaultDeps(deps)
+
+  if (custom?.options) {
+    editor.updateOptions(custom.options)
+  }
 
   if (await pathExists(customizerFile)) {
     // since nodejs built-in `require` doesn't work with local js file:
@@ -31,8 +40,8 @@ export const getConfigs = async (
       editor.updateOptions(customConfig.options)
     }
 
-    if (customConfig.custom && typeof customConfig.custom === 'function') {
-      editor.filter('workspace:custom', customConfig.custom)
+    if (customConfig.filter && typeof customConfig.filter === 'function') {
+      editor.filter('workspace:custom', customConfig.filter)
     }
   }
 

@@ -1,6 +1,5 @@
 import {
   bold,
-  italic,
   red,
   gray,
   // text util colors
@@ -9,9 +8,8 @@ import {
   bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgGreenBright, bgYellowBright, bgBlueBright, bgMagentaBright, bgCyanBright,
   bgRed, bgRedBright
 } from 'chalk'
-import type { IWebpackConfig } from '../interfaces'
 
-export { bold } from 'chalk'
+export { bold, italic, underline } from 'chalk'
 
 export const log = console.log.bind(console)
 export const logInfo = (...items: any[]) => {
@@ -30,15 +28,6 @@ export const logError = (...items: any[]) => {
 }
 export const logSuccess = (...items: any[]) => {
   console.info(bold.greenBright('✔'), ...items)
-}
-
-export const logEntries = (configs: IWebpackConfig[]) => {
-  logInfo(bold.cyanBright('Building entries:'))
-
-  configs.forEach(({ name, target, entry }) => {
-    log(`   ${name} (${italic(target)}):`)
-    Object.keys(entry).forEach(entryName => { log(`     ${entryName}`) })
-  })
 }
 
 const TextColors = {
@@ -68,20 +57,43 @@ const BadgeColors = {
   red: bgRed,
   redBright: bgRedBright
 }
+const badgeColorNames = Object.keys(TextColors)
 
 type ITextColorName = keyof typeof TextColors
-export const color = (message: string, color: ITextColorName = 'blue') => {
+export const color = (
+  message: string,
+  color: ITextColorName | number = 'blue'
+): string => {
+  if (typeof color === 'number') {
+    color = textColorNames[color % textColorNames.length] as ITextColorName
+  }
+
   return color ? TextColors[color](message) : message
 }
 
-export const colorIndex = (message: string, colorIndex = 0) => {
-  const colorName = textColorNames[colorIndex % textColorNames.length] as ITextColorName
-
-  return color(message, colorName)
-}
-
 type IBadgeColorName = keyof typeof BadgeColors
-export const badge = (message: string, color: IBadgeColorName = 'blueBright') => {
-  // eslint-disable-next-line no-irregular-whitespace
-  return color ? BadgeColors[color](` ${bold(message)} `) : message
+export const badge = (
+  message: string,
+  color: IBadgeColorName | number = 'blueBright',
+  textColor?: ITextColorName | 'white' | 'whiteBright' | 'black' | number
+): string => {
+  if (typeof color === 'number') {
+    color = badgeColorNames[color % badgeColorNames.length] as IBadgeColorName
+  }
+
+  if (typeof textColor === 'number') {
+    textColor = textColorNames[textColor % textColorNames.length] as ITextColorName
+  }
+
+  if (!color) {
+    return message
+  }
+
+  let painter = BadgeColors[color]
+
+  if (textColor) {
+    painter = painter[textColor]
+  }
+
+  return painter(` ${bold(message)} `)
 }

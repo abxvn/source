@@ -348,7 +348,7 @@ export class DtsWriter extends EventEmitter {
 
   private writeDeclaration (declarationFile: SourceFile) {
     const filePath = resolve(declarationFile.fileName)
-    const currentModule = removeExtension(this.inDir?.relative(filePath) || '')
+    const currentModule = '/' + removeExtension(this.inDir?.relative(filePath) || '')
 
     if (!currentModule) {
       throw Error(`[dtsw] unable to resolve current module for ${currentModule}`)
@@ -493,8 +493,12 @@ export class DtsWriter extends EventEmitter {
 
     this.emit('log', `[dtsw] declared module ${moduleId}`)
     this.writeOutput(`declare module '${moduleId}' {`)
-    this.writeOutput(lines.join(EOL))
+    this.writeOutput(this.deduplicateLines(lines).join(EOL))
     this.writeOutput('}')
+  }
+
+  protected deduplicateLines (lines: string[]) {
+    return lines
   }
 
   protected filterOutput (contents: string): string[] {
@@ -573,7 +577,7 @@ export class DtsWriter extends EventEmitter {
   }
 
   protected prefixModule (moduleId: string, isExternal = false) {
-    return !isExternal ? `${this.options.name}/${moduleId}` : moduleId
+    return !isExternal ? `${this.options.name}/${moduleId.replace(/^\//, '')}` : moduleId.replace(/^\//, '')
   }
 
   private get output (): WriteStream {
@@ -669,7 +673,7 @@ export class DtsFilterWriter extends DtsWriter {
 
     const output = [
       `declare module '${moduleId}' {`,
-      lines.join(EOL),
+      this.deduplicateLines(lines).join(EOL),
       '}'
     ].join(EOL)
 

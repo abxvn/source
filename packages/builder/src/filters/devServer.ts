@@ -36,7 +36,6 @@ const devServer: IFilter = async ({ editor }) => {
       const devDivIndex = `${devDirPath}/index.html`
 
       if (!await pathExists(devDivIndex)) {
-        console.log(devDivIndex)
         continue
       }
 

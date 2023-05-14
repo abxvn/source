@@ -1,21 +1,23 @@
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
 import { getConfigs } from '../configs'
-import { logError, logEntries, log, logSuccess, logInfo, badge } from '../lib/logger'
+import { logError, log, logSuccess, logInfo, badge } from '@abux/logger'
+import { logEntries } from '../lib/entries'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
-import { nodeEnv, path } from './options'
+import { nodeEnv, path, production } from './options'
 import { type IBuildEnvironment } from '../interfaces'
 
 interface IBuildOptions {
   path: string
   nodeEnv: IBuildEnvironment
+  production?: boolean
 }
 
 const build = async (options: IBuildOptions): Promise<void> => {
   try {
     process.env.WEBPACK_SERVE = ''
 
-    const envName = options.nodeEnv
+    const envName = options.production ? 'production' : options.nodeEnv
     const { configs } = await getConfigs(options.path, envName)
 
     if (!configs.length) {
@@ -56,6 +58,7 @@ export default {
   action: build,
   options: [
     path,
-    nodeEnv
+    nodeEnv,
+    production
   ]
 }

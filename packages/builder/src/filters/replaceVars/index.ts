@@ -4,7 +4,7 @@ import type { IEntries, IFilter, IPathResolver, IWebpackConfig } from '../../int
 import { getLocalPackagePath, resolver } from '../../lib/paths'
 import { pathExists, readFile, readJSON } from '../../lib/vendors'
 import { parse } from 'dotenv'
-import { logInfo, logWarn } from '../../lib/logger'
+import { logInfo, logWarn } from '@abux/logger'
 
 const replaceVars: IFilter = async ({ editor }) => {
   const path = resolver(editor.path.rootPath)

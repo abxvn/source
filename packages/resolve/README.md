@@ -1,6 +1,6 @@
 @abux/resolve
 =====
-![build][badge-build]
+[![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
 [![downloads][npm-downloads-badge]][npm-url]
 [![code style][code-style-badge]][code-style-url]
@@ -13,15 +13,16 @@ Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modu
   - _Allow advanced search using file contents search (coming soon)_
 
 **Table of contents**
-+ [Installation](#installation)
-+ [Usage](#usage)
-  - [Resolve in async way](#resolve-in-async-way)
-  - [Resolve modules](#resolve-modules)
-  - [Options](#options)
-  - [Play with CLI](#play-with-cli)
-  - [Resolve in classic way](#resolve-in-classic-way)
-+ [Benchmarks](#benchmarks)
-+ [Contribution](#contribution)
+* [Installation](#installation)
+* [Usage](#usage)
+  + [Resolve in async way](#resolve-in-async-way)
+  + [Resolve modules](#resolve-modules)
+  + [Options](#options)
+  + [Play with CLI](#play-with-cli)
+  + [Resolve in classic way](#resolve-in-classic-way)
+* [Benchmarks](#benchmarks)
+* [Contribution](#contribution)
+* [Changelog](#changelog)
 
 Installation
 -----
@@ -167,10 +168,14 @@ yarn start
 
 If you have any other suggestions, you can even open new issues with `type: enhancement` and `package: resolve` labels.
 
+Changelog
 -----
+See [CHANGELOG.md][changelog]
 
+-----
 🍻 Cheers
 
+[changelog]: https://github.com/abuxvn/source/blob/main/packages/resolve/CHANGELOG.md
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abux/resolve
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/resolve

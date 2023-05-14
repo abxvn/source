@@ -3,7 +3,7 @@ import { Command, type Option } from 'commander'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'
-import { bold, logInfo } from './lib/logger'
+import { bold, logInfo } from '@abux/logger'
 import { type IApp } from './interfaces'
 
 interface ICommand {

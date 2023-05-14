@@ -1,7 +1,8 @@
 import chalk from 'chalk'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
-import { badge, logInfo, logProgress, logWarn } from '../../lib/logger'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
+import { logInfo } from '@abux/logger'
+import { logProgress, logStep, logWarn } from './loggers'
 
 interface IUpdatePackageJsonParams {
   modify?: boolean
@@ -35,7 +36,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const packagePath = editor.path.resolve('package.json')
 
   if (!await pathExists(packagePath)) {
-    logWarn(badge('init', 'yellow'), 'package.json not found')
+    logWarn('package.json not found')
 
     return
   }
@@ -44,22 +45,22 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const scripts = json.scripts || {}
   const workspaces: string[] = json.workspaces || []
 
-  logProgress(badge('init'), 'config script "start"')
+  logProgress('config script "start"')
   scripts.start = 'builder build'
-  logProgress(badge('init'), 'config script "build"')
+  logProgress('config script "build"')
   scripts.build = 'builder build --node-env production'
 
   if (useEslint) {
-    logProgress(badge('init'), 'config script "lint"')
+    logProgress('config script "lint"')
     scripts.lint = 'eslint packages/**/*.{ts,tsx}'
   }
   if (useJest) {
-    logProgress(badge('init'), 'config script "test"')
+    logProgress('config script "test"')
     scripts.test = 'jest'
   }
 
   if (!workspaces.some(w => w.includes('packages/'))) {
-    logProgress(badge('init'), 'config add workspaces')
+    logProgress('config add workspaces')
     workspaces.push('packages/*')
   }
 
@@ -71,5 +72,5 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
     spaces: 2
   })
 
-  logInfo(badge('init'), 'config done')
+  logStep('config done')
 }

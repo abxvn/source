@@ -1,7 +1,7 @@
 import { Compilation, sources } from 'webpack'
 import type { Compiler } from 'webpack'
 import type { IImportReplacementMap } from '../interfaces'
-import { logInfo } from '../lib/logger'
+import { logInfo } from '@abux/logger'
 import { matchPattern } from '../lib/data'
 
 class ImportReplacementPlugin {
