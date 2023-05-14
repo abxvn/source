@@ -1,4 +1,4 @@
-import { collapser } from '@abux/logger/cli'
+import { collapsible } from '@abux/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
 import { install, installSdk } from '../../lib/packages'
 import {
@@ -32,8 +32,8 @@ export const installPackages = async ({ answers, deps }: IInstallPackagesParams,
     }
   })
 
-  const outputStream = collapser(process.stdout)
-  const errorStream = collapser(process.stderr)
+  const outputStream = collapsible(process.stdout)
+  const errorStream = collapsible(process.stderr)
 
   if (mainDependencies.length || devDependencies.length) {
     logStep('install dependencies')

@@ -4,31 +4,44 @@ import type { Configuration, MultiCompiler } from 'webpack'
 import { getConfigs } from '../configs'
 import { badge, logError, logInfo } from '@abux/logger'
 import { path } from './options'
+import { type ICollapsible, collapsible } from '@abux/logger/cli'
 
 const dev = async (options: any): Promise<void> => {
   const envName = 'development'
   const { configs } = await getConfigs(options.path, envName)
-  const compiler: MultiCompiler = webpack(configs.map(config => {
-    return {
-      ...config,
-      stats: 'minimal'
+  const compiler: MultiCompiler = webpack(
+    configs.map(config => ({ ...config, stats: 'errors-warnings' })) as Configuration[]
+  )
+  const ports: Record<string, string> = {}
+
+  const streams: ICollapsible[] = []
+
+  compiler.hooks.done.tap('setuplogCleaner', () => { // clean error logs after each compilation
+    streams.forEach(stream => stream.collapse())
+    Object.keys(ports).forEach(name => {
+      logInfo(`${badge(name, 'blue', 'white')} dev port ${ports[name]}, bundling...`)
+    })
+
+    if (!streams.length) {
+      // streams.push(collapsible(process.stderr, true))
+      streams.push(collapsible(process.stdout, true))
     }
-  }) as Configuration[])
+  })
 
   await Promise.all(configs.map(async (config, idx) => {
-    const id = idx + 1
+    const name = config.name
     const devServer = new WebpackDevServer(config.devServer, compiler.compilers[idx])
 
     devServer.options.onListening = ({ server }) => {
       const address: any = server?.address()
 
-      logInfo(`${badge(`Dev#${id}`)}  dev port ${address.port as string}, bundling...`)
+      ports[name] = address.port
     }
 
     try {
       await devServer.start()
     } catch (err) {
-      logError(`${badge(`Dev#${id}`, 'redBright')} failed to start`, err)
+      logError(`${badge(name, 'redBright', 'white')} failed to start`, err)
     }
   }))
 }

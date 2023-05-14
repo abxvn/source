@@ -1,4 +1,4 @@
-import { copy } from '../../lib/vendors'
+import { copy, pathExists } from '../../lib/vendors'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { resolver } from '../../lib/paths'
 import { type IEditorConfigsAnswer } from '../questions'
@@ -12,10 +12,11 @@ interface ICopyConfigsParams {
   editor: IConfigEditor
 }
 export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams) => {
+  const hasPackagesFolder = await pathExists(editor.path.resolve('packages'))
   const copies: string[] = [
     '.vscode',
-    'packages/dummy/package.json',
-    'packages/dummy/cli/_index.ts',
+    !hasPackagesFolder ? 'packages/dummy/package.json' : '',
+    !hasPackagesFolder ? 'packages/dummy/cli/_index.ts' : '',
     '_.yarnrc.yml',
     deps.requires('typescript') ? '_tsconfig.json' : '',
     deps.requires('jest') ? '_jest.config.js' : '',
