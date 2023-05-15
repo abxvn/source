@@ -1,17 +1,21 @@
 {
   "name": "@abux/logger",
   "description": "Logger helpers and collapsible logs",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "index.js",
   "types": "index.d.ts",
-  "files": [
-    "index.js",
-    "cli/index.js"
-  ],
+  "license": "MIT",
   "dependencies": {
     "chalk": "^4"
   },
   "devDependencies": {
     "@types/node": "^20.1.3"
-  }
+  },
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "cli/index.js",
+    "README.md",
+    "LICENSE"
+  ]
 }

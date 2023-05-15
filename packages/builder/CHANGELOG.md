@@ -1,5 +1,12 @@
 # @abux/builder
 
+## 0.1.4
+
+### Patch Changes
+
+- Updated dependencies
+  - @abux/logger@0.0.4
+
 ## 0.1.3
 
 ### Patch Changes

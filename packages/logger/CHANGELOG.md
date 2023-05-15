@@ -1,5 +1,11 @@
 # @abux/logger
 
+## 0.0.4
+
+### Patch Changes
+
+- Add d.ts file
+
 ## 0.0.3
 
 ### Patch Changes
