@@ -2,9 +2,29 @@
   "name": "@abux/logger",
   "description": "Logger helpers and collapsible logs",
   "version": "0.0.4",
+  "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
-  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abuxvn/source.git",
+    "directory": "packages/logger"
+  },
+  "keywords": [
+    "abux",
+    "logger",
+    "collapse",
+    "ansi",
+    "interactive"
+  ],
+  "author": {
+    "name": "Hung Luu",
+    "email": "hungluu2106@gmail.com"
+  },
+  "bugs": {
+    "url": "https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Alogger%22"
+  },
+  "homepage": "https://github.com/abuxvn/source/tree/main/packages/logger#readme",
   "dependencies": {
     "chalk": "^4"
   },
