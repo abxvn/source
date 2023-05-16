@@ -32,7 +32,7 @@ declare module '@abux/logger/cli' {
   export const collapse: ICollapsible;
 }
 declare module '@abux/logger/lib/loggers' {
-  export { bold, italic, underline } from 'chalk';
+  export { bold, italic, underline, unstyle } from 'ansi-colors';
   export const log: any;
   export const logInfo: (...items: any[]) => void;
   export const logProgress: (...items: any[]) => void;
@@ -66,9 +66,9 @@ declare module '@abux/logger/lib/loggers' {
     redBright: any;
   };
   type ITextColorName = keyof typeof TextColors;
-  export const color: (message: string, color?: ITextColorName | number) => string;
+  export const color: (message: string, textColor?: ITextColorName | number) => string;
   type IBadgeColorName = keyof typeof BadgeColors;
-  export const badge: (message: string, color?: IBadgeColorName | number, textColor?: ITextColorName | 'white' | 'whiteBright' | 'black' | number) => string;
+  export const badge: (label: string, bgColor?: IBadgeColorName | number, textColor?: ITextColorName | 'white' | 'whiteBright' | 'black' | number) => string;
 }
 declare module '@abux/logger/index' {
   export * from '@abux/logger/lib/loggers';

@@ -24,6 +24,7 @@ export const getConfig = async (
 ): Promise<IWebpackConfig> => {
   const { envName = 'development' } = editor.options
   const config: IWebpackConfig = {
+    target: 'node', // might be changed later in setWebPackageConfig
     name: target,
     entry: entries,
     mode: envName,
@@ -71,6 +72,7 @@ export const getConfig = async (
 export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => {
   return {
     ...config,
+    target: 'node',
     output: {
       ...config.output,
       libraryTarget: 'commonjs2'
@@ -78,7 +80,6 @@ export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => 
       //   type: 'commonjs2'
       // }
     },
-    target: 'node',
     externalsPresets: {
       ...config.externalsPresets,
       node: true
@@ -90,6 +91,7 @@ export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => 
 export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
   return {
     ...config,
+    target: 'web',
     output: {
       ...config.output
       // libraryTarget: 'var'
@@ -97,7 +99,6 @@ export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
       //   type: 'var'
       // }
     },
-    target: 'web',
     externalsPresets: {
       ...config.externalsPresets,
       node: false

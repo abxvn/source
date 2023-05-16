@@ -2,6 +2,7 @@ import { cursorTo, moveCursor, clearLine } from 'readline'
 import type { ICollapsible, IWritable } from './interfaces'
 import { Writable } from 'stream'
 import { watch } from './CollapserWatcher'
+import { unstyle } from 'ansi-colors'
 
 const EOL = '\n'
 
@@ -142,7 +143,7 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
     // K to clear line
     // scroll S up T down
     // eslint-disable-next-line no-control-regex
-    const ansiRegex = /\x1B(?:\[(\d+)([ABEF]))/g
+    const ansiRegex = /\u001b(?:\[(\d+)([ABEF]))/g
     let match = ansiRegex.exec(line)
 
     while (match) {
@@ -161,9 +162,6 @@ export class Collapser extends Writable implements ICollapsible, IWritable {
       match = ansiRegex.exec(line)
     }
 
-    // clear possible ansi escape codes
-    line = line.replace(/\x1B(\[[\d;]+[mABCDEFGHJKST])/ug, '') // eslint-disable-line no-control-regex
-
-    return this.chunks(line, chunkSize)
+    return this.chunks(unstyle(line), chunkSize)
   }
 }

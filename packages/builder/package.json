@@ -30,7 +30,6 @@
   "dependencies": {
     "@abux/logger": "workspace:^",
     "@abux/resolve": "workspace:^",
-    "chalk": "^4",
     "commander": "^10.0.1",
     "dotenv": "^16.0.3",
     "execa": "^5.1.1",
