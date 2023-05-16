@@ -1,5 +1,11 @@
 # @abux/logger
 
+## 0.0.5
+
+### Patch Changes
+
+- replace logger utility
+
 ## 0.0.4
 
 ### Patch Changes
