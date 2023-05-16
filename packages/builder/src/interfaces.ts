@@ -60,7 +60,7 @@ export type IFilter = (options: IFilterOptions) => Promise<IFilterOutput>
 export interface IWebpackConfig extends Omit<Configuration, 'entry'> {
   name: string
   entry: IEntries
-  target?: IBuildTarget
+  target: IBuildTarget
   plugins: WebpackPluginInstance[]
   devServer?: IDevServerOptions
   externals?: Exclude<ExternalsPlugin['externals'], string | RegExp>

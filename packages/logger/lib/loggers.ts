@@ -6,10 +6,10 @@ import {
   green, yellow, blue, magenta, cyan, greenBright, yellowBright, blueBright, magentaBright, cyanBright,
   // badge util bg colors
   bgGreen, bgYellow, bgBlue, bgMagenta, bgCyan, bgGreenBright, bgYellowBright, bgBlueBright, bgMagentaBright, bgCyanBright,
-  bgRed, bgRedBright
-} from 'chalk'
+  bgRed, bgRedBright, unstyle
+} from 'ansi-colors'
 
-export { bold, italic, underline } from 'chalk'
+export { bold, italic, underline, unstyle } from 'ansi-colors'
 
 export const log = console.log.bind(console)
 export const logInfo = (...items: any[]) => {
@@ -62,38 +62,38 @@ const badgeColorNames = Object.keys(TextColors)
 type ITextColorName = keyof typeof TextColors
 export const color = (
   message: string,
-  color: ITextColorName | number = 'blue'
+  textColor: ITextColorName | number = 'blue'
 ): string => {
-  if (typeof color === 'number') {
-    color = textColorNames[color % textColorNames.length] as ITextColorName
+  if (typeof textColor === 'number') {
+    textColor = textColorNames[textColor % textColorNames.length] as ITextColorName
   }
 
-  return color ? TextColors[color](message) : message
+  return textColor ? TextColors[textColor](message) : message
 }
 
 type IBadgeColorName = keyof typeof BadgeColors
 export const badge = (
-  message: string,
-  color: IBadgeColorName | number = 'blueBright',
+  label: string,
+  bgColor: IBadgeColorName | number = 'blueBright',
   textColor?: ITextColorName | 'white' | 'whiteBright' | 'black' | number
 ): string => {
-  if (typeof color === 'number') {
-    color = badgeColorNames[color % badgeColorNames.length] as IBadgeColorName
+  if (typeof bgColor === 'number') {
+    bgColor = badgeColorNames[bgColor % badgeColorNames.length] as IBadgeColorName
   }
 
   if (typeof textColor === 'number') {
     textColor = textColorNames[textColor % textColorNames.length] as ITextColorName
   }
 
-  if (!color) {
-    return message
+  if (!bgColor) {
+    return label
   }
 
-  let painter = BadgeColors[color]
+  let painter = BadgeColors[bgColor]
 
   if (textColor) {
     painter = painter[textColor]
   }
 
-  return painter(` ${bold(message)} `)
+  return painter(` ${bold(unstyle(label))} `)
 }

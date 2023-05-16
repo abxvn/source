@@ -1,6 +1,6 @@
 {
   "name": "@abux/builder",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "Quick scaffolding code base to build web apps and games",
   "license": "MIT",
   "main": "./cli/index.js",
@@ -30,7 +30,6 @@
   "dependencies": {
     "@abux/logger": "workspace:^",
     "@abux/resolve": "workspace:^",
-    "chalk": "^4",
     "commander": "^10.0.1",
     "dotenv": "^16.0.3",
     "execa": "^5.1.1",

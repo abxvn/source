@@ -1,7 +1,6 @@
-import chalk from 'chalk'
+import { logInfo, italic, bold } from '@abux/logger'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
-import { logInfo } from '@abux/logger'
 import { logProgress, logStep, logWarn } from './loggers'
 
 interface IUpdatePackageJsonParams {
@@ -14,20 +13,20 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const useJest = deps.requires('jest')
 
   if (!modify) {
-    logInfo(chalk.bold.cyan`Recommended further config:`)
+    logInfo(bold.cyan('Recommended further config:'))
     logInfo(`You probably want to add your workspaces path into package.json:
-    ${chalk.italic`"workspaces:" [
+    ${italic(`"workspaces:" [
       "packages/*"
-    ]`}`)
+    ]`)}`)
 
     if (useEslint) {
       logInfo(`Essential config for linting command:
-      ${chalk.italic`"lint": "eslint packages/**/*.ts"`}`)
+      ${italic('"lint": "eslint packages/**/*.ts"')}`)
     }
 
     if (useJest) {
       logInfo(`Essential config for testing command:
-      ${chalk.italic`"test": "jest"`}`)
+      ${italic('"test": "jest"')}`)
     }
 
     return

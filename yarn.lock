@@ -16,7 +16,6 @@ __metadata:
     "@types/kind-of": ^6.0.0
     "@types/webpack": ^5.28.0
     "@types/webpack-node-externals": ^3.0.0
-    chalk: ^4
     commander: ^10.0.1
     dotenv: ^16.0.3
     execa: ^5.1.1
@@ -42,7 +41,7 @@ __metadata:
   resolution: "@abux/logger@workspace:packages/logger"
   dependencies:
     "@types/node": ^20.1.3
-    chalk: ^4
+    ansi-colors: ^4.1.3
   languageName: unknown
   linkType: soft
 
@@ -2656,7 +2655,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4, chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
+"chalk@npm:^4.0.0, chalk@npm:^4.1.0, chalk@npm:^4.1.1, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:

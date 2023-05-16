@@ -21,7 +21,7 @@ const dev = async (options: any): Promise<void> => {
       stream.collapse()
     })
     Object.keys(ports).forEach(name => {
-      logInfo(`${badge(name, 'blue', 'white')} dev port ${ports[name]}, bundling...`)
+      logInfo(`${badge(name, 'blue', 'whiteBright')} dev port ${ports[name]}, bundling...`)
     })
 
     if (!streams.length) {

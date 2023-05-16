@@ -37,7 +37,7 @@ export const logEntries = (configs: IWebpackConfig[]) => {
   logInfo(bold.cyanBright('Building entries:'))
 
   configs.forEach(({ name, target, entry }) => {
-    log(`   ${name} (${italic(target)}):`)
+    log(`   ${name} (${italic(target || '')}):`)
     Object.keys(entry).forEach(entryName => { log(`     ${entryName}`) })
   })
 }
