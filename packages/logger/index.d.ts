@@ -2,7 +2,7 @@ declare module '@abux/logger/index' {
   import type { IStyles, IUnstyler, ILoggers } from '@abux/logger/lib/styles/interfaces';
   export const unstyle: IUnstyler;
   export const styles: IStyles;
-  export const logger: ILoggers;
+  export const loggers: ILoggers;
 }
 declare module '@abux/logger/lib/styles/interfaces' {
   export const Modifiers: {

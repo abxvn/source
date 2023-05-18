@@ -1,5 +1,11 @@
 # @abux/logger
 
+## 1.0.2
+
+### Patch Changes
+
+- Fix types
+
 ## 1.0.1
 
 ### Patch Changes

@@ -4,4 +4,4 @@ import { createLoggers } from './lib/styles/loggers'
 
 export const unstyle: IUnstyler = _unstyle
 export const styles: IStyles = _styles
-export const logger: ILoggers = createLoggers(styles, unstyle, console, styleLog)
+export const loggers: ILoggers = createLoggers(styles, unstyle, console, styleLog)
