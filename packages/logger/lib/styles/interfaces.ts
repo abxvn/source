@@ -74,7 +74,7 @@ export type IBadgeEffectColor = 'bgGreen' | 'bgGreenBright' | 'bgYellow' | 'bgYe
 'bgCyan' | 'bgCyanBright' | 'bgMagenta' | 'bgMagentaBright'
 // | 'bgRed' | 'bgRedBright' | 'bgBlack' | 'bgGray'
 
-export interface ILoggers<T extends IStyledCssLog | string> {
+export interface ILoggers {
   log: ILogger
   info: ILogger
   warn: ILogger
@@ -84,13 +84,10 @@ export interface ILoggers<T extends IStyledCssLog | string> {
   color: (
     message: string,
     textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright'
-  ) => T
+  ) => string
   badge: (
     label: string,
     bgColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black',
     textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright'
-  ) => T
+  ) => string
 }
-
-export type IBrowserLoggers = ILoggers<IStyledCssLog>
-export type IConsoleLoggers = ILoggers<string>

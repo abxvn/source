@@ -1,8 +1,8 @@
 declare module '@abux/logger/index' {
-  import type { IBrowserLoggers, IStyles, IUnstyler } from '@abux/logger/lib/styles/interfaces';
+  import type { IStyles, IUnstyler, ILoggers } from '@abux/logger/lib/styles/interfaces';
   export const unstyle: IUnstyler;
   export const styles: IStyles;
-  export const loggers: IBrowserLoggers;
+  export const logger: ILoggers;
 }
 declare module '@abux/logger/lib/styles/interfaces' {
   export const Modifiers: {
@@ -66,18 +66,16 @@ declare module '@abux/logger/lib/styles/interfaces' {
   export type ILogStyler = (formattedText: string) => IStyledCssLog;
   export type ITextEffectColor = 'green' | 'greenBright' | 'yellow' | 'yellowBright' | 'blue' | 'blueBright' | 'cyan' | 'cyanBright' | 'magenta' | 'magentaBright';
   export type IBadgeEffectColor = 'bgGreen' | 'bgGreenBright' | 'bgYellow' | 'bgYellowBright' | 'bgBlue' | 'bgBlueBright' | 'bgCyan' | 'bgCyanBright' | 'bgMagenta' | 'bgMagentaBright';
-  export interface ILoggers<T extends IStyledCssLog | string> {
+  export interface ILoggers {
     log: ILogger;
     info: ILogger;
     warn: ILogger;
     progress: ILogger;
     success: ILogger;
     error: ILogger;
-    color: (message: string, textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright') => T;
-    badge: (label: string, bgColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black', textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright') => T;
+    color: (message: string, textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright') => string;
+    badge: (label: string, bgColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black', textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright') => string;
   }
-  export type IBrowserLoggers = ILoggers<IStyledCssLog>;
-  export type IConsoleLoggers = ILoggers<string>;
 }
 declare module '@abux/logger/lib/interfaces' {
   /// <reference types="node" />
@@ -108,13 +106,13 @@ declare module '@abux/logger/cli' {
   /// <reference types="node" />
   /// <reference types="node" />
   import type { ICollapsible } from '@abux/logger/lib/interfaces';
-  import type { IConsoleLoggers, IStyles, IUnstyler } from '@abux/logger/lib/styles/interfaces';
+  import type { ILoggers, IStyles, IUnstyler } from '@abux/logger/lib/styles/interfaces';
   export type { ICollapsible } from '@abux/logger/lib/interfaces';
   export const collapsible: (stream?: NodeJS.WriteStream, collectFromStream?: boolean) => ICollapsible;
   export const collapse: ICollapsible;
   export const unstyle: IUnstyler;
   export const styles: IStyles;
-  export const loggers: IConsoleLoggers;
+  export const loggers: ILoggers;
 }
 declare module '@abux/logger' {
   export * from '@abux/logger/index'

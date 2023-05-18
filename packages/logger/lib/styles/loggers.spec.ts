@@ -1,7 +1,6 @@
 import { createLoggers } from './loggers'
 import * as browserLib from './browser'
 import * as consoleLib from './console'
-import type { IStyledCssLog } from './interfaces'
 
 // @ts-expect-error temporarily enable for unit testing
 browserLib.enabled = true // eslint-disable-line no-import-assign
@@ -9,7 +8,7 @@ browserLib.enabled = true // eslint-disable-line no-import-assign
 describe('loggers#browser', () => {
   const mockLog = jest.fn()
   const { styles, unstyle, styleLog, SPACE } = browserLib
-  const loggers = createLoggers<IStyledCssLog>(styles, unstyle, {
+  const loggers = createLoggers(styles, unstyle, {
     log: mockLog,
     error: mockLog,
     info: mockLog
@@ -36,7 +35,7 @@ describe('loggers#browser', () => {
 describe('loggers#console', () => {
   const mockLog = jest.fn()
   const { styles, unstyle } = consoleLib
-  const loggers = createLoggers<string>(styles, unstyle, {
+  const loggers = createLoggers(styles, unstyle, {
     log: mockLog,
     error: mockLog,
     info: mockLog

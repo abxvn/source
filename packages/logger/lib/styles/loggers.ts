@@ -5,8 +5,7 @@ import type {
   IBadgeEffectColor,
   IUnstyler,
   ILogStyler,
-  ILogger,
-  IStyledCssLog
+  ILogger
 } from './interfaces'
 
 const customLog = (logFunction: ILogger, logStyler?: ILogStyler, ...items: any[]) => {
@@ -25,12 +24,12 @@ const customLog = (logFunction: ILogger, logStyler?: ILogStyler, ...items: any[]
   }), ...css)
 }
 
-export const createLoggers = <T extends string | IStyledCssLog>(
+export const createLoggers = (
   styles: IStyles,
   unstyle: IUnstyler,
   logFunctions: any = console,
   styleLog?: ILogStyler
-): ILoggers<T> => {
+): ILoggers => {
   const { bold, red, gray } = styles
   const textColorNames: ITextEffectColor[] = [
     'green',
@@ -65,7 +64,7 @@ export const createLoggers = <T extends string | IStyledCssLog>(
         textColor = textColorNames[textColor % textColorNames.length]
       }
 
-      return (textColor ? styles[textColor](message) : message) as T
+      return (textColor ? styles[textColor](message) : message)
     },
     badge (label, bgColor = 'blueBright', textColor?) {
       if (typeof bgColor === 'number') {
@@ -77,7 +76,7 @@ export const createLoggers = <T extends string | IStyledCssLog>(
       }
 
       if (!bgColor) {
-        return label as T
+        return label
       }
 
       const mappedBgColor = `bg${capitalize(bgColor)}` as IBadgeEffectColor
@@ -88,7 +87,7 @@ export const createLoggers = <T extends string | IStyledCssLog>(
         painter = painter[textColor]
       }
 
-      return painter.bold(` ${unstyle(label)} `) as T
+      return painter.bold(` ${unstyle(label)} `)
     }
   }
 }
