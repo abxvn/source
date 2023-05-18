@@ -1,7 +1,8 @@
 import { Collapser } from '../lib/Collapser'
-import type { ICollapsible } from '../lib/interfaces'
 import { styles as _styles, unstyle as _unstyle } from '../lib/styles/console'
 import { createLoggers } from '../lib/styles/loggers'
+import type { ICollapsible } from '../lib/interfaces'
+import type { IConsoleLoggers, IStyles, IUnstyler } from '../lib/styles/interfaces'
 
 export type { ICollapsible } from '../lib/interfaces'
 
@@ -12,6 +13,6 @@ export const collapsible = (
 
 export const collapse = collapsible()
 
-export const unstyle = _unstyle
-export const styles = _styles
-export const loggers = createLoggers(styles, unstyle, console)
+export const unstyle: IUnstyler = _unstyle
+export const styles: IStyles = _styles
+export const loggers: IConsoleLoggers = createLoggers(styles, unstyle, console)
