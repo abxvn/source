@@ -1,5 +1,7 @@
 import type { Compilation, Compiler } from 'webpack'
-import { logProgress } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
+
+const { progress } = loggers
 
 type IEventName = keyof Compiler['hooks']
 type IEvents = Partial<Record<IEventName, any>>
@@ -7,13 +9,13 @@ type IEvents = Partial<Record<IEventName, any>>
 export default class ProgressReportPlugin {
   private readonly events: IEvents = {
     beforeRun (compiler: Compiler) {
-      logProgress(`${compiler.name as string}: start building`)
+      progress(`${compiler.name as string}: start building`)
     },
     compilation (compilation: Compilation) {
-      logProgress(`${compilation.compiler.name as string}: compiling`)
+      progress(`${compilation.compiler.name as string}: compiling`)
     },
     afterCompile (compilation: Compilation) {
-      logProgress(`${compilation.compiler.name as string}: compiled`)
+      progress(`${compilation.compiler.name as string}: compiled`)
     }
   }
 

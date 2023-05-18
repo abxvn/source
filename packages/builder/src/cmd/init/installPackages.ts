@@ -13,7 +13,7 @@ interface IInstallPackagesParams {
   deps: IConfigDeps
 }
 export const installPackages = async ({ answers, deps }: IInstallPackagesParams, app: IApp) => {
-  deps.set('@abux/builder', { version: '*' })
+  deps.set('@abux/builder', { version: app.appVersion || '*' })
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
       deps.unset(name)

@@ -1,7 +1,10 @@
-import { logInfo, italic, bold } from '@abux/logger'
+import { loggers, styles } from '@abux/logger/cli'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
 import { logProgress, logStep, logWarn } from './loggers'
+
+const { italic, bold } = styles
+const { info } = loggers
 
 interface IUpdatePackageJsonParams {
   modify?: boolean
@@ -13,19 +16,19 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   const useJest = deps.requires('jest')
 
   if (!modify) {
-    logInfo(bold.cyan('Recommended further config:'))
-    logInfo(`You probably want to add your workspaces path into package.json:
+    info(bold.cyan('Recommended further config:'))
+    info(`You probably want to add your workspaces path into package.json:
     ${italic(`"workspaces:" [
       "packages/*"
     ]`)}`)
 
     if (useEslint) {
-      logInfo(`Essential config for linting command:
+      info(`Essential config for linting command:
       ${italic('"lint": "eslint packages/**/*.ts"')}`)
     }
 
     if (useJest) {
-      logInfo(`Essential config for testing command:
+      info(`Essential config for testing command:
       ${italic('"test": "jest"')}`)
     }
 

@@ -1,11 +1,14 @@
 import glob from 'fast-glob'
-import { logInfo, bold, italic, log } from '@abux/logger'
+import { loggers, styles } from '@abux/logger/cli'
 import type {
   ITargetedExpandedEntries,
   IPathResolver,
   IWebpackConfig
 } from '../interfaces'
 import { resolve } from './paths'
+
+const { info, log } = loggers
+const { bold, italic } = styles
 
 export const expandEntries = async (
   path: IPathResolver,
@@ -34,7 +37,7 @@ export const expandEntries = async (
 }
 
 export const logEntries = (configs: IWebpackConfig[]) => {
-  logInfo(bold.cyanBright('Building entries:'))
+  info(bold.cyanBright('Building entries:'))
 
   configs.forEach(({ name, target, entry }) => {
     log(`   ${name} (${italic(target || '')}):`)

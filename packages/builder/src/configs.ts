@@ -2,7 +2,7 @@ import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEdit
 
 import ConfigEditor from './ConfigEditor'
 import { pathExists } from './lib/vendors'
-import { bold } from '@abux/logger'
+import { styles } from '@abux/logger/cli'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'
 
@@ -54,7 +54,7 @@ export const getConfigs = async (
     editor,
     configs: configs.map(config => ({
       ...config,
-      name: bold.underline.greenBright(config.name),
+      name: styles.bold.underline.greenBright(config.name),
       plugins: config.plugins.filter(Boolean)
     }))
   }

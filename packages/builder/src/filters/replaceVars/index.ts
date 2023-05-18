@@ -4,7 +4,9 @@ import type { IEntries, IFilter, IPathResolver, IWebpackConfig } from '../../int
 import { getLocalPackagePath, resolver } from '../../lib/paths'
 import { pathExists, readFile, readJSON } from '../../lib/vendors'
 import { parse } from 'dotenv'
-import { logInfo, logWarn } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
+
+const { info, warn } = loggers
 
 const replaceVars: IFilter = async ({ editor }) => {
   const path = resolver(editor.path.rootPath)
@@ -57,7 +59,7 @@ const defineEnvPerEntries = async (path: IPathResolver, entries: IEntries): Prom
       try {
         const packageInfo: any = await readJSON(packageInfoFile)
 
-        logInfo(`[vars] register ${packageName} info`)
+        info(`[vars] register ${packageName} info`)
         Object.keys(packageInfo).forEach(key => {
           const value = packageInfo[key]
 
@@ -68,7 +70,7 @@ const defineEnvPerEntries = async (path: IPathResolver, entries: IEntries): Prom
           }
         })
       } catch (error: any) {
-        logWarn(`cannot parse ${packageName} info, error:`, error.message)
+        warn(`cannot parse ${packageName} info, error:`, error.message)
 
         return
       }
@@ -81,7 +83,7 @@ const defineEnvPerEntries = async (path: IPathResolver, entries: IEntries): Prom
         const envText: string = await readFile(packageEnvFile, 'utf-8')
         const envs = parse(envText)
 
-        logInfo(`[vars] register ${packageName} envs`)
+        info(`[vars] register ${packageName} envs`)
         Object.keys(envs).forEach(key => {
           const value = envs[key]
 
@@ -92,7 +94,7 @@ const defineEnvPerEntries = async (path: IPathResolver, entries: IEntries): Prom
           }
         })
       } catch (error: any) {
-        logWarn(`cannot parse ${packageName} env file, error:`, error.message)
+        warn(`cannot parse ${packageName} env file, error:`, error.message)
       }
     })
   )

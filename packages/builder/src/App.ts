@@ -3,7 +3,7 @@ import { Command, type Option } from 'commander'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'
-import { bold, logInfo } from '@abux/logger'
+import { loggers, styles } from '@abux/logger/cli'
 import { type IApp } from './interfaces'
 
 interface ICommand {
@@ -46,7 +46,7 @@ export default class App extends Command implements IApp {
       const cmd = this.command(commandName)
         .description(description)
         .action(async (...args: any[]) => {
-          logInfo(`${bold(this._name)} v${this._version}`)
+          loggers.info(`${styles.bold(this._name)} v${this._version}`)
           await action.bind(this)(...args)
         })
 
