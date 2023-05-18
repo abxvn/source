@@ -1,7 +1,7 @@
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
 import { getConfigs } from '../configs'
-import { logError, log, logSuccess, logInfo, badge } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
 import { logEntries } from '../lib/entries'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
 import { nodeEnv, path, production } from './options'
@@ -21,11 +21,11 @@ const build = async (options: IBuildOptions): Promise<void> => {
     const { configs } = await getConfigs(options.path, envName)
 
     if (!configs.length) {
-      throw Error(`${badge('build', 'redBright')} no entries found for "${options.path}"`)
+      throw Error(`${loggers.badge('build', 'redBright')} no entries found for "${options.path}"`)
     }
 
     logEntries(configs)
-    logInfo(badge('build', 'greenBright'), 'start')
+    loggers.info(loggers.badge('build', 'greenBright'), 'start')
     configs.forEach(config => config.plugins.push(new ProgressReportPlugin()))
 
     await new Promise<void>((resolve, reject) => {
@@ -33,7 +33,7 @@ const build = async (options: IBuildOptions): Promise<void> => {
         if (err) {
           reject(err)
         } else {
-          log(stats?.toString({
+          loggers.log(stats?.toString({
             chunks: false, // Removes chunk information
             colors: true // Enables colorful output
           }))
@@ -47,9 +47,9 @@ const build = async (options: IBuildOptions): Promise<void> => {
       })
     })
 
-    logSuccess(badge('build', 'greenBright'), 'done')
+    loggers.success(loggers.badge('build', 'greenBright'), 'done')
   } catch (err: any) {
-    logError(err.message)
+    loggers.error(err.message)
   }
 }
 

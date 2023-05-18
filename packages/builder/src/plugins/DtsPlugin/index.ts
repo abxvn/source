@@ -1,9 +1,11 @@
 import type { Compiler } from 'webpack'
 import { Dts } from '@abux/builder/src/lib/dts/index.js'
 import { pathExists, readJSON } from '../../lib/vendors'
-import { logError, logInfo, logProgress, logSuccess, logWarn, color } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
 import type { IPathResolver } from '../../interfaces'
 import { removeExt, resolver, getLocalPackagePath } from '../../lib/paths'
+
+// const { logError, logInfo, logProgress, logSuccess, logWarn, color } = loggers
 
 let counterId = 0
 
@@ -61,7 +63,7 @@ export class DtsPlugin {
           }
 
           if (!await pathExists(tsconfigPath)) {
-            logWarn(this.log(id, packageName, 'generation ignored, required tsconfig'))
+            loggers.warn(this.log(id, packageName, 'generation ignored, required tsconfig'))
 
             return
           }
@@ -69,9 +71,8 @@ export class DtsPlugin {
           const dts = new Dts()
           const filePatterns = packageFiles.map(f => resolver(projectPath).relative(this.path.resolve(p, f)))
 
-          dts.on('log', message => { logProgress(this.log(id, message)) })
-          // dts.on('log:verbose', message => { logProgress(message) })
-          logInfo(this.log(id, packageName, 'generation started'))
+          dts.on('log', message => { loggers.progress(this.log(id, message)) })
+          loggers.info(this.log(id, packageName, 'generation started'))
 
           await dts.generate({
             projectPath: tsconfigPath,
@@ -82,9 +83,9 @@ export class DtsPlugin {
             filePatterns
           })
 
-          logSuccess(this.log(id, packageName, 'declaration at', typesFile))
+          loggers.success(this.log(id, packageName, 'declaration at', typesFile))
         } catch (err: any) {
-          logError(this.log(id, err.message))
+          loggers.error(this.log(id, err.message))
         }
       }))
     })
@@ -99,7 +100,7 @@ export class DtsPlugin {
     }
 
     return message.replace(/^\[(dtsw?)\]/, (_, prefix: string) =>
-      color(`[${prefix} ${id}]`, id)
+      loggers.color(`[${prefix} ${id}]`, id)
     )
   }
 }

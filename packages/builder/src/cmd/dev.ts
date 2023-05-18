@@ -2,9 +2,11 @@ import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import type { Configuration, MultiCompiler } from 'webpack'
 import { getConfigs } from '../configs'
-import { badge, logError, logInfo } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
 import { path } from './options'
 import { type ICollapsible, collapsible } from '@abux/logger/cli'
+
+const { info, badge } = loggers
 
 const dev = async (options: any): Promise<void> => {
   const envName = 'development'
@@ -21,7 +23,7 @@ const dev = async (options: any): Promise<void> => {
       stream.collapse()
     })
     Object.keys(ports).forEach(name => {
-      logInfo(`${badge(name, 'blue', 'whiteBright')} dev port ${ports[name]}, bundling...`)
+      info(`${badge(name, 'blue', 'whiteBright')} dev port ${ports[name]}, bundling...`)
     })
 
     if (!streams.length) {
@@ -43,7 +45,7 @@ const dev = async (options: any): Promise<void> => {
     try {
       await devServer.start()
     } catch (err) {
-      logError(`${badge(name, 'redBright', 'white')} failed to start`, err)
+      loggers.error(`${badge(name, 'redBright', 'white')} failed to start`, err)
     }
   }))
 }

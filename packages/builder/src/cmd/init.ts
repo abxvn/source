@@ -1,4 +1,4 @@
-import { logError, logInfo } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
 import { path } from './options'
 import { getConfigs } from '../configs'
 import {
@@ -45,7 +45,7 @@ const init = async function (this: IApp, options: any) {
 
   logSuccess('done')
 
-  logInfo(`You may also need to enabled / install recommended VSCode extensions
+  loggers.info(`You may also need to enabled / install recommended VSCode extensions
   and agree if editor confirms for using workspace typescript`)
 }
 
@@ -60,10 +60,10 @@ export default {
 const checkVersion = async () => {
   const yarnVersion = await getYarnVersion()
 
-  logInfo('Versions:', 'node', process.versions.node, 'yarn', yarnVersion)
+  loggers.info('Versions:', 'node', process.versions.node, 'yarn', yarnVersion)
 
   if (!/^3/.test(yarnVersion)) {
-    logError(`
+    loggers.error(`
       Please check if Yarn Berry was set up correctly.
       Usually it will be all good by running this command:
       yarn init -2

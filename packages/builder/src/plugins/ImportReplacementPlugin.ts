@@ -1,8 +1,10 @@
 import { Compilation, sources } from 'webpack'
 import type { Compiler } from 'webpack'
 import type { IImportReplacementMap } from '../interfaces'
-import { logInfo } from '@abux/logger'
+import { loggers } from '@abux/logger/cli'
 import { matchPattern } from '../lib/data'
+
+const { info } = loggers
 
 class ImportReplacementPlugin {
   constructor (readonly replacementMap: IImportReplacementMap, readonly pattern?: string | RegExp) {}
@@ -34,7 +36,7 @@ class ImportReplacementPlugin {
             new sources.RawSource(newText)
           )
 
-          logInfo(`[replace] ${name}: ${shortenListStr}`)
+          info(`[replace] ${name}: ${shortenListStr}`)
         }
       })
     })
