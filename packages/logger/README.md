@@ -17,11 +17,14 @@ An utility logger for CLI and web, to be reused in our projects
 
 Features:
 -----
-- Designed to work as a log stream
-- Stream writer can be piped and collapsed (replace previous lines with new data)
-- Add watcher to collapse other streams (supports process.stdout and process.stderr too)
-- Handle ANSI escape codes
-- Some helper method for styled loggers
++ Collapsible:
+  - Designed to work as a log stream
+  - Stream writer can be piped and collapsed (replace previous lines with new data)
+  - Add watcher to collapse other streams (supports process.stdout and process.stderr too)
+  - Handle ANSI escape codes
++ Styled Loggers:
+  - Some helper methods for styled loggers
+  - Support both browser and CLI color logging
 
 Examples
 -----
@@ -62,16 +65,30 @@ stream.collapse()
 
 ### Styled loggers
 
+For browser:
 ```typescript
-import { 
-  color, badge, bold, underline 
-} from '@abux/logger'
+import { styles, logInfo } from '@abux/logger'
+
+console.log(color, badge, bold, underline)
 
 color('text', 'blue')
 badge('text', 'red', 'white') // white text badge with red background
 
 bold('bold-text')
-underline('underlined-text')
+logInfo(underline('underlined-text'))
+```
+
+For CLI:
+```typescript
+import { styles, logInfo } from '@abux/logger/cli'
+
+console.log(color, badge, bold, underline)
+
+color('text', 'blue')
+badge('text', 'red', 'white') // white text badge with red background
+
+bold('bold-text')
+logInfo(underline('underlined-text'))
 ```
 
 Changelog
