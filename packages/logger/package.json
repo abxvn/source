@@ -1,7 +1,7 @@
 {
   "name": "@abux/logger",
   "description": "Logger helpers and collapsible logs",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",
