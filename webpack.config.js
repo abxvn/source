@@ -24,6 +24,9 @@ const entry = {
   },
   '/packages/logger/index.ts': {
     import: resolvePath('packages/logger/index.ts')
+  },
+  '/packages/tasks/index.ts': {
+    import: resolvePath('packages/tasks/index.ts')
   }
 }
 

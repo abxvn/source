@@ -82,7 +82,8 @@ const addDefaultDeps = (deps: IConfigDeps) => {
     version: '^29.5.0',
     dev: true,
     dependencies: [
-      { name: 'ts-jest', version: '^29.1.0' }
+      { name: 'ts-jest', version: '^29.1.0' },
+      { name: '@types/jest', version: '^29.5.1' }
     ]
   })
 }

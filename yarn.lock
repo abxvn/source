@@ -60,6 +60,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@abux/tasks@workspace:packages/tasks":
+  version: 0.0.0-use.local
+  resolution: "@abux/tasks@workspace:packages/tasks"
+  languageName: unknown
+  linkType: soft
+
 "@ampproject/remapping@npm:^2.2.0":
   version: 2.2.1
   resolution: "@ampproject/remapping@npm:2.2.1"
