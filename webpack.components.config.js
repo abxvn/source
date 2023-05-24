@@ -2,6 +2,7 @@ const { BannerPlugin } = require('webpack')
 const webpackNodeExternals = require('webpack-node-externals')
 const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const rootPath = __dirname.replace(/\\/g, '/')
 const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
@@ -68,10 +69,14 @@ exports = module.exports = {
   },
   plugins: [
     new BannerPlugin({
-      banner ({ filename }) {
-        return filename.includes('/cli/')
-          ? '#!/usr/bin/env node'
-          : ''
+      banner: ({ filename }) => {
+        const license = '/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */\n'
+
+        if (/(builder|resolve)\/cli\//.test(filename)) {
+          return ['#!/usr/bin/env node', license].join('\n')
+        } else {
+          return license
+        }
       },
       raw: true
     })
@@ -96,5 +101,10 @@ exports = module.exports = {
   ],
   externalsPresets: {
     node: true
+  },
+  optimization: {
+    minimizer: [new TerserPlugin({
+      extractComments: false
+    })]
   }
 }

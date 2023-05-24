@@ -17,6 +17,7 @@ A priority based task runner which is:
   + [Default task priorities](#default-task-priorities)
   + [Provide task context](#provide-task-context)
   + [Custom task type](#custom-task-type)
+* [Changelog](#changelog)
 * [Contribution](#contribution)
 
 Installation
@@ -102,12 +103,24 @@ const tasks2 = new EventEmitter<ICustomTaskType2>()
 const tasks2 = new EventEmitter<ICustomTaskType3>()
 ```
 
+Changelog
+-----
+See [CHANGELOG.md][changelog]
+
 Contribution
 -----
 
 All PRs and ideas for improvement are welcomed. 
 
 If you got any issues using this package, don't hesitate to create new [🐞 Bug report][issues] with a proper `package:<name>` label.
+
+Feel free to clone this project, make changes that your feel necessary and pull request anytime you want.
+
+Install dependencies and run development build:
+```
+yarn install
+yarn start
+```
 
 **Working on your first Pull Request?**
 

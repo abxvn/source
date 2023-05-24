@@ -21,8 +21,8 @@ Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modu
   + [Play with CLI](#play-with-cli)
   + [Resolve in classic way](#resolve-in-classic-way)
 * [Benchmarks](#benchmarks)
-* [Contribution](#contribution)
 * [Changelog](#changelog)
+* [Contribution](#contribution)
 
 Installation
 -----
@@ -152,30 +152,37 @@ We tested with 2 cases, to compare speed using vanilla `require.resolve` and thi
 
 All tests were done on my Mac intel i5 10th (2020), RAM 16 GB
 
-Contribution
------
-All contributions are welcomed. Feel free to clone this project, make changes that your feel necessary and pull request anytime you want.
-
-Install dependencies
-```
-yarn install
-```
-
-Run development build
-```
-yarn start
-```
-
-If you have any other suggestions, you can even open new issues with `type: enhancement` and `package: resolve` labels.
-
 Changelog
 -----
 See [CHANGELOG.md][changelog]
 
+Contribution
 -----
-🍻 Cheers
+
+All PRs and ideas for improvement are welcomed. 
+
+If you got any issues using this package, don't hesitate to create new [🐞 Bug report][issues] with a proper `package:<name>` label.
+
+Feel free to clone this project, make changes that your feel necessary and pull request anytime you want.
+
+Install dependencies and run development build:
+```
+yarn install
+yarn start
+```
+
+**Working on your first Pull Request?**
+
+You can learn how from this free video series: [How to Contribute to an Open Source Project on GitHub](https://egghead.io/courses/how-to-contribute-to-an-open-source-project-on-github)
+
+To help you get your feet wet and get you familiar with our contribution process, we have a list of good first issues that contain bugs that have a relatively limited scope. This is a great place to get started.
+
+-----
+Cheers 🍻
 
 [changelog]: https://github.com/abuxvn/source/blob/main/packages/resolve/CHANGELOG.md
+[issues]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Aresolve
+[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
 [badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abux/resolve
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/resolve
