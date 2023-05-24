@@ -1,6 +1,6 @@
 {
   "name": "@abux/tasks",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Light-weight and fast priority based task runner",
   "license": "MIT",
   "main": "./index.js",
