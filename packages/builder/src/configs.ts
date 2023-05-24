@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'

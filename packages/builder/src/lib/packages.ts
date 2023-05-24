@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import execa from 'execa'
 import Module from 'module'
 import { resolve } from './paths'

@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { Compiler } from 'webpack'
 import { Dts } from '@abux/builder/src/lib/dts/index.js'
 import { pathExists, readJSON } from '../../lib/vendors'

@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
 import { getConfigs } from '../configs'

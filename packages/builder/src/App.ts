@@ -1,5 +1,5 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { Command, type Option } from 'commander'
-// import pkg from '../package.json'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'

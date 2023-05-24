@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { cursorTo, moveCursor, clearLine } from 'readline'
 import type { ICollapsible, IWritable } from './interfaces'
 import { Writable } from 'stream'

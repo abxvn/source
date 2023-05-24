@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { copy, pathExists } from '../../lib/vendors'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { resolver } from '../../lib/paths'

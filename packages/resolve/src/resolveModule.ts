@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { resolve } from './resolve'
 import { getDirPath } from './lib'
 import type { IModule, IResolveOptions } from './interfaces'

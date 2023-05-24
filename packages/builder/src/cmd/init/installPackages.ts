@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { collapsible } from '@abux/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
 import { install, installSdk } from '../../lib/packages'

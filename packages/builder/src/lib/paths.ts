@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { resolve as _resolve, basename, relative as _relative, join } from 'path'
 import type { IPathResolver } from '../interfaces'
 

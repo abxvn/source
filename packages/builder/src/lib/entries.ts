@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import glob from 'fast-glob'
 import { loggers, styles } from '@abux/logger/cli'
 import type {

@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { type IHeapPushParams, type IHeap, type IHeapItem } from './interfaces'
 
 export class MinHeap<TData> extends Array<IHeapItem<TData>> implements IHeap<TData> {
