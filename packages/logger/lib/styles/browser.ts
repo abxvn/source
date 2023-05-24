@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IModifierName, IFormatState, IStyledCssLog, IStyles, IFormatStateKey, IUnstyler, ILogStyler } from './interfaces'
 import { Modifiers } from './interfaces'
 

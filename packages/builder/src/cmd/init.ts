@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { loggers } from '@abux/logger/cli'
 import { path } from './options'
 import { getConfigs } from '../configs'

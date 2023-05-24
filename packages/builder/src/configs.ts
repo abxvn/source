@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
@@ -82,7 +83,8 @@ const addDefaultDeps = (deps: IConfigDeps) => {
     version: '^29.5.0',
     dev: true,
     dependencies: [
-      { name: 'ts-jest', version: '^29.1.0' }
+      { name: 'ts-jest', version: '^29.1.0' },
+      { name: '@types/jest', version: '^29.5.1' }
     ]
   })
 }

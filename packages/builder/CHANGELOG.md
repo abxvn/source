@@ -1,5 +1,14 @@
 # @abux/builder
 
+## 0.2.3
+
+### Patch Changes
+
+- Update docs
+- Updated dependencies
+  - @abux/resolve@1.0.6
+  - @abux/logger@1.0.3
+
 ## 0.2.2
 
 ### Patch Changes

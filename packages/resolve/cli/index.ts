@@ -1,3 +1,4 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { Command } from 'commander'
 import { resolve, resolveModule } from '@abux/resolve'
 
