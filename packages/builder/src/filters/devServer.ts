@@ -46,7 +46,9 @@ const devServer: IFilter = async ({ editor }) => {
         port: 0, // random port
         historyApiFallback: false,
         compress: true,
-        static: devDirPath, // public serve folder
+        // public serve folder
+        // for windows, normalize drive letters
+        static: devDirPath.replace(/([A-Z]+):/, (_, d: string) => `/${d.toLowerCase()}`),
         hot: true,
         devMiddleware: {
           publicPath: '/'

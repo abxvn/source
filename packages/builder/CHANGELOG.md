@@ -1,5 +1,17 @@
 # @abux/builder
 
+## 0.2.5
+
+### Patch Changes
+
+- Fix empty dev server for windows
+
+## 0.2.4
+
+### Patch Changes
+
+- Fix dev server static path for windows
+
 ## 0.2.3
 
 ### Patch Changes
