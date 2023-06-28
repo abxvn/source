@@ -1,5 +1,17 @@
 # @abux/resolve
 
+## 1.1.2
+
+### Patch Changes
+
+- update fixes for module dir listing
+
+## 1.1.1
+
+### Patch Changes
+
+- add fixes for module dir listing
+
 ## 1.1.0
 
 ### Minor Changes

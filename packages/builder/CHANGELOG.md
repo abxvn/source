@@ -1,5 +1,20 @@
 # @abux/builder
 
+## 0.3.3
+
+### Patch Changes
+
+- fix module dir listing
+- Updated dependencies
+  - @abux/resolve@1.1.2
+
+## 0.3.2
+
+### Patch Changes
+
+- Updated dependencies
+  - @abux/resolve@1.1.1
+
 ## 0.3.1
 
 ### Patch Changes

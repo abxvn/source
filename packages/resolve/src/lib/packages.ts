@@ -21,7 +21,7 @@ export const listModuleDirs = (fullPath: string) => {
   const path = normalizePath(fullPath)
   const moduleDirs = []
 
-  const pathWalkRegex = /[A-Za-z]:|\/[^/]+?/g
+  const pathWalkRegex = /[A-Za-z]:|\/[^/]+/g
   let rebuiltPath = ''
   let match = pathWalkRegex.exec(path)
 

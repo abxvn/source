@@ -62,7 +62,7 @@ export const resolveRequest = (
     }
 
     if (!moduleDirs.length) {
-      moduleDirs = listModuleDirs(path)
+      moduleDirs = listModuleDirs(callerPath)
       moduleDirs.push(yarnGlobalPackageDir)
       moduleDirs.push(npmGlobalPackageDir)
     }

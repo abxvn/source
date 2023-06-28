@@ -4,17 +4,17 @@ import { listModuleDirs } from './packages'
 
 describe('packages', () => {
   it('should list possible node_modules dirs from a path', () => {
-    expect(listModuleDirs('/a/b/c')).toEqual([
-      '/a/b/c/node_modules',
-      '/a/b/node_modules',
-      '/a/node_modules',
+    expect(listModuleDirs('/a11/b11/c11')).toEqual([
+      '/a11/b11/c11/node_modules',
+      '/a11/b11/node_modules',
+      '/a11/node_modules',
       '/node_modules'
     ])
 
     // windows
-    expect(listModuleDirs('D:\\b\\c')).toEqual([
-      'D:/b/c/node_modules',
-      'D:/b/node_modules',
+    expect(listModuleDirs('D:\\b22\\c22')).toEqual([
+      'D:/b22/c22/node_modules',
+      'D:/b22/node_modules',
       'D:/node_modules'
     ])
   })
