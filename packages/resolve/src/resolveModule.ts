@@ -1,7 +1,7 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { resolve } from './resolve'
-import { getDirPath } from './lib'
-import type { IModule, IResolveOptions } from './interfaces'
+import { getDirPath } from './lib/helpers'
+import type { IModule, IResolveOptions } from './lib/interfaces'
 import { readJSON } from './lib/fs/asyncFs'
 
 export const resolveModule = async (moduleOrDirPath: string, options?: IResolveOptions): Promise<IModule> => {

@@ -1,7 +1,7 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { resolve as resolvedPath } from 'path'
-import type { IFsPathType, IResolvedFileType } from '../../interfaces'
-import { realpathSync, statSync, readJSONSync, pathExistsSync } from 'fs-extra'
+import type { IFsPathType, IResolvedFileType } from '../interfaces'
+import { realpathSync, lstatSync, readJSONSync, pathExistsSync } from 'fs-extra'
 
 const RELATIVE_PATH_REGEX = /^\.\.?(\/|\\|$)/
 
@@ -46,12 +46,14 @@ export const getFsPathTypeSync = (fsPath: string, callerPath: string): IFsPathTy
     path = resolvedPath(callerPath, fsPath)
   }
 
-  let stats = statSync(path)
+  // use `lstat` instead of `stat` to void stats following symlink
+  // resulting in isSymbolicLink always return false
+  let stats = lstatSync(path)
   let type: IResolvedFileType = null
 
   if (stats.isSymbolicLink()) {
     path = realpathSync(path)
-    stats = statSync(path)
+    stats = lstatSync(path)
   }
 
   if (stats.isDirectory()) {

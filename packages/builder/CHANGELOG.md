@@ -1,5 +1,13 @@
 # @abux/builder
 
+## 0.3.1
+
+### Patch Changes
+
+- Fix resolving loaders
+- Updated dependencies
+  - @abux/resolve@1.1.0
+
 ## 0.3.0
 
 ### Minor Changes

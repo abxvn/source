@@ -1,6 +1,7 @@
 import { map } from '../lib/data'
 import type { IBuildTarget, IConfigEditor, IEntries, IFilter, IWebpackConfig } from '../interfaces'
-import { resolve } from '@abux/resolve'
+import type { RuleSetRule } from 'webpack'
+import { resolveOptions } from '../lib/entries'
 
 const initConfigs: IFilter = async ({ editor }) => {
   const targetedEntries = editor.entries
@@ -39,23 +40,23 @@ export const getConfig = async (
     },
     module: {
       rules: [
-        {
+        await resolveOptions<RuleSetRule>('ts-loader', path => ({
           test: /\.(js|tsx?)$/,
           use: [
             {
-              loader: await resolve('ts-loader'),
+              loader: path,
               options: {
                 configFile: editor.path.resolve('tsconfig.json')
               }
             }
           ],
           exclude: /node_modules|yarn/
-        },
-        {
+        })),
+        await resolveOptions<RuleSetRule>('html-loader', path => ({
           test: /\.html$/i,
-          loader: await resolve('html-loader')
-        }
-      ]
+          loader: path
+        }))
+      ].filter(Boolean) as RuleSetRule[]
     },
     externals: [],
     plugins: [],

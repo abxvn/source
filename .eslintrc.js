@@ -27,7 +27,7 @@ module.exports = {
     complexity: [
       'warn',
       {
-        max: 15
+        max: 20
       }
     ],
     'padding-line-between-statements': [

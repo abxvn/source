@@ -1,6 +1,6 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-export * from './lib/packages'
-export * from './lib/pnp'
+export * from './packages'
+export * from './pnp'
 
 export const getDirPath = (path: string) => path.replace(/[\\/][^\\/]+$/, '')
 export const getCallerPath = (): string => {

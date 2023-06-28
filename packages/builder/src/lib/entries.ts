@@ -7,8 +7,9 @@ import type {
   IWebpackConfig,
   IFileFilter
 } from '../interfaces'
-import { resolve } from './paths'
+import { resolve as resolvePath } from './paths'
 import { minimatch } from 'minimatch'
+import { resolve } from '@abux/resolve'
 
 const { info, log } = loggers
 const { bold, italic } = styles
@@ -30,7 +31,7 @@ export const expandEntries = async (
   return filteredFiles.reduce<ITargetedExpandedEntries>(
     (targetedEntries, f: string) => {
       const relativePath = path.relative(f)
-      const fullPath = resolve(path.relative(f))
+      const fullPath = resolvePath(path.relative(f))
       const target = /\/(scripts|dev|web)\//.test(relativePath) ? 'web' : 'node'
 
       return {
@@ -54,4 +55,17 @@ export const logEntries = (configs: IWebpackConfig[]) => {
     log(`   ${name} (${italic(target || '')}):`)
     Object.keys(entry).forEach(entryName => { log(`     ${entryName}`) })
   })
+}
+
+export const resolveOptions = async <TResult = Record<string, unknown>>(
+  packageName: string,
+  getOptions: (resolvedPath: string) => TResult
+) => {
+  const resolvedPath = await resolve(packageName)
+
+  if (resolvedPath) {
+    return getOptions(resolvedPath)
+  } else {
+    return undefined
+  }
 }

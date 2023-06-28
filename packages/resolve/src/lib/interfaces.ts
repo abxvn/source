@@ -18,6 +18,7 @@ export interface IFsPathType {
 export interface IResolveOptions {
   callerPath?: string
   moduleDirs?: string[]
+  usePnpFallback?: boolean
 }
 
 // Yarn PnP API
@@ -37,6 +38,9 @@ export interface PnpApi {
     options?: PnpResolveRequestOptions
   ) => string | null
 }
+
+export type IMaybePromise<T> = T | Promise<T>
+export type IResolveTrace = Map<string, unknown>
 
 // UNUSED DEFS FOR PnpApi
 // These parts mostly for reusing of other packages

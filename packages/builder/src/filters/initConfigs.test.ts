@@ -1,6 +1,17 @@
 import { type IWebpackConfigs } from '../interfaces'
 import { extractPattern } from '../lib/data'
 import { getMockConfig } from '../../tests/mocks/mockConfigs'
+import { resolveOptions } from '../lib/entries'
+
+jest.mock('../lib/entries', () => {
+  return {
+    ...jest.requireActual('../lib/entries'),
+    resolveOptions: jest.fn().mockImplementation((p, o) => o(p))
+  }
+})
+const mockLibEntries = {
+  resolveOptions
+}
 
 const webEntries = {
   'web/index.ts': {

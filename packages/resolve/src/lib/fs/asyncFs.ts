@@ -1,16 +1,20 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import { createReadStream, stat, realpath, pathExists } from 'fs-extra'
+import { createReadStream, lstat, realpath, pathExists } from 'fs-extra'
 import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'
-import type { IFsPathType, IResolvedFileType } from '../../interfaces'
+import type { IFsPathType, IResolveTrace, IResolvedFileType } from '../interfaces'
 
 export { readJSON } from 'fs-extra'
 
 const RELATIVE_PATH_REGEX = /^\.\.?(\/|\\|$)/
 
-export const resolveFromFsPath = async (fsPath: string, callerPath: string): Promise<string> => {
+export const resolveFromFsPath = async (
+  fsPath: string,
+  callerPath: string,
+  trace?: IResolveTrace
+): Promise<string> => {
   try {
-    const { path, type } = await getFsPathType(fsPath, callerPath)
+    const { path, type } = await getFsPathType(fsPath, callerPath, trace)
 
     if (type === null) {
       return ''
@@ -28,38 +32,53 @@ export const resolveFromFsPath = async (fsPath: string, callerPath: string): Pro
         }
       }
 
-      if (await pathExists(mainFilePath)) {
-        return mainFilePath
-      }
+      const mainFileExists = await pathExists(mainFilePath)
 
-      return ''
+      trace?.set('fs:main', mainFilePath)
+      trace?.set('fs:main:exists', mainFileExists)
+
+      return mainFileExists ? mainFilePath : ''
     }
-  } catch (err) {
+  } catch (err: any) {
+    trace?.set('fs:error', err.message)
+
     return ''
   }
 }
 
-export const getFsPathType = async (fsPath: string, callerPath: string): Promise<IFsPathType> => {
+export const getFsPathType = async (
+  fsPath: string,
+  callerPath: string,
+  trace?: IResolveTrace
+): Promise<IFsPathType> => {
   const isRelativePath = RELATIVE_PATH_REGEX.test(fsPath)
 
   let path = fsPath
 
   if (isRelativePath) {
     path = resolvedPath(callerPath, fsPath)
+    trace?.set('fs:relative', path)
   }
 
-  let stats = await stat(path)
+  // use `lstat` instead of `stat` to void stats following symlink
+  // resulting in isSymbolicLink always return false
+  let stats = await lstat(path)
   let type: IResolvedFileType = null
 
   if (stats.isSymbolicLink()) {
+    trace?.set('fs:symlink', true)
     path = await realpath(path)
-    stats = await stat(path)
+    stats = await lstat(path)
   }
 
   if (stats.isDirectory()) {
+    trace?.set('fs:type', 'dir')
     type = 'directory'
   } else if (stats.isFile() || stats.isFIFO()) {
+    trace?.set('fs:type', 'file')
     type = 'file'
+  } else {
+    trace?.set('fs:type', 'unknown')
   }
 
   return {

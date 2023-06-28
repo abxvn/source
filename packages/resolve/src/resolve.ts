@@ -1,49 +1,22 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import type { IResolveOptions } from './interfaces'
-import {
-  isLocalMatch,
-  listModuleDirs,
-  npmGlobalPackageDir,
-  yarnGlobalPackageDir,
-  isBuiltin,
-  isPnpEnabled,
-  pnpApi,
-  getCallerPath
-} from './lib'
+import type { IResolveOptions, IResolveTrace } from './lib/interfaces'
+import { resolveRequest } from './lib/resolvers'
 import { resolveFromFsPath } from './lib/fs/asyncFs'
 
 export const resolve = async (path: string, options?: IResolveOptions): Promise<string> => {
-  if (isBuiltin(path)) {
-    return path
+  const trace: IResolveTrace | undefined = +(process.env.ABUX_RESOLVE_DEBUG as string)
+    ? new Map()
+    : undefined
+  const resolveOptions = {
+    usePnpFallback: true,
+    ...options
   }
 
-  let callerPath = options?.callerPath
-  let moduleDirs = options?.moduleDirs
+  const result = await resolveRequest(path, resolveOptions, resolveFromFsPath, trace)
 
-  if (!callerPath) {
-    callerPath = getCallerPath() || process.cwd()
+  if (trace) {
+    console.debug('@abux/resolve', Object.fromEntries(trace.entries()))
   }
 
-  // possibly an installed dependencies
-  if (!isLocalMatch(path)) {
-    if (isPnpEnabled()) {
-      return pnpApi?.resolveRequest(path, callerPath) || ''
-    }
-
-    if (!moduleDirs) {
-      moduleDirs = listModuleDirs(path)
-      moduleDirs.push(yarnGlobalPackageDir)
-      moduleDirs.push(npmGlobalPackageDir)
-    }
-
-    for await (const moduleDir of moduleDirs) {
-      const fsPath = await resolveFromFsPath(`${moduleDir}/${path}`, '')
-
-      if (fsPath) {
-        return fsPath
-      }
-    }
-  }
-
-  return await resolveFromFsPath(path, callerPath)
+  return result
 }

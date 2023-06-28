@@ -1,5 +1,5 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import type { PnpApi } from '../interfaces'
+import type { PnpApi } from './interfaces'
 
 const getPnpApi = (): PnpApi | null => {
   try {
@@ -19,3 +19,7 @@ const getPnpApi = (): PnpApi | null => {
 
 export const pnpApi = getPnpApi()
 export const isPnpEnabled = () => pnpApi !== null
+export const resolvePnpPackage: PnpApi['resolveRequest'] = (
+  request,
+  issuer
+) => pnpApi?.resolveRequest(request, issuer) || ''

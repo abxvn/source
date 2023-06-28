@@ -1,27 +1,30 @@
 import { realpathSync } from 'fs-extra'
 import { resolve as resolvePath } from 'path'
-import { isPnpEnabled, listModuleDirs, pnpApi } from './lib'
+import { isPnpEnabled, listModuleDirs, resolvePnpPackage } from './lib/helpers'
 import { resolveModule } from './resolveModule'
 import { readJSON } from './lib/fs/asyncFs'
 
 const mockDir = realpathSync(resolvePath(__dirname, '../tests/mocks')).replace(/\\/g, '/')
 const resolveMockPath = (path: string) => resolvePath(mockDir, path)
-const mockLib = { isPnpEnabled, listModuleDirs, readJSON, pnpApi }
+const mockHelpers = { isPnpEnabled, listModuleDirs, readJSON, resolvePnpPackage }
 
-jest.mock('./lib', () => {
+jest.mock('./lib/helpers', () => {
   return {
-    ...jest.requireActual('./lib'),
+    ...jest.requireActual('./lib/helpers'),
     isPnpEnabled: jest.fn(),
     listModuleDirs: jest.fn(),
+    resolvePnpPackage: jest.fn(),
     pnpApi: {
-      resolveRequest: () => resolveMockPath('mockModuleDirs/packageModule/package.json')
+      resolveRequest: () => ''
     }
   }
 })
 
 describe('resolveModule#dir', () => {
   it('should resolve local directory with package.json', async () => {
-    expect(await resolveModule('../tests/mocks/mockDirPackage')).toMatchObject({
+    const result = await resolveModule('../tests/mocks/mockDirPackage', { callerPath: __dirname })
+
+    expect(result).toMatchObject({
       exists: true,
       main: 'mockCustomIndex.js'
     })
@@ -36,22 +39,27 @@ describe('resolveModule#dir', () => {
 
 describe('resolveModule#withPnp', () => {
   beforeAll(() => {
-    jest.spyOn(mockLib, 'isPnpEnabled').mockReturnValue(true)
+    jest.spyOn(mockHelpers, 'isPnpEnabled').mockReturnValue(true)
   })
 
   it('should use pnp api to resolve', async () => {
-    expect(await resolveModule('testPnpPackage'))
-      .toMatchObject({
-        exists: true,
-        main: 'mockPackageCustomIndex.js'
-      })
+    jest.spyOn(mockHelpers, 'resolvePnpPackage').mockReturnValueOnce(
+      resolveMockPath('mockModuleDirs/packageModule/package.json')
+    )
+
+    const result = await resolveModule('testPnpPackage', { callerPath: __dirname })
+
+    expect(result).toMatchObject({
+      exists: true,
+      main: 'mockPackageCustomIndex.js'
+    })
   })
 })
 
 describe('resolveModule#withoutPnp', () => {
   beforeAll(() => {
-    jest.spyOn(mockLib, 'isPnpEnabled').mockReturnValue(false)
-    jest.spyOn(mockLib, 'listModuleDirs')
+    jest.spyOn(mockHelpers, 'isPnpEnabled').mockReturnValue(false)
+    jest.spyOn(mockHelpers, 'listModuleDirs')
       .mockImplementation(() => [resolveMockPath('mockModuleDirs')])
   })
 
@@ -69,6 +77,21 @@ describe('resolveModule#withoutPnp', () => {
     }
 
     expect(await resolveModule('packageModule', customOptions))
+      .toMatchObject({
+        exists: true,
+        main: 'mockPackageCustomIndex.js'
+      })
+  })
+})
+
+describe('resolveModule#withPnpm', () => {
+  beforeAll(() => {
+    jest.spyOn(mockHelpers, 'isPnpEnabled').mockReturnValue(false)
+    jest.spyOn(mockHelpers, 'listModuleDirs').mockImplementation(() => [resolveMockPath('mockModulePnpm')])
+  })
+
+  it('should resolve using node_modules dirs', async () => {
+    expect(await resolveModule('packageModule'))
       .toMatchObject({
         exists: true,
         main: 'mockPackageCustomIndex.js'
