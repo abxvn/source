@@ -57,7 +57,8 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
           map: { react: 'preact/compat', 'react-dom': 'preact/compat' },
           pattern: /preact/
         }
-      ]
+      ],
+      ignores: [/node_modules/, /\.yarn/]
     }
     this.filters = filters
     this.deps = deps || new ConfigDeps()
@@ -91,7 +92,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   }
 
   async init () {
-    let entries = await expandEntries(this.path, this.options.entryPatterns)
+    let entries = await expandEntries(this.path, this.options.entryPatterns, this.options.ignores)
 
     for await (const entryFilter of this.entryFilters) {
       entries = await entryFilter(entries)

@@ -15,12 +15,14 @@ export interface IReplacementOption {
   map: IImportReplacementMap
 }
 
+export type IFileFilter = string | RegExp
 export interface IBuilderOptions {
   envName: IBuildEnvironment
   rootPath: string
   entryPatterns: string[]
   replacements: IReplacementOption[]
   devs: IDevServerCustomOption[]
+  ignores: IFileFilter[]
 }
 
 export type IBuilderCustomOptions = Partial<IBuilderOptions>

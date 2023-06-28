@@ -4,20 +4,30 @@ import { loggers, styles } from '@abux/logger/cli'
 import type {
   ITargetedExpandedEntries,
   IPathResolver,
-  IWebpackConfig
+  IWebpackConfig,
+  IFileFilter
 } from '../interfaces'
 import { resolve } from './paths'
+import { minimatch } from 'minimatch'
 
 const { info, log } = loggers
 const { bold, italic } = styles
 
 export const expandEntries = async (
   path: IPathResolver,
-  patterns: string[]
+  patterns: string[],
+  ignores: IFileFilter[] = []
 ): Promise<ITargetedExpandedEntries> => {
   const files = await glob(patterns.map(pattern => path.resolve(pattern)))
+  const filteredFiles = files.filter(path =>
+    !ignores.some(pattern =>
+      pattern instanceof RegExp
+        ? pattern.test(path)
+        : minimatch(path, pattern)
+    )
+  )
 
-  return files.reduce<ITargetedExpandedEntries>(
+  return filteredFiles.reduce<ITargetedExpandedEntries>(
     (targetedEntries, f: string) => {
       const relativePath = path.relative(f)
       const fullPath = resolve(path.relative(f))
