@@ -6,8 +6,8 @@
     "start": "webpack",
     "build": "webpack --node-env production",
     "components": "webpack -c webpack.components.config.js",
-    "test": "jest",
-    "lint": "eslint \"packages/**/*.{ts,tsx}\" -c .eslintrc.js",
+    "test": "jest -c tests/spec/config.js",
+    "lint": "eslint -c .eslintrc.js packages --ext ts",
     "resolve": "yarn workspace @abux/resolve",
     "builder": "yarn workspace @abux/builder"
   },
