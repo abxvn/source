@@ -1,6 +1,6 @@
 import { type IWebpackConfigs } from '../interfaces'
 import { getMockConfig } from '../../tests/mocks/mockConfigs'
-import { DtsPlugin } from '../plugins/DtsPlugin'
+import { WebpackDtsPlugin } from '@abux/webpack-dts'
 import generateDts from './generateDts'
 
 describe('generateDts#configs', () => {
@@ -16,7 +16,7 @@ describe('generateDts#configs', () => {
     const devPlugins = devConfigs[0].plugins || []
     const prodPlugins = prodConfigs[0].plugins || []
 
-    expect(devPlugins.some(p => p instanceof DtsPlugin)).toBe(false)
-    expect(prodPlugins.some(p => p instanceof DtsPlugin)).toBe(true)
+    expect(devPlugins.some(p => p instanceof WebpackDtsPlugin)).toBe(false)
+    expect(prodPlugins.some(p => p instanceof WebpackDtsPlugin)).toBe(true)
   })
 })

@@ -1,6 +1,6 @@
 import { map } from '../lib/data'
 import type { IFilter } from '../interfaces'
-import { DtsPlugin } from '@abux/builder/src/plugins/DtsPlugin/index.js'
+import { WebpackDtsPlugin } from '@abux/webpack-dts'
 
 const generateDts: IFilter = async ({ editor }) => {
   return {
@@ -8,7 +8,7 @@ const generateDts: IFilter = async ({ editor }) => {
       ...config,
       plugins: [
         ...config.plugins,
-        editor.options.envName === 'production' && new DtsPlugin(editor.path.rootPath)
+        editor.options.envName === 'production' && new WebpackDtsPlugin(editor.path.rootPath)
       ]
     }))
   }

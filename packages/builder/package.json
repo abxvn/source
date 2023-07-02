@@ -30,6 +30,7 @@
   "dependencies": {
     "@abux/logger": "workspace:^",
     "@abux/resolve": "workspace:^",
+    "@abux/webpack-dts": "workspace:^",
     "commander": "^10.0.1",
     "dotenv": "^16.0.3",
     "execa": "^5.1.1",
@@ -41,7 +42,7 @@
     "kind-of": "^6.0.3",
     "minimatch": "^9.0.0",
     "ts-loader": "^9.4.2",
-    "typescript": "^5.0.2",
+    "typescript": "~5.0.2",
     "webpack": "^5.76.3",
     "webpack-dev-server": "^4.13.3",
     "webpack-node-externals": "^3.0.0"

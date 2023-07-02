@@ -1,0 +1,69 @@
+/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
+import { resolve as _resolve, basename, relative as _relative, join } from 'path'
+
+export interface IPathResolver {
+  rootPath: string
+  resolve: (...paths: string[]) => string
+  relative: (fullPath: string) => string
+  includes: (fullPath: string) => boolean
+  resolveList: (paths: string[]) => string[]
+  dir: () => IPathResolver
+  // alias of resolve, but return IPathResolver
+  res: (...paths: string[]) => IPathResolver
+}
+
+export class PathResolver implements IPathResolver {
+  readonly rootPath: string
+
+  constructor (rootPath: string) {
+    this.rootPath = normalize(_resolve(rootPath))
+  }
+
+  relative (fullPath: string) {
+    return normalize(_relative(this.rootPath, normalize(fullPath)))
+  }
+
+  relativeList (fullPaths: string[]) {
+    return fullPaths.map(fullPath => this.relative(fullPath))
+  }
+
+  includes (fullPath: string): boolean {
+    return normalize(fullPath).indexOf(this.rootPath) === 0
+  }
+
+  resolve (...paths: string[]) {
+    return normalize(_resolve(this.rootPath, ...paths.filter(Boolean).map(p => p.replace(/^\/+/, ''))))
+  }
+
+  resolveList (paths: string[]) {
+    return paths.map(path => this.resolve(path))
+  }
+
+  dir (): IPathResolver {
+    return resolver(getDir(this.rootPath))
+  }
+
+  res (...paths: string[]) {
+    return resolver(this.resolve(...paths))
+  }
+}
+
+export const normalize = (path: string) => path?.replace(/\\/g, '/') || ''
+export const getDir = (path: string) => normalize(path).replace(/\/[^/]+\/?$/, '')
+export const getName = (path: string) => basename(normalize(path))
+export const resolver = (rootPath: string): IPathResolver => new PathResolver(rootPath)
+export const resolve = (path: string) => normalize(_resolve(path))
+export const merge = (...paths: string[]) => normalize(join(...paths))
+export const removeExt = (path: string) => path?.replace(/\.([^/]+)$/, '')
+
+const MODULE_PATH_REGEX = /([^/.]+\/[^/.]+)/
+
+export const getLocalPackagePath = (relativePath: string): string => {
+  if (relativePath.includes('node_modules') || relativePath.includes('.yarn')) {
+    return ''
+  }
+
+  const match = relativePath.match(MODULE_PATH_REGEX)
+
+  return match ? match[1] : ''
+}
