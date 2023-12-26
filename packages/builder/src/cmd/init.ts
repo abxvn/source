@@ -9,7 +9,7 @@ import {
   type ISdkAnswer,
   sdk,
   type IEditorConfigsAnswer,
-  editorConfigs
+  editorConfigs,
 } from './questions'
 import { YARN_ENABLED, getPnpmVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
@@ -28,8 +28,8 @@ const init = async function (this: IApp, options: any) {
   const envName = 'development'
   const { editor, deps } = await getConfigs(options.path, envName, {
     options: {
-      entryPatterns: []
-    }
+      entryPatterns: [],
+    },
   })
 
   await checkVersion()
@@ -54,8 +54,8 @@ export default {
   description: 'Init config folder',
   action: init,
   options: [
-    path
-  ]
+    path,
+  ],
 }
 
 const checkVersion = async () => {

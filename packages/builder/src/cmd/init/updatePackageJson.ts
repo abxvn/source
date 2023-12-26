@@ -73,7 +73,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
     scripts,
     ...YARN_ENABLED ? workspaces : undefined,
   }, {
-    spaces: 2
+    spaces: 2,
   })
 
   logStep('config done')

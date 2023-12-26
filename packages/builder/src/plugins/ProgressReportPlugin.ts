@@ -17,7 +17,7 @@ export default class ProgressReportPlugin {
     },
     afterCompile (compilation: Compilation) {
       progress(`${compilation.compiler.name as string}: compiled`)
-    }
+    },
   }
 
   apply (compiler: Compiler) {

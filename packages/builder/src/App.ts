@@ -35,7 +35,7 @@ export default class App extends Command implements IApp {
     this.registerCommands({
       dev,
       build,
-      init
+      init,
     })
   }
 

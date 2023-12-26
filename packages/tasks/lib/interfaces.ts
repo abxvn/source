@@ -1,6 +1,6 @@
 import {
   type TaskPriority,
-  type TaskStatus
+  type TaskStatus,
 } from './consts'
 
 export type ITaskPriority = typeof TaskPriority[keyof typeof TaskPriority]

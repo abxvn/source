@@ -1,11 +1,11 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { collapsible } from '@abux/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
-import { YARN_ENABLED, install, installSdk } from '../../lib/packages'
+import { install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,
-  type ISdkAnswer
+  type ISdkAnswer,
 } from '../questions'
 import { logProgress, logStep } from './loggers'
 

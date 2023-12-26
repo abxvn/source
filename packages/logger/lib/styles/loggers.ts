@@ -5,7 +5,7 @@ import type {
   IBadgeEffectColor,
   IUnstyler,
   ILogStyler,
-  ILogger
+  ILogger,
 } from './interfaces'
 
 const customLog = (logFunction: ILogger, logStyler?: ILogStyler, ...items: any[]) => {
@@ -41,7 +41,7 @@ export const createLoggers = (
     'yellowBright',
     'blueBright',
     'magentaBright',
-    'cyanBright'
+    'cyanBright',
   ]
 
   const log = logFunctions.log.bind(console)
@@ -88,7 +88,7 @@ export const createLoggers = (
       }
 
       return painter.bold(` ${unstyle(label)} `)
-    }
+    },
   }
 }
 

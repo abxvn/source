@@ -18,10 +18,10 @@ const replaceVars: IFilter = async ({ editor }) => {
         ...config.plugins,
         new DefinePlugin({
           'process.env.NODE_ENV': JSON.stringify(config.mode),
-          ...await defineEnvPerEntries(path, config.entry)
-        })
-      ]
-    }))
+          ...await defineEnvPerEntries(path, config.entry),
+        }),
+      ],
+    })),
   }
 }
 

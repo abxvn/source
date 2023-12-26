@@ -12,7 +12,7 @@ export const resolveModule = async (moduleOrDirPath: string, options?: IResolveO
     main: 'index.js',
     name: '',
     version: '',
-    dependencies: []
+    dependencies: [],
   }
 
   try {
@@ -29,7 +29,7 @@ export const resolveModule = async (moduleOrDirPath: string, options?: IResolveO
         path: getDirPath(packageJsonFilePath),
         name: packageJson.name || '',
         main: packageJson.main || 'index.js',
-        exists: true
+        exists: true,
       }
     } else {
       return module
@@ -37,7 +37,7 @@ export const resolveModule = async (moduleOrDirPath: string, options?: IResolveO
   } catch (err) {
     return {
       ...module,
-      error: err as Error
+      error: err as Error,
     }
   }
 }

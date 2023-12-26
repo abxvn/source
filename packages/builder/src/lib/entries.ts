@@ -5,7 +5,7 @@ import type {
   ITargetedExpandedEntries,
   IPathResolver,
   IWebpackConfig,
-  IFileFilter
+  IFileFilter,
 } from '../interfaces'
 import { resolve as resolvePath } from './paths'
 import { minimatch } from 'minimatch'
@@ -39,9 +39,9 @@ export const expandEntries = async (
         [target]: {
           ...targetedEntries[target],
           [relativePath]: {
-            import: fullPath
-          }
-        }
+            import: fullPath,
+          },
+        },
       }
     },
     {}

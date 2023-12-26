@@ -9,7 +9,7 @@ export class MinHeap<TData> extends Array<IHeapItem<TData>> implements IHeap<TDa
       const itemId = originalIdx++
       const item = {
         ...items[idx],
-        id: itemId
+        id: itemId,
       }
 
       super.push(item)

@@ -5,7 +5,7 @@ import ImportReplacementPlugin from '../plugins/ImportReplacementPlugin'
 const replaceImports: IFilter = async ({ editor }) => {
   if (!editor.options.replacements) {
     return {
-      configs: editor.configs
+      configs: editor.configs,
     }
   }
 
@@ -16,9 +16,9 @@ const replaceImports: IFilter = async ({ editor }) => {
         ...config.plugins,
         ...editor.options.replacements.map(({ pattern, map }) =>
           new ImportReplacementPlugin(map, pattern)
-        )
-      ]
-    }))
+        ),
+      ],
+    })),
   }
 }
 

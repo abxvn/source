@@ -8,8 +8,8 @@ export const YARN_ENABLED = false
 
 const cliOptions = {
   env: {
-    FORCE_COLOR: 'true'
-  }
+    FORCE_COLOR: 'true',
+  },
 }
 
 interface IWritable {
@@ -31,14 +31,14 @@ export const install = async (
     dev = false,
     outputStream = process.stdout,
     errorStream = process.stderr,
-    tool = 'pnpm'
+    tool = 'pnpm',
   } = options || {}
 
   const subProcess = execa(tool, [
     tool !== 'npm' ? 'add' : 'install',
     '--silent',
     dev ? '-D' : '',
-    ...packages
+    ...packages,
   ].filter(Boolean), cliOptions)
 
   if (outputStream) {
@@ -74,7 +74,7 @@ export const getPnpmVersion = async (): Promise<string> => {
 export const installSdk = async (name: string, options?: Omit<IInstallOptions, 'dev'>) => {
   const {
     outputStream = process.stdout,
-    errorStream = process.stderr
+    errorStream = process.stderr,
   } = options || {}
   const subProcess = execa('yarn', ['dlx', '@yarnpkg/sdks', name], cliOptions)
 

@@ -1,7 +1,7 @@
 export const Modifiers = {
   bold: 'b',
   underline: 'u',
-  italic: 'i'
+  italic: 'i',
 }
 export type IModifierName = keyof typeof Modifiers
 export type IModifier = typeof Modifiers[IModifierName]

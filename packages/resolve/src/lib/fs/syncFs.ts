@@ -64,6 +64,6 @@ export const getFsPathTypeSync = (fsPath: string, callerPath: string): IFsPathTy
 
   return {
     path,
-    type
+    type,
   }
 }

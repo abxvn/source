@@ -1,6 +1,6 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import {
-  SyntaxKind, forEachChild, parseConfigFileTextToJson, parseJsonConfigFileContent, sys
+  SyntaxKind, forEachChild, parseConfigFileTextToJson, parseJsonConfigFileContent, sys,
 } from 'typescript'
 import type {
   CompilerOptions,
@@ -14,7 +14,7 @@ import type {
   ExportAssignment,
   ExportDeclaration,
   ModuleDeclaration,
-  VariableStatement
+  VariableStatement,
 } from 'typescript'
 import { type IReplacer } from './interfaces'
 import { readFile } from 'fs-extra'
@@ -50,7 +50,7 @@ export const NodeKinds = {
   },
   isModuleDeclaration (node: Node): node is ModuleDeclaration {
     return node && node.kind === SyntaxKind.ModuleDeclaration
-  }
+  },
 }
 
 export const removeExtension = (filePath: string) => filePath.replace(/(\.d)?\.ts|\.js$/, '')
@@ -114,7 +114,7 @@ export const parseTsConfig = async (fileName: string): Promise<{
 
   return {
     fileNames: configParseResult.fileNames,
-    compilerOptions: configParseResult.options
+    compilerOptions: configParseResult.options,
   }
 }
 

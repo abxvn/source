@@ -21,7 +21,7 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
     !hasPackagesFolder ? 'packages/dummy/cli/_index.ts' : '',
     deps.requires('typescript') ? '_tsconfig.json' : '',
     deps.requires('jest') ? '_tests' : '',
-    deps.requires('eslint') ? '_.eslintrc.js' : ''
+    deps.requires('eslint') ? '_.eslintrc.js' : '',
   ].filter(Boolean)
 
   if (answers.editorConfigs) {

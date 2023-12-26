@@ -8,7 +8,7 @@ import {
   isBuiltin,
   resolvePnpPackage,
   getCallerPath,
-  isPnpEnabled
+  isPnpEnabled,
 } from './helpers'
 
 export const resolveRequest = (

@@ -11,7 +11,7 @@ const main = async (args: any) => {
 
   const options = app.parse(args).opts()
   const resolveOptions = {
-    callerPath: process.cwd()
+    callerPath: process.cwd(),
   }
 
   let messages = []
@@ -30,7 +30,7 @@ const main = async (args: any) => {
 
       return {
         ...module,
-        error: module.error?.message?.replace(/[\r\n\s]+(.[\n\r]?)+$/, '')
+        error: module.error?.message?.replace(/[\r\n\s]+(.[\n\r]?)+$/, ''),
       }
     }))
   }

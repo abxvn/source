@@ -56,8 +56,8 @@ export const getConfigs = async (
     configs: configs.map(config => ({
       ...config,
       name: styles.bold.underline.greenBright(config.name),
-      plugins: config.plugins.filter(Boolean)
-    }))
+      plugins: config.plugins.filter(Boolean),
+    })),
   }
 }
 
@@ -78,7 +78,7 @@ const addDefaultDeps = (deps: IConfigDeps) => {
       { name: 'eslint-plugin-jest', version: '^27.6.0' },
       { name: 'eslint-plugin-n', version: '^16.5.0' },
       { name: 'eslint-plugin-promise', version: '^6.1.1' },
-    ]
+    ],
   })
   deps.set('jest', {
     version: '^29.7.0',
@@ -87,6 +87,6 @@ const addDefaultDeps = (deps: IConfigDeps) => {
       { name: '@jest/globals', version: '^29.7.0' },
       { name: '@types/jest', version: '^29.5.11' },
       { name: 'ts-jest', version: '^29.1.1' },
-    ]
+    ],
   })
 }

@@ -3,23 +3,23 @@ import type { IFilter, IBuilderCustomOptions } from '../../src/interfaces'
 
 const webEntries = {
   'web/index.ts': {
-    import: 'web/index.ts'
+    import: 'web/index.ts',
   },
   'web/dev/index.ts': {
-    import: 'web/dev/index.ts'
-  }
+    import: 'web/dev/index.ts',
+  },
 }
 const nodeEntries = {
   'node/index.ts': {
-    import: 'node/index.ts'
-  }
+    import: 'node/index.ts',
+  },
 }
 
 class MockConfigEditor extends ConfigEditor {
   public get entries () {
     return {
       web: webEntries,
-      node: nodeEntries
+      node: nodeEntries,
     }
   }
 }
@@ -31,7 +31,7 @@ export const getMockConfig = async (
   const editor = new MockConfigEditor({
     envName: 'development',
     rootPath: __dirname,
-    filters
+    filters,
   })
 
   if (options) {

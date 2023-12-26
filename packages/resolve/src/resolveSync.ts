@@ -6,7 +6,7 @@ import { resolveRequest } from './lib/resolvers'
 export const resolveSync = (path: string, options?: IResolveOptions): string => {
   const resolveOptions = {
     usePnpFallback: true,
-    ...options
+    ...options,
   }
 
   return resolveRequest(path, resolveOptions, resolveFromFsPathSync) as string

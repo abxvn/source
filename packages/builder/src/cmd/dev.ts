@@ -55,6 +55,6 @@ export default {
   description: 'Run dev servers for testing apps on browser',
   action: dev,
   options: [
-    path
-  ]
+    path,
+  ],
 }

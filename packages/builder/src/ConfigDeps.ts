@@ -3,7 +3,7 @@ import type {
   IConfigDeps,
   IConfigDepsSetData,
   IDep,
-  IDepWithDeps
+  IDepWithDeps,
 } from './interfaces'
 
 export default class ConfigDeps implements IConfigDeps {
@@ -21,7 +21,7 @@ export default class ConfigDeps implements IConfigDeps {
       deps[name] = {
         ...deps[name], // if exists, update with new version and dev indicator
         version,
-        dev: deps[name]?.dev ?? dev // obey previous dev
+        dev: deps[name]?.dev ?? dev, // obey previous dev
       }
 
       dependencies?.forEach(({ name, version, dev: dependencyDev }) => {
@@ -32,7 +32,7 @@ export default class ConfigDeps implements IConfigDeps {
         deps[name] = {
           ...deps[name], // if exists, update with new version and dev indicator
           version,
-          dev: deps[name]?.dev ?? dependencyDev ?? dev // obey previous dev, or use main package dev if not set
+          dev: deps[name]?.dev ?? dependencyDev ?? dev, // obey previous dev, or use main package dev if not set
         }
       })
 
@@ -63,7 +63,7 @@ export default class ConfigDeps implements IConfigDeps {
       // apply new data
       dep = {
         ...this.deps[name],
-        ...data
+        ...data,
       }
 
       this.deps[name] = dep
@@ -74,7 +74,7 @@ export default class ConfigDeps implements IConfigDeps {
         name,
         version,
         dependencies: dependencies || [],
-        dev: dev ?? false
+        dev: dev ?? false,
       }
     }
 

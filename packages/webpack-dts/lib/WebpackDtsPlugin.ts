@@ -78,7 +78,7 @@ export class WebpackDtsPlugin {
             inputDir: projectPath,
             outputPath: typesFilePath,
             main: removeExt(packageMain.replace(/^(\.\/?)+/, '')),
-            filePatterns
+            filePatterns,
           })
 
           loggers.success(this.log(id, packageName, 'declaration at', typesFile))

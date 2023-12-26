@@ -1,12 +1,12 @@
 import {
-  loggers
+  loggers,
 } from '@abux/logger/cli'
 
 const {
   badge,
   progress,
   success,
-  info
+  info,
 } = loggers
 
 export const logStep = (...messages: string[]) => {

@@ -77,7 +77,7 @@ export class DtsFilterWriter extends DtsWriter {
     const output = [
       `declare module '${moduleId}' {`,
       this.deduplicateLines(lines).join(EOL),
-      '}'
+      '}',
     ].join(EOL)
 
     if (this.filters.filePatterns?.length) {

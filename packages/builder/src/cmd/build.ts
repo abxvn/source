@@ -36,7 +36,7 @@ const build = async (options: IBuildOptions): Promise<void> => {
         } else {
           loggers.log(stats?.toString({
             chunks: false, // Removes chunk information
-            colors: true // Enables colorful output
+            colors: true, // Enables colorful output
           }))
 
           if (stats?.hasErrors()) {
@@ -60,6 +60,6 @@ export default {
   options: [
     path,
     nodeEnv,
-    production
-  ]
+    production,
+  ],
 }

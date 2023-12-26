@@ -14,7 +14,7 @@ class ImportReplacementPlugin {
     compiler.hooks.compilation.tap('[replacement] setup compilation', (compilation: Compilation) => {
       compilation.hooks.processAssets.tapPromise({
         name: '[replacement] replace assets before saving',
-        stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE
+        stage: Compilation.PROCESS_ASSETS_STAGE_OPTIMIZE,
       }, async (assets: any) => {
         const replacementList = Object.keys(this.replacementMap).map(from => `${from}:${this.replacementMap[from]}`)
         const shortenListStr = replacementList.join(' ').padEnd(40, '...')

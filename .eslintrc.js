@@ -20,6 +20,8 @@ module.exports = {
     '**/*.d.ts',
     '**/*.mjs',
     '**/node_modules',
+    '**/*.spec.ts',
+    '**/*.test.ts',
   ],
   rules: {
     'no-unused-vars': 'warn',

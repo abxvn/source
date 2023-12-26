@@ -9,7 +9,7 @@ export const resolve = async (path: string, options?: IResolveOptions): Promise<
     : undefined
   const resolveOptions = {
     usePnpFallback: true,
-    ...options
+    ...options,
   }
 
   const result = await resolveRequest(path, resolveOptions, resolveFromFsPath, trace)

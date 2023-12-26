@@ -6,7 +6,7 @@ import {
   LOW_PRIORITY_TIMEOUT,
   NORMAL_PRIORITY_TIMEOUT,
   TaskPriority,
-  TaskStatus
+  TaskStatus,
 } from './consts'
 import type { ITaskEmitter, ITask, ITaskPriority, ITaskStatus, ITaskEmitterOptions } from './interfaces'
 import { MinHeap } from './storage/MinHeap'
@@ -21,7 +21,7 @@ export class TaskEmitter<
   constructor (options?: Partial<ITaskEmitterOptions<TTask>>) {
     this.options = {
       concurrency: 1,
-      ...options
+      ...options,
     }
   }
 
@@ -64,14 +64,14 @@ export class TaskEmitter<
     const data = {
       status,
       priority,
-      ...item
+      ...item,
     }
 
     const task = data as TTask
 
     this.items.push({
       sortId: this.getItemSortId(task),
-      data: task
+      data: task,
     })
   }
 
