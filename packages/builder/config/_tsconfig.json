@@ -2,8 +2,10 @@
   "include": [
     ".eslintrc.js",
     "packages/**/*.ts",
-    // For react only
-    "packages/**/*.tsx"
+    "packages/**/*.tsx",
+    // for apps
+    // "apps/**/*.ts",
+    // "apps/**/*.tsx"
   ],
   "exclude": [
     ".yarn",
@@ -12,10 +14,9 @@
   ],
   "compilerOptions": {
     // "declaration": true,
-    "module": "commonjs",
-    "target": "es6",
-    // for react only
-    // "jsx": "react",
+    "module": "ESNext",
+    "target": "ESNext",
+    "jsx": "react",
     "lib": [
       "dom",
       "esnext",
@@ -25,10 +26,9 @@
     "moduleResolution": "Node",
     "resolveJsonModule": true,
     // "types": [
-    // "node",
-    // For react only (next for react v18)
-    // "react/next",
-    // "react-dom/next",
+    //   "node",
+    //   "react",
+    //   "react-dom",
     // ],
     "strict": true,
     // "noEmit": true,
