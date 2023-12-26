@@ -54,6 +54,7 @@ exports = module.exports = async () => {
       }
     },
     resolve: {
+      symlinks: true,
       extensions: [
         '.ts',
         '.js',
@@ -76,7 +77,11 @@ exports = module.exports = async () => {
             }
           ],
           exclude: /node_modules|\.yarn/
-        }
+        },
+        {
+          test: /.node$/,
+          loader: 'node-loader',
+        },
       ]
     },
     plugins: [

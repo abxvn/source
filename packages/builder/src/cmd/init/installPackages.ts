@@ -1,7 +1,7 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { collapsible } from '@abux/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
-import { install, installSdk } from '../../lib/packages'
+import { YARN_ENABLED, install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,
@@ -10,7 +10,7 @@ import {
 import { logProgress, logStep } from './loggers'
 
 interface IInstallPackagesParams {
-  answers: { components: IComponentAnswer, sdk: ISdkAnswer }
+  answers: { components: IComponentAnswer, sdk?: ISdkAnswer }
   deps: IConfigDeps
 }
 export const installPackages = async ({ answers, deps }: IInstallPackagesParams, app: IApp) => {

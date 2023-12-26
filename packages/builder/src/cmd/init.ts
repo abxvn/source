@@ -11,7 +11,7 @@ import {
   type IEditorConfigsAnswer,
   editorConfigs
 } from './questions'
-import { getYarnVersion } from '../lib/packages'
+import { YARN_ENABLED, getPnpmVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
 import { copyConfigs } from './init/copyConfigs'
 import { updatePackageJson } from './init/updatePackageJson'
@@ -20,7 +20,7 @@ import { logSuccess } from './init/loggers'
 
 interface IAnswers {
   components: IComponentAnswer
-  sdk: ISdkAnswer
+  sdk?: ISdkAnswer
   editorConfigs: IEditorConfigsAnswer
 }
 
@@ -36,8 +36,8 @@ const init = async function (this: IApp, options: any) {
 
   const answers = await ask<IAnswers>({
     components,
-    sdk,
-    editorConfigs
+    editorConfigs,
+    ...YARN_ENABLED ? { sdk } : undefined,
   })
 
   await installPackages({ answers, deps }, this)
@@ -59,15 +59,7 @@ export default {
 }
 
 const checkVersion = async () => {
-  const yarnVersion = await getYarnVersion()
+  const pnpmVersion = await getPnpmVersion()
 
-  loggers.info('Versions:', 'node', process.versions.node, 'yarn', yarnVersion)
-
-  if (!/^3/.test(yarnVersion)) {
-    loggers.error(`
-      Please check if Yarn Berry was set up correctly.
-      Usually it will be all good by running this command:
-      yarn init -2
-    `)
-  }
+  loggers.info('Versions:', 'node', process.versions.node, 'pnpm', pnpmVersion)
 }

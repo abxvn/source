@@ -21,7 +21,7 @@ declare module '@abux/paths/index' {
   }
   export const normalize: (path: string) => string;
   export const getDir: (path: string) => string;
-  export const getName: (path: string) => any;
+  export const getName: (path: string) => string;
   export const resolver: (rootPath: string) => IPathResolver;
   export const resolve: (path: string) => string;
   export const merge: (...paths: string[]) => string;

@@ -33,6 +33,7 @@ declare module '@abux/dts/lib/interfaces' {
   export type IReplacer = (node: Node) => string | undefined;
 }
 declare module '@abux/dts/lib/Dts' {
+  /// <reference types="node" />
   import EventEmitter from 'events';
   import type { IGenerateOptions } from '@abux/dts/lib/interfaces';
   export class Dts extends EventEmitter {

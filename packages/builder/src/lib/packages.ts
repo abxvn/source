@@ -4,6 +4,8 @@ import Module from 'module'
 import { resolve } from './paths'
 import { readFile } from './vendors'
 
+export const YARN_ENABLED = false
+
 const cliOptions = {
   env: {
     FORCE_COLOR: 'true'
@@ -15,6 +17,7 @@ interface IWritable {
 }
 
 interface IInstallOptions {
+  tool?: 'pnpm' | 'yarn' | 'npm'
   dev?: boolean
   outputStream?: IWritable
   errorStream?: IWritable
@@ -27,13 +30,14 @@ export const install = async (
   const {
     dev = false,
     outputStream = process.stdout,
-    errorStream = process.stderr
+    errorStream = process.stderr,
+    tool = 'pnpm'
   } = options || {}
 
-  const subProcess = execa('yarn', [
-    'add',
+  const subProcess = execa(tool, [
+    tool !== 'npm' ? 'add' : 'install',
     '--silent',
-    dev ? '--dev' : '',
+    dev ? '-D' : '',
     ...packages
   ].filter(Boolean), cliOptions)
 
@@ -57,6 +61,12 @@ export const install = async (
 
 export const getYarnVersion = async (): Promise<string> => {
   const { stdout } = await execa('yarn', ['--version'], cliOptions)
+
+  return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
+}
+
+export const getPnpmVersion = async (): Promise<string> => {
+  const { stdout } = await execa('pnpm', ['--version'], cliOptions)
 
   return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
 }

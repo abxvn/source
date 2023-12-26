@@ -16,6 +16,7 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
   const hasPackagesFolder = await pathExists(editor.path.resolve('packages'))
   const copies: string[] = [
     '.vscode',
+    'pnpm-workspace.yaml',
     !hasPackagesFolder ? 'packages/dummy/package.json' : '',
     !hasPackagesFolder ? 'packages/dummy/cli/_index.ts' : '',
     deps.requires('typescript') ? '_tsconfig.json' : '',

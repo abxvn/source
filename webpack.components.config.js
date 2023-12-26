@@ -25,7 +25,13 @@ const entry = {
   },
   '/packages/logger/cli/index.ts': {
     import: resolvePath('packages/logger/cli/index.ts')
-  }
+  },
+  // '/packages/resolve/index.ts': {
+  //   import: resolvePath('packages/resolve/index.ts')
+  // },
+  // '/packages/resolve/cli/index.ts': {
+  //   import: resolvePath('packages/resolve/cli/index.ts')
+  // },
 }
 
 exports = module.exports = {
