@@ -11,11 +11,11 @@ const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
 const envName = process.env.NODE_ENV || 'development'
 
 const entry = {
-  '/packages/builder/src/lib/dts/index.ts': {
-    import: resolvePath('packages/builder/src/lib/dts/index.ts')
+  '/packages/dts/index.ts': {
+    import: resolvePath('packages/dts/index.ts')
   },
-  '/packages/builder/src/plugins/DtsPlugin/index.ts': {
-    import: resolvePath('packages/builder/src/plugins/DtsPlugin/index.ts')
+  '/packages/webpack-dts/index.ts': {
+    import: resolvePath('packages/webpack-dts/index.ts')
   },
   '/packages/builder/src/filters/replaceVars/index.ts': {
     import: resolvePath('packages/builder/src/filters/replaceVars/index.ts')

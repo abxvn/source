@@ -1,16 +1,13 @@
 /*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { Compiler } from 'webpack'
-import { Dts } from '@abux/builder/src/lib/dts/index.js'
-import { pathExists, readJSON } from '../../lib/vendors'
+import { Dts } from '@abux/dts'
+import { pathExists, readJSON } from 'fs-extra'
 import { loggers } from '@abux/logger/cli'
-import type { IPathResolver } from '../../interfaces'
-import { removeExt, resolver, getLocalPackagePath } from '../../lib/paths'
-
-// const { logError, logInfo, logProgress, logSuccess, logWarn, color } = loggers
+import { removeExt, resolver, getLocalPackagePath, type IPathResolver } from '@abux/paths'
 
 let counterId = 0
 
-export class DtsPlugin {
+export class WebpackDtsPlugin {
   readonly path: IPathResolver
 
   constructor (rootPath: string) {
@@ -24,8 +21,8 @@ export class DtsPlugin {
       builtModulePaths = []
     })
 
-    compiler.hooks.compilation.tap('[dts] setup compilation', (compilation) => {
-      compilation.hooks.succeedModule.tap('[dts] collect built module', (module) => {
+    compiler.hooks.compilation.tap('[dts] setup compilation', compilation => {
+      compilation.hooks.succeedModule.tap('[dts] collect built module', module => {
         if (module.constructor.name !== 'NormalModule') {
           return
         }

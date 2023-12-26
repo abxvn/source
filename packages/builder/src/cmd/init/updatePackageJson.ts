@@ -25,12 +25,12 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
 
     if (useEslint) {
       info(`Essential config for linting command:
-      ${italic('"lint": "eslint packages/**/*.ts"')}`)
+      ${italic('"lint": "eslint packages --ext ts"')}`)
     }
 
     if (useJest) {
       info(`Essential config for testing command:
-      ${italic('"test": "jest"')}`)
+      ${italic('"test": "jest -c tests/spec/config.js"')}`)
     }
 
     return

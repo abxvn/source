@@ -4,7 +4,7 @@ const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
 
 const TerserPlugin = require('terser-webpack-plugin')
-const { DtsPlugin } = require('./packages/builder/src/plugins/DtsPlugin')
+const { WebpackDtsPlugin } = require('@abux/webpack-dts')
 const { default: replaceVars } = require('./packages/builder/src/filters/replaceVars')
 
 const rootPath = __dirname.replace(/\\/g, '/')
@@ -14,6 +14,15 @@ const resolvePath = subPath => resolve(rootPath, subPath).replace(/\\/g, '/')
 const envName = process.env.NODE_ENV || 'development'
 
 const entry = {
+  '/packages/paths/index.ts': {
+    import: resolvePath('packages/paths/index.ts')
+  },
+  '/packages/dts/index.ts': {
+    import: resolvePath('packages/dts/index.ts')
+  },
+  '/packages/webpack-dts/index.ts': {
+    import: resolvePath('packages/webpack-dts/index.ts')
+  },
   '/packages/builder/cli/index.ts': {
     import: resolvePath('packages/builder/cli/index.ts')
   },
@@ -83,7 +92,7 @@ exports = module.exports = async () => {
         },
         raw: true
       }),
-      envName === 'production' && new DtsPlugin(rootPath)
+      envName === 'production' && new WebpackDtsPlugin(rootPath)
     ].filter(Boolean),
     watch: envName === 'development',
     watchOptions: {

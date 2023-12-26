@@ -1,68 +1,6 @@
 declare module '@abux/builder/cli/index' {
   export type { IFilter, IBuilderCustomOptions } from '@abux/builder/src/interfaces';
 }
-declare module '@abux/builder/src/plugins/DtsPlugin' {
-  import type { Compiler } from 'webpack';
-  import type { IPathResolver } from '@abux/builder/src/interfaces';
-  export class DtsPlugin {
-    readonly path: IPathResolver;
-    constructor (rootPath: string);
-    apply (compiler: Compiler): void;
-  }
-}
-declare module '@abux/builder/src/lib/dts' {
-  /// <reference types="node" />
-  import type { CompilerOptions } from 'typescript';
-  import EventEmitter from 'events';
-  import { type IPathResolver } from '@abux/builder/src/interfaces';
-  interface IGenerateOptions {
-    name: string;
-    inputDir: string;
-    main?: string;
-    projectPath?: string;
-    outputPath?: string;
-    files?: string[];
-    references?: string[];
-    filePatterns?: string[];
-  }
-  export class Dts extends EventEmitter {
-    generate ({ name, main, inputDir, projectPath, outputPath, files, references, filePatterns }: IGenerateOptions): Promise<void>;
-  }
-  interface IDtsWriterOptions {
-    name: string;
-    main?: string;
-    outputPath: string;
-    references?: string[];
-    excludedPatterns?: string[];
-    resolvedModule?: (resolution: IModuleResolution) => string;
-    resolvedImport?: (resolution: IModuleImportResolution) => string;
-  }
-  interface IModuleResolution {
-    currentModule: string;
-  }
-  interface IModuleImportResolution {
-    currentModule: string;
-    importedModule: string;
-    isExternal?: boolean;
-  }
-  export class DtsWriter extends EventEmitter {
-    readonly ident = "  ";
-    readonly options: IDtsWriterOptions;
-    constructor (options: IDtsWriterOptions);
-    write (inputDir: string, compilerOptions: CompilerOptions, filePaths: string[]): Promise<void>;
-  }
-  interface IDtsFilters {
-    filePatterns?: string[];
-  }
-  export class DtsFilterWriter extends DtsWriter {
-    readonly filters: IDtsFilters;
-    readonly modulePathMap: Record<string, string>;
-    readonly moduleDepsMap: Record<string, string[]>;
-    readonly cachedOutputs: Record<string, string>;
-    constructor (options: IDtsWriterOptions, filters: IDtsFilters);
-    emitOutput (): void;
-  }
-}
 declare module '@abux/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';
   export type IBuildEnvironment = 'development' | 'production';

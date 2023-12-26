@@ -1,5 +1,13 @@
 # @abux/builder
 
+## 0.3.4
+
+### Patch Changes
+
+- Move dts plugins into packages
+- Updated dependencies
+  - @abux/webpack-dts@0.0.1
+
 ## 0.3.3
 
 ### Patch Changes
