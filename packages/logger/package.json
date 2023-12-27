@@ -1,7 +1,7 @@
 {
   "name": "@abxvn/logger",
   "description": "Logger helpers and collapsible logs",
-  "version": "1.0.3",
+  "version": "2.0.0",
   "license": "MIT",
   "main": "index.js",
   "types": "index.d.ts",

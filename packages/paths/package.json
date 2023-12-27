@@ -1,6 +1,6 @@
 {
   "name": "@abxvn/paths",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A cross-platform path resolving utility used internally by ABux packages",
   "types": "index.d.ts",
   "repository": {

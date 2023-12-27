@@ -1,6 +1,6 @@
 {
   "name": "@abxvn/tasks",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Light-weight and fast priority based task runner",
   "license": "MIT",
   "main": "./index.js",

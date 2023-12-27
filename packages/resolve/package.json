@@ -1,6 +1,6 @@
 {
   "name": "@abxvn/resolve",
-  "version": "1.1.2",
+  "version": "2.0.0",
   "description": "Async resolve with pnp supports",
   "license": "MIT",
   "main": "index.js",

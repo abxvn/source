@@ -1,7 +1,7 @@
 {
   "name": "@abxvn/webpack-dts",
   "description": "Webpack plugin for typescript declaration dts generation",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "types": "index.d.ts",
   "repository": {
     "type": "git",

@@ -1,5 +1,11 @@
 # @abxvn/logger
 
+## 2.0.0
+
+### Major Changes
+
+- Migrate scope, supports pnpm by default, rebuild
+
 ## 1.0.3
 
 ### Patch Changes

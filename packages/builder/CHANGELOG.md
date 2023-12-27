@@ -1,5 +1,18 @@
 # @abxvn/builder
 
+## 1.0.0
+
+### Major Changes
+
+- Migrate scope, supports pnpm by default, rebuild
+
+### Patch Changes
+
+- Updated dependencies
+  - @abxvn/webpack-dts@1.0.0
+  - @abxvn/resolve@2.0.0
+  - @abxvn/logger@2.0.0
+
 ## 0.3.4
 
 ### Patch Changes
