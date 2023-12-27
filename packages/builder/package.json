@@ -1,6 +1,6 @@
 {
   "name": "@abxvn/builder",
-  "version": "1.0.1",
+  "version": "1.1.1",
   "description": "Quick scaffolding code base to build web apps and games",
   "license": "MIT",
   "main": "./cli/index.js",

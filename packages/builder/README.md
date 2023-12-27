@@ -29,6 +29,14 @@ npx @abxvn/builder init
 yarn dlx @abxvn/builder init
 ```
 
+Usage: @abxvn/builder init [options]
+```
+Options:
+  --path <path>  Specify root path for compilation (default: "current folder")
+  --pm <name>    Optional package manager (choices: "pnpm", "npm", "yarn")
+  -h, --help     display help for command
+```
+
 ### Commands
 
 _Documentation coming soon_

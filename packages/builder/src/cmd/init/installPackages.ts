@@ -1,6 +1,6 @@
 import { collapsible } from '@abxvn/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
-import { install, installSdk } from '../../lib/packages'
+import { type IInstallOptions, install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,
@@ -11,8 +11,9 @@ import { logProgress, logStep } from './loggers'
 interface IInstallPackagesParams {
   answers: { components: IComponentAnswer, sdk?: ISdkAnswer }
   deps: IConfigDeps
+  pm?: IInstallOptions['pm']
 }
-export const installPackages = async ({ answers, deps }: IInstallPackagesParams, app: IApp) => {
+export const installPackages = async ({ answers, deps, pm = 'pnpm' }: IInstallPackagesParams, app: IApp) => {
   deps.set('@abxvn/builder', { version: app.appVersion || '*' })
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
@@ -41,14 +42,14 @@ export const installPackages = async ({ answers, deps }: IInstallPackagesParams,
 
   if (mainDependencies.length) {
     logProgress('install', mainDependencies.join(' '))
-    await install(mainDependencies, { outputStream, errorStream })
+    await install(mainDependencies, { outputStream, errorStream, pm })
     outputStream.collapse(true)
     errorStream.collapse(true)
   }
 
   if (devDependencies.length) {
     logProgress('install dev', devDependencies.join(' '))
-    await install(devDependencies, { dev: true, outputStream, errorStream })
+    await install(devDependencies, { dev: true, outputStream, errorStream, pm })
     outputStream.collapse(true)
     errorStream.collapse(true)
   }

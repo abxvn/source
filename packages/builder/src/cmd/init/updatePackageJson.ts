@@ -2,7 +2,7 @@ import { loggers, styles } from '@abxvn/logger/cli'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
 import { logProgress, logStep, logWarn } from './loggers'
-import { YARN_ENABLED } from '../../lib/packages'
+import { type IInstallOptions } from '../../lib/packages'
 
 const { italic, bold } = styles
 const { info } = loggers
@@ -11,8 +11,9 @@ interface IUpdatePackageJsonParams {
   modify?: boolean
   deps: IConfigDeps
   editor: IConfigEditor
+  pm?: IInstallOptions['pm']
 }
-export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdatePackageJsonParams) => {
+export const updatePackageJson = async ({ modify = true, deps, editor, pm }: IUpdatePackageJsonParams) => {
   const useEslint = deps.requires('eslint')
   const useJest = deps.requires('jest')
 
@@ -70,7 +71,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   await writeJSON(packagePath, {
     ...json,
     scripts,
-    ...YARN_ENABLED ? workspaces : undefined,
+    ...(pm === 'yarn' && workspaces),
   }, {
     spaces: 2,
   })

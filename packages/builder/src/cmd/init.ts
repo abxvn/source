@@ -1,5 +1,5 @@
 import { loggers } from '@abxvn/logger/cli'
-import { path } from './options'
+import { path, pm, pmChoices } from './options'
 import { getConfigs } from '../configs'
 import {
   ask,
@@ -10,12 +10,13 @@ import {
   type IEditorConfigsAnswer,
   editorConfigs,
 } from './questions'
-import { YARN_ENABLED, getPnpmVersion } from '../lib/packages'
+import { type IInstallOptions, getVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
 import { copyConfigs } from './init/copyConfigs'
 import { updatePackageJson } from './init/updatePackageJson'
 import type { IApp } from '../interfaces'
 import { logSuccess } from './init/loggers'
+import { argv0 } from 'process'
 
 interface IAnswers {
   components: IComponentAnswer
@@ -31,17 +32,20 @@ const init = async function (this: IApp, options: any) {
     },
   })
 
-  await checkVersion()
+  if (!options.pm && pmChoices.includes(argv0)) options.pm = argv0
+  if (!options.pm) options.pm = 'pnpm'
+
+  await checkVersion(options.pm)
 
   const answers = await ask<IAnswers>({
     components,
     editorConfigs,
-    ...YARN_ENABLED ? { sdk } : undefined,
+    ...(options.pm === 'yarn' && { sdk }),
   })
 
-  await installPackages({ answers, deps }, this)
+  await installPackages({ answers, deps, pm: options.pm }, this)
   await copyConfigs({ answers, deps, editor })
-  await updatePackageJson({ editor, deps })
+  await updatePackageJson({ editor, deps, pm: options.pm })
 
   logSuccess('done')
 
@@ -54,11 +58,10 @@ export default {
   action: init,
   options: [
     path,
+    pm,
   ],
 }
 
-const checkVersion = async () => {
-  const pnpmVersion = await getPnpmVersion()
-
-  loggers.info('Versions:', 'node', process.versions.node, 'pnpm', pnpmVersion)
+const checkVersion = async (pm: IInstallOptions['pm'] = 'pnpm') => {
+  loggers.info('Versions:', 'node', process.versions.node, pm, await getVersion(pm))
 }
