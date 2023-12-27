@@ -3,8 +3,6 @@ import Module from 'module'
 import { resolve } from './paths'
 import { readFile } from './vendors'
 
-export const YARN_ENABLED = false
-
 const cliOptions = {
   env: {
     FORCE_COLOR: 'true',
@@ -15,8 +13,8 @@ interface IWritable {
   write: (message: string) => void
 }
 
-interface IInstallOptions {
-  tool?: 'pnpm' | 'yarn' | 'npm'
+export interface IInstallOptions {
+  pm?: 'pnpm' | 'yarn' | 'npm'
   dev?: boolean
   outputStream?: IWritable
   errorStream?: IWritable
@@ -30,12 +28,14 @@ export const install = async (
     dev = false,
     outputStream = process.stdout,
     errorStream = process.stderr,
-    tool = 'pnpm',
+    pm = 'pnpm',
   } = options || {}
 
-  const subProcess = execa(tool, [
-    tool !== 'npm' ? 'add' : 'install',
-    '--silent',
+  const subProcess = execa(pm, [
+    pm !== 'npm' ? 'add' : 'install',
+    pm !== 'pnpm' ? '--silent' : '',
+    pm !== 'npm' ? '-w' : '',
+    pm === 'npm' ? '--save' : '',
     dev ? '-D' : '',
     ...packages,
   ].filter(Boolean), cliOptions)
@@ -58,14 +58,8 @@ export const install = async (
   await subProcess
 }
 
-export const getYarnVersion = async (): Promise<string> => {
-  const { stdout } = await execa('yarn', ['--version'], cliOptions)
-
-  return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
-}
-
-export const getPnpmVersion = async (): Promise<string> => {
-  const { stdout } = await execa('pnpm', ['--version'], cliOptions)
+export const getVersion = async (program: string): Promise<string> => {
+  const { stdout } = await execa(program, ['--version'], cliOptions)
 
   return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
 }

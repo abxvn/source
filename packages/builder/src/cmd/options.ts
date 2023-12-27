@@ -10,3 +10,7 @@ export const path = new Option('--path <path>', 'Specify root path for compilati
 
 export const production = new Option('--production', 'Production build')
   .default(false)
+
+export const pmChoices = ['pnpm', 'npm', 'yarn']
+export const pm = new Option('--pm <name>', 'Package manager')
+  .choices(pmChoices)
