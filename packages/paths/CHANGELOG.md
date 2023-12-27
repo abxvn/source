@@ -1,4 +1,4 @@
-# @abux/paths
+# @abxvn/paths
 
 ## 0.0.1
 

@@ -1,7 +1,7 @@
-declare module '@abux/builder/cli/index' {
-  export type { IFilter, IBuilderCustomOptions } from '@abux/builder/src/interfaces';
+declare module '@abxvn/builder/cli/index' {
+  export type { IFilter, IBuilderCustomOptions } from '@abxvn/builder/src/interfaces';
 }
-declare module '@abux/builder/src/interfaces' {
+declare module '@abxvn/builder/src/interfaces' {
   import type { Configuration, WebpackPluginInstance, WebpackOptionsNormalized, ExternalsPlugin } from 'webpack';
   export type IBuildEnvironment = 'development' | 'production';
   export type IBuildTarget = 'web' | 'node';
@@ -109,11 +109,11 @@ declare module '@abux/builder/src/interfaces' {
     readonly appVersion: string;
   }
 }
-declare module '@abux/builder/src/filters/replaceVars' {
-  import type { IFilter } from '@abux/builder/src/interfaces'
+declare module '@abxvn/builder/src/filters/replaceVars' {
+  import type { IFilter } from '@abxvn/builder/src/interfaces'
   const replaceVars: IFilter;
   export default replaceVars;
 }
-declare module '@abux/builder' {
-  export * from '@abux/builder/cli/index'
+declare module '@abxvn/builder' {
+  export * from '@abxvn/builder/cli/index'
 }

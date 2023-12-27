@@ -1,4 +1,4 @@
-# @abux/builder
+# @abxvn/builder
 
 ## 0.3.4
 
@@ -6,7 +6,7 @@
 
 - Move dts plugins into packages
 - Updated dependencies
-  - @abux/webpack-dts@0.0.1
+  - @abxvn/webpack-dts@0.0.1
 
 ## 0.3.3
 
@@ -14,14 +14,14 @@
 
 - fix module dir listing
 - Updated dependencies
-  - @abux/resolve@1.1.2
+  - @abxvn/resolve@1.1.2
 
 ## 0.3.2
 
 ### Patch Changes
 
 - Updated dependencies
-  - @abux/resolve@1.1.1
+  - @abxvn/resolve@1.1.1
 
 ## 0.3.1
 
@@ -29,7 +29,7 @@
 
 - Fix resolving loaders
 - Updated dependencies
-  - @abux/resolve@1.1.0
+  - @abxvn/resolve@1.1.0
 
 ## 0.3.0
 
@@ -55,30 +55,30 @@
 
 - Update docs
 - Updated dependencies
-  - @abux/resolve@1.0.6
-  - @abux/logger@1.0.3
+  - @abxvn/resolve@1.0.6
+  - @abxvn/logger@1.0.3
 
 ## 0.2.2
 
 ### Patch Changes
 
 - Updated dependencies
-  - @abux/logger@1.0.2
+  - @abxvn/logger@1.0.2
 
 ## 0.2.1
 
 ### Patch Changes
 
 - Updated dependencies
-  - @abux/logger@1.0.1
+  - @abxvn/logger@1.0.1
 
 ## 0.2.0
 
 ### Patch Changes
 
-- Update usage of `@abux/logger`
+- Update usage of `@abxvn/logger`
 - Updated dependencies
-  - @abux/logger@1.0.0
+  - @abxvn/logger@1.0.0
 
 ## 0.1.5
 
@@ -86,14 +86,14 @@
 
 - replace logger utility
 - Updated dependencies
-  - @abux/logger@0.0.5
+  - @abxvn/logger@0.0.5
 
 ## 0.1.4
 
 ### Patch Changes
 
 - Updated dependencies
-  - @abux/logger@0.0.4
+  - @abxvn/logger@0.0.4
 
 ## 0.1.3
 
@@ -101,8 +101,8 @@
 
 - Add changelog
 - Updated dependencies
-  - @abux/resolve@1.0.5
-  - @abux/logger@0.0.3
+  - @abxvn/resolve@1.0.5
+  - @abxvn/logger@0.0.3
 
 ## 0.1.2
 
@@ -114,4 +114,4 @@
   - `init`: collapsible defailted output
   - move `logger` to new library
 - 8706de6: Updated dependencies
-  - @abux/logger@0.0.2
+  - @abxvn/logger@0.0.2

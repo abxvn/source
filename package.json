@@ -11,7 +11,7 @@
     "builder": "pnpm --filter builder"
   },
   "dependencies": {
-    "@abux/webpack-dts": "workspace:^",
+    "@abxvn/webpack-dts": "workspace:^",
     "@changesets/cli": "^2.27.1",
     "typescript": "~5.0.4",
     "webpack": "^5.89.0"

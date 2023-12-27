@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import {
   forEachChild,
   SyntaxKind,
@@ -13,7 +12,7 @@ import type {
   CompilerOptions,
   LiteralExpression,
 } from 'typescript'
-import { type IPathResolver, resolver, normalize, resolve, merge, getDir } from '@abux/paths'
+import { type IPathResolver, resolver, normalize, resolve, merge, getDir } from '@abxvn/paths'
 import EventEmitter from 'events'
 import { type WriteStream, createWriteStream } from './fs'
 import { minimatch } from 'minimatch'

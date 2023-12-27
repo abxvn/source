@@ -1,9 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
 import { pathExists } from './lib/vendors'
-import { styles } from '@abux/logger/cli'
+import { styles } from '@abxvn/logger/cli'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'
 
@@ -22,7 +21,7 @@ export const getConfigs = async (
 }> => {
   const deps = new ConfigDeps()
   const editor = new ConfigEditor({ envName, rootPath, deps })
-  const customizerFile = editor.path.resolve('abux.config.js')
+  const customizerFile = editor.path.resolve('abx.config.js')
 
   addDefaultDeps(deps)
 

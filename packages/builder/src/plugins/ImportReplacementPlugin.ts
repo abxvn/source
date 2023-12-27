@@ -1,8 +1,7 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { Compilation, sources } from 'webpack'
 import type { Compiler } from 'webpack'
 import type { IImportReplacementMap } from '../interfaces'
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 import { matchPattern } from '../lib/data'
 
 const { info } = loggers

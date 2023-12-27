@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import {
   HIGH_PRIORITY_TIMEOUT,
   IDLE_PRIORITY_TIMEOUT,

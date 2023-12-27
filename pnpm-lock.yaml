@@ -8,7 +8,7 @@ importers:
 
   .:
     dependencies:
-      '@abux/webpack-dts':
+      '@abxvn/webpack-dts':
         specifier: workspace:^
         version: link:packages/webpack-dts
       '@changesets/cli':
@@ -99,13 +99,13 @@ importers:
 
   packages/builder:
     dependencies:
-      '@abux/logger':
+      '@abxvn/logger':
         specifier: workspace:^
         version: link:../logger
-      '@abux/resolve':
+      '@abxvn/resolve':
         specifier: workspace:^
         version: link:../resolve
-      '@abux/webpack-dts':
+      '@abxvn/webpack-dts':
         specifier: workspace:^
         version: link:../webpack-dts
       commander:
@@ -172,7 +172,7 @@ importers:
 
   packages/dts:
     dependencies:
-      '@abux/paths':
+      '@abxvn/paths':
         specifier: workspace:^
         version: link:../paths
       fs-extra:
@@ -202,7 +202,7 @@ importers:
 
   packages/resolve:
     dependencies:
-      '@abux/resolve':
+      '@abxvn/resolve':
         specifier: workspace:^
         version: 'link:'
       commander:
@@ -229,13 +229,13 @@ importers:
 
   packages/webpack-dts:
     dependencies:
-      '@abux/dts':
+      '@abxvn/dts':
         specifier: workspace:^
         version: link:../dts
-      '@abux/logger':
+      '@abxvn/logger':
         specifier: workspace:^
         version: link:../logger
-      '@abux/paths':
+      '@abxvn/paths':
         specifier: workspace:^
         version: link:../paths
       fs-extra:

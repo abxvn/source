@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { createReadStream, lstat, realpath, pathExists } from 'fs-extra'
 import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'

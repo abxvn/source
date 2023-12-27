@@ -1,6 +1,6 @@
 import { map } from '../lib/data'
 import type { IFilter } from '../interfaces'
-import { WebpackDtsPlugin } from '@abux/webpack-dts'
+import { WebpackDtsPlugin } from '@abxvn/webpack-dts'
 
 const generateDts: IFilter = async ({ editor }) => {
   return {

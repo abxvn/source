@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IResolveOptions, IResolveTrace } from './lib/interfaces'
 import { resolveRequest } from './lib/resolvers'
 import { resolveFromFsPath } from './lib/fs/asyncFs'
@@ -15,7 +14,7 @@ export const resolve = async (path: string, options?: IResolveOptions): Promise<
   const result = await resolveRequest(path, resolveOptions, resolveFromFsPath, trace)
 
   if (trace) {
-    console.debug('@abux/resolve', Object.fromEntries(trace.entries()))
+    console.debug('@abxvn/resolve', Object.fromEntries(trace.entries()))
   }
 
   return result

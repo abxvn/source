@@ -1,8 +1,7 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { ScriptTarget } from 'typescript'
 import type { CompilerOptions } from 'typescript'
 import EventEmitter from 'events'
-import { getDir, resolver } from '@abux/paths'
+import { getDir, resolver } from '@abxvn/paths'
 import { pathExists, mkdirp } from './fs'
 import type { IGenerateOptions } from './interfaces'
 import { parseTsConfig } from './helpers'

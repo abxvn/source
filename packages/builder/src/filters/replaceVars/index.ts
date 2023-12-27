@@ -4,7 +4,7 @@ import type { IEntries, IFilter, IPathResolver, IWebpackConfig } from '../../int
 import { getLocalPackagePath, resolver } from '../../lib/paths'
 import { pathExists, readFile, readJSON } from '../../lib/vendors'
 import { parse } from 'dotenv'
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 
 const { info, warn } = loggers
 

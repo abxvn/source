@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { resolve as resolvedPath } from 'path'
 import type { IFsPathType, IResolvedFileType } from '../interfaces'
 import { realpathSync, lstatSync, readJSONSync, pathExistsSync } from 'fs-extra'

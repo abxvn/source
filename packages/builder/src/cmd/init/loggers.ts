@@ -1,6 +1,6 @@
 import {
   loggers,
-} from '@abux/logger/cli'
+} from '@abxvn/logger/cli'
 
 const {
   badge,

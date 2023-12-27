@@ -1,4 +1,4 @@
-@abux/resolve
+@abxvn/resolve
 =====
 [![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
@@ -28,11 +28,11 @@ Installation
 -----
 Install using `yarn` or `npm`:
 ```
-yarn add @abux/resolve
+yarn add @abxvn/resolve
 ```
 
 ```
-npm add @abux/resolve
+npm add @abxvn/resolve
 ```
 
 Usage
@@ -43,7 +43,7 @@ The `resolve` supports asynchronously resolving:
 - or a module's main (entry) path, to be used with `require`
 
 ```ts
-import { resolve } from `@abux/resolve`
+import { resolve } from `@abxvn/resolve`
 
 // Entry point / main to require
 // pnp: <dir>/.yarn/cache/.../packageA/index.js
@@ -63,7 +63,7 @@ console.log(resolve('../localWorkspaceB'))
 The `resolveModule` supports asynchronously resolving module metadata
 
 ```ts
-import { resolveModule } from `@abux/resolve`
+import { resolveModule } from `@abxvn/resolve`
 
 console.log(resolveModule('packageA')) // => IModule
 console.log(resolveModule('workspaceA')) // => IModule
@@ -96,7 +96,7 @@ interface IModule {
 We can pass custom options into the resolver:
 
 ```js
-import { resolve } from `@abux/resolve`
+import { resolve } from `@abxvn/resolve`
 
 resolve('moduleB', options)
 ```
@@ -118,7 +118,7 @@ resolve <...paths>
 if you want CLI to search for module metadata, please call with flag `-m` or `--metadata`, for example:
 
 ```bash
-resolve @abux/resolve lodash -m
+resolve @abxvn/resolve lodash -m
 ```
 
 ### Resolve in classic way
@@ -127,7 +127,7 @@ You can also `resolve` in classic, I mean synchronously resolving, but with this
 - Custom list of node_modules dirs for searching
 
 ```ts
-import { resolveSync } from `@abux/resolve`
+import { resolveSync } from `@abxvn/resolve`
 
 // Entry point / main to require
 // pnp: <dir>/.yarn/cache/.../packageA/index.js
@@ -180,12 +180,12 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abuxvn/source/blob/main/packages/resolve/CHANGELOG.md
-[issues]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Aresolve
-[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
-[npm-url]: https://www.npmjs.com/package/@abux/resolve
-[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/resolve
-[npm-version-badge]: https://img.shields.io/npm/v/@abux/resolve
+[changelog]: https://github.com/abxvnvn/source/blob/main/packages/resolve/CHANGELOG.md
+[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Aresolve
+[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abxvn/resolve
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/resolve
+[npm-version-badge]: https://img.shields.io/npm/v/@abxvn/resolve
 [code-style-badge]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
 [code-style-url]: https://standardjs.com

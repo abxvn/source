@@ -1,5 +1,4 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import { loggers, styles } from '@abux/logger/cli'
+import { loggers, styles } from '@abxvn/logger/cli'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
 import { logProgress, logStep, logWarn } from './loggers'

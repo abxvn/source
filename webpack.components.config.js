@@ -76,7 +76,7 @@ exports = module.exports = {
   plugins: [
     new BannerPlugin({
       banner: ({ filename }) => {
-        const license = '/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */\n'
+        const license = '/*! Copyright (c) 2023 ABx. Under MIT license found in the LICENSE file */\n'
 
         if (/(builder|resolve)\/cli\//.test(filename)) {
           return ['#!/usr/bin/env node', license].join('\n')

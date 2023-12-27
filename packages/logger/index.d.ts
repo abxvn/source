@@ -1,10 +1,10 @@
-declare module '@abux/logger/index' {
-  import type { IStyles, IUnstyler, ILoggers } from '@abux/logger/lib/styles/interfaces';
+declare module '@abxvn/logger/index' {
+  import type { IStyles, IUnstyler, ILoggers } from '@abxvn/logger/lib/styles/interfaces';
   export const unstyle: IUnstyler;
   export const styles: IStyles;
   export const loggers: ILoggers;
 }
-declare module '@abux/logger/lib/styles/interfaces' {
+declare module '@abxvn/logger/lib/styles/interfaces' {
   export const Modifiers: {
     bold: string;
     underline: string;
@@ -77,7 +77,7 @@ declare module '@abux/logger/lib/styles/interfaces' {
     badge: (label: string, bgColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black', textColor?: ITextEffectColor | number | 'red' | 'redBright' | 'gray' | 'black' | 'white' | 'whiteBright') => string;
   }
 }
-declare module '@abux/logger/lib/interfaces' {
+declare module '@abxvn/logger/lib/interfaces' {
   /// <reference types="node" />
   /// <reference types="node" />
   import type { Writable } from 'stream';
@@ -100,21 +100,21 @@ declare module '@abux/logger/lib/interfaces' {
     count: number;
   }
 }
-declare module '@abux/logger/cli' {
+declare module '@abxvn/logger/cli' {
   /// <reference types="node" />
   /// <reference types="node" />
   /// <reference types="node" />
   /// <reference types="node" />
   /// <reference types="node" />
-  import type { ICollapsible } from '@abux/logger/lib/interfaces';
-  import type { ILoggers, IStyles, IUnstyler } from '@abux/logger/lib/styles/interfaces';
-  export type { ICollapsible } from '@abux/logger/lib/interfaces';
+  import type { ICollapsible } from '@abxvn/logger/lib/interfaces';
+  import type { ILoggers, IStyles, IUnstyler } from '@abxvn/logger/lib/styles/interfaces';
+  export type { ICollapsible } from '@abxvn/logger/lib/interfaces';
   export const collapsible: (stream?: NodeJS.WriteStream, collectFromStream?: boolean) => ICollapsible;
   export const collapse: ICollapsible;
   export const unstyle: IUnstyler;
   export const styles: IStyles;
   export const loggers: ILoggers;
 }
-declare module '@abux/logger' {
-  export * from '@abux/logger/index'
+declare module '@abxvn/logger' {
+  export * from '@abxvn/logger/index'
 }

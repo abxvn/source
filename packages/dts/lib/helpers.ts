@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import {
   SyntaxKind, forEachChild, parseConfigFileTextToJson, parseJsonConfigFileContent, sys,
 } from 'typescript'
@@ -18,7 +17,7 @@ import type {
 } from 'typescript'
 import { type IReplacer } from './interfaces'
 import { readFile } from 'fs-extra'
-import { getDir } from '@abux/paths'
+import { getDir } from '@abxvn/paths'
 
 export const DTSLEN = '.d.ts'.length
 export const EOL = '\n'

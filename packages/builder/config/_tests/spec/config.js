@@ -15,7 +15,7 @@ export default {
   // transform: {
   //   '^.+\\.tsx?$': [
   //     'ts-jest'
-  //     // { tsconfig: require('@abux/resolve').resolve('./custom.config.json') }
+  //     // { tsconfig: require('@abxvn/resolve').resolve('./custom.config.json') }
   //   ]
   // },
   extensionsToTreatAsEsm: ['.ts'],

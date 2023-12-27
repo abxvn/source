@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { minimatch } from 'minimatch'
 import { DtsWriter } from './DtsWriter'
 import { removeExtension, EOL } from './helpers'

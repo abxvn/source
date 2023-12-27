@@ -1,4 +1,4 @@
-# @abux/webpack-dts
+# @abxvn/webpack-dts
 
 ## 0.0.1
 
@@ -6,5 +6,5 @@
 
 - Init
 - Updated dependencies
-  - @abux/paths@0.0.1
-  - @abux/dts@0.0.1
+  - @abxvn/paths@0.0.1
+  - @abxvn/dts@0.0.1

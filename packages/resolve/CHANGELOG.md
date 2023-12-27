@@ -1,4 +1,4 @@
-# @abux/resolve
+# @abxvn/resolve
 
 ## 1.1.2
 

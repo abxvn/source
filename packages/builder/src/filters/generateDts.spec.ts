@@ -1,6 +1,6 @@
 import { type IWebpackConfigs } from '../interfaces'
 import { getMockConfig } from '../../tests/mocks/mockConfigs'
-import { WebpackDtsPlugin } from '@abux/webpack-dts'
+import { WebpackDtsPlugin } from '@abxvn/webpack-dts'
 import generateDts from './generateDts'
 
 describe('generateDts#configs', () => {

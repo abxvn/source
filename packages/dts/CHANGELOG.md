@@ -1,4 +1,4 @@
-# @abux/dts
+# @abxvn/dts
 
 ## 0.0.2
 
@@ -6,4 +6,4 @@
 
 - Init
 - Updated dependencies
-  - @abux/paths@0.0.1
+  - @abxvn/paths@0.0.1

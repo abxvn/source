@@ -1,9 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { Command } from 'commander'
-import { resolve, resolveModule } from '@abux/resolve'
+import { resolve, resolveModule } from '@abxvn/resolve'
 
 const main = async (args: any) => {
-  const app = new Command('@abux/resolve')
+  const app = new Command('@abxvn/resolve')
 
   app.argument('<paths...>', 'modules or paths to resolve from current working dir')
   app.description('Resolving files, module entry paths or metadata')

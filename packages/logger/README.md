@@ -1,4 +1,4 @@
-@abux/logger
+@abxvn/logger
 =====
 [![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
@@ -32,7 +32,7 @@ Examples
 ### Collapsible console logs
 
 ```typescript
-import { collapse } from '@abux/logger/cli'
+import { collapse } from '@abxvn/logger/cli'
 
 // These 2 lines are writen into stdout
 collapse.write(`A`)
@@ -45,7 +45,7 @@ collapse.collapse()
 ### Collapsible streams
 
 ```typescript
-import { collapsible } from '@abux/logger/cli'
+import { collapsible } from '@abxvn/logger/cli'
 
 collapsible(process.stdout)
 collapsible(process.stderr)
@@ -55,7 +55,7 @@ collapsible(<anyWritableStream>)
 ### Manipulate other streams
 
 ```typescript
-import { collapsible } from '@abux/logger/cli'
+import { collapsible } from '@abxvn/logger/cli'
 
 // All data writen into stdout will be collected
 // And can be collapse / hidden later
@@ -68,7 +68,7 @@ stream.collapse()
 
 For browser:
 ```typescript
-import { styles, logInfo } from '@abux/logger'
+import { styles, logInfo } from '@abxvn/logger'
 
 console.log(color, badge, bold, underline)
 
@@ -81,7 +81,7 @@ logInfo(underline('underlined-text'))
 
 For CLI:
 ```typescript
-import { styles, logInfo } from '@abux/logger/cli'
+import { styles, logInfo } from '@abxvn/logger/cli'
 
 console.log(color, badge, bold, underline)
 
@@ -120,10 +120,10 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abuxvn/source/blob/main/packages/logger/CHANGELOG.md
-[issues]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Alogger
-[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
-[npm-url]: https://www.npmjs.com/package/@abux/logger
-[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/logger
-[npm-version-badge]: https://img.shields.io/npm/v/@abux/logger
+[changelog]: https://github.com/abxvnvn/source/blob/main/packages/logger/CHANGELOG.md
+[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Alogger
+[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abxvn/logger
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/logger
+[npm-version-badge]: https://img.shields.io/npm/v/@abxvn/logger

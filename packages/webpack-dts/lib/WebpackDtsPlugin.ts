@@ -1,9 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { Compiler } from 'webpack'
-import { Dts } from '@abux/dts'
+import { Dts } from '@abxvn/dts'
 import { pathExists, readJSON } from 'fs-extra'
-import { loggers } from '@abux/logger/cli'
-import { removeExt, resolver, getLocalPackagePath, type IPathResolver } from '@abux/paths'
+import { loggers } from '@abxvn/logger/cli'
+import { removeExt, resolver, getLocalPackagePath, type IPathResolver } from '@abxvn/paths'
 
 let counterId = 0
 

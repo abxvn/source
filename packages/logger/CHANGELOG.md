@@ -1,4 +1,4 @@
-# @abux/logger
+# @abxvn/logger
 
 ## 1.0.3
 
@@ -24,11 +24,11 @@
 
 - Update APIs to support color logging on browser
 - Divide usages per environment:
-  - `@abux/logger`: Browser logging, exports:
+  - `@abxvn/logger`: Browser logging, exports:
     - `styles`: styles of text for logging, color, background, bold...
     - `loggers`: loggers utilities like info, success, badge...
     - `unstyle`: revert a styled text
-  - `@abux/logger/cli`: Console (CLI) logging, exports:
+  - `@abxvn/logger/cli`: Console (CLI) logging, exports:
     - `collapsible`: Convert any writable stream to collapsible one
     - `collapse`: A collapsible stream bound to `process.stdout`
     - `styles`: styles of text for logging, color, background, bold...

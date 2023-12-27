@@ -1,4 +1,4 @@
-@abux/builder
+@abxvn/builder
 =====
 [![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
@@ -28,7 +28,7 @@ yarn init -2
 Run this command for the builder to setup necessary dependencies and code base:
 
 ```
-yarn dlx @abux/builder init
+yarn dlx @abxvn/builder init
 ```
 
 ### Commands
@@ -67,12 +67,12 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abuxvn/source/blob/main/packages/builder/CHANGELOG.md
-[issues]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Abuilder
-[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
-[npm-url]: https://www.npmjs.com/package/@abux/builder
-[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/builder
-[npm-version-badge]: https://img.shields.io/npm/v/@abux/builder
+[changelog]: https://github.com/abxvnvn/source/blob/main/packages/builder/CHANGELOG.md
+[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Abuilder
+[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abxvn/builder
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/builder
+[npm-version-badge]: https://img.shields.io/npm/v/@abxvn/builder
 [code-style-badge]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
 [code-style-url]: https://standardjs.com
