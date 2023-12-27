@@ -1,5 +1,11 @@
 # @abxvn/builder
 
+## 1.1.0
+
+### Minor Changes
+
+- Add package manager optional option to init command (npm, pnpm, yarn)
+
 ## 1.0.1
 
 ### Patch Changes
