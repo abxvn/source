@@ -1,5 +1,11 @@
 # @abxvn/builder
 
+## 1.1.1
+
+### Patch Changes
+
+- Fix version build
+
 ## 1.1.0
 
 ### Minor Changes
