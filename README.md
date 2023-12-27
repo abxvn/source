@@ -7,21 +7,22 @@ Some handy tools for your next projects
 Tool List:
 -----
 
-**`@abxvn/resolve`** [[npm]][npm_resolve][[changelog]][changelog_resolve] 
+**`@abxvn/resolve`**: Provide an performant async [`require.resolve`](https://nodejs.org/api/modules.html#modules_all_together) function with pnp supports
 
-Provide an performant async [`require.resolve`](https://nodejs.org/api/modules.html#modules_all_together) function with pnp supports
+[![npm][npm_resolve_badge]][npm_resolve] [![changelog][changelog_badge]][changelog_resolve]
 
-**`@abxvn/builder`** [[npm]][npm_builder][[changelog]][changelog_builder] 
 
-Quick scaffolding code base to build web apps and games
+**`@abxvn/builder`**: Quick scaffolding a monorepo code base to build multiple apps like webs, games, APIs, functions, CLIs
 
-**`@abxvn/tasks`** [[npm]][npm_tasks][[changelog]][changelog_tasks] 
-  
-A priority based task runner which is type safed, extremely fast, light-weight with no dependencies
+[![npm][npm_builder_badge]][npm_builder] [![changelog][changelog_badge]][changelog_builder]
 
-**`@abxvn/logger`** [[npm]][npm_logger][[changelog]][changelog_logger] 
+**`@abxvn/tasks`**: A priority based task runner which is type safed, extremely fast, light-weight with no dependencies
 
-An utility logger for CLI and web, supports colors and collapsible logs
+[![npm][npm_tasks_badge]][npm_tasks] [![changelog][changelog_badge]][changelog_tasks]
+
+**`@abxvn/logger`**: An utility logger for CLI and web, supports colors and collapsible logs
+
+[![npm][npm_logger_badge]][npm_logger] [![changelog][changelog_badge]][changelog_logger]
 
 Contribution
 -----
@@ -56,7 +57,13 @@ Cheers 🍻
 [npm_resolve]: https://www.npmjs.com/package/@abxvn/resolve
 [npm_logger]: https://www.npmjs.com/package/@abxvn/logger
 
+[npm_builder_badge]: https://img.shields.io/npm/v/@abxvn/builder
+[npm_tasks_badge]: https://img.shields.io/npm/v/@abxvn/tasks
+[npm_resolve_badge]: https://img.shields.io/npm/v/@abxvn/resolve
+[npm_logger_badge]: https://img.shields.io/npm/v/@abxvn/logger
+
 [changelog_builder]: https://github.com/abxvn/source/blob/main/packages/builder/CHANGELOG.md
 [changelog_tasks]: https://github.com/abxvn/source/blob/main/packages/tasks/CHANGELOG.md
 [changelog_resolve]: https://github.com/abxvn/source/blob/main/packages/resolve/CHANGELOG.md
 [changelog_logger]: https://github.com/abxvn/source/blob/main/packages/logger/CHANGELOG.md
+[changelog_badge]: https://img.shields.io/badge/changelog-8A2BE2

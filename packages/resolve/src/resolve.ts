@@ -3,7 +3,7 @@ import { resolveRequest } from './lib/resolvers'
 import { resolveFromFsPath } from './lib/fs/asyncFs'
 
 export const resolve = async (path: string, options?: IResolveOptions): Promise<string> => {
-  const trace: IResolveTrace | undefined = +(process.env.ABUX_RESOLVE_DEBUG as string)
+  const trace: IResolveTrace | undefined = +(process.env.ABX_RESOLVE_DEBUG as string)
     ? new Map()
     : undefined
   const resolveOptions = {
