@@ -1,6 +1,6 @@
 import { collapsible } from '@abxvn/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
-import { IInstallOptions, install, installSdk } from '../../lib/packages'
+import { type IInstallOptions, install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,

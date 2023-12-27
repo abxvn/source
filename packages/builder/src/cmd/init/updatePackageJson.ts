@@ -2,7 +2,7 @@ import { loggers, styles } from '@abxvn/logger/cli'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
 import { logProgress, logStep, logWarn } from './loggers'
-import { IInstallOptions } from '../../lib/packages'
+import { type IInstallOptions } from '../../lib/packages'
 
 const { italic, bold } = styles
 const { info } = loggers

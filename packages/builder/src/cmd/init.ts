@@ -10,7 +10,7 @@ import {
   type IEditorConfigsAnswer,
   editorConfigs,
 } from './questions'
-import { IInstallOptions, getVersion } from '../lib/packages'
+import { type IInstallOptions, getVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
 import { copyConfigs } from './init/copyConfigs'
 import { updatePackageJson } from './init/updatePackageJson'
