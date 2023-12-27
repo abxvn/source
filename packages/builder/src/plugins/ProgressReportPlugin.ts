@@ -1,6 +1,5 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { Compilation, Compiler } from 'webpack'
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 
 const { progress } = loggers
 
@@ -17,7 +16,7 @@ export default class ProgressReportPlugin {
     },
     afterCompile (compilation: Compilation) {
       progress(`${compilation.compiler.name as string}: compiled`)
-    }
+    },
   }
 
   apply (compiler: Compiler) {

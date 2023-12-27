@@ -1,13 +1,14 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import execa from 'execa'
 import Module from 'module'
 import { resolve } from './paths'
 import { readFile } from './vendors'
 
+export const YARN_ENABLED = false
+
 const cliOptions = {
   env: {
-    FORCE_COLOR: 'true'
-  }
+    FORCE_COLOR: 'true',
+  },
 }
 
 interface IWritable {
@@ -15,6 +16,7 @@ interface IWritable {
 }
 
 interface IInstallOptions {
+  tool?: 'pnpm' | 'yarn' | 'npm'
   dev?: boolean
   outputStream?: IWritable
   errorStream?: IWritable
@@ -27,14 +29,15 @@ export const install = async (
   const {
     dev = false,
     outputStream = process.stdout,
-    errorStream = process.stderr
+    errorStream = process.stderr,
+    tool = 'pnpm',
   } = options || {}
 
-  const subProcess = execa('yarn', [
-    'add',
+  const subProcess = execa(tool, [
+    tool !== 'npm' ? 'add' : 'install',
     '--silent',
-    dev ? '--dev' : '',
-    ...packages
+    dev ? '-D' : '',
+    ...packages,
   ].filter(Boolean), cliOptions)
 
   if (outputStream) {
@@ -61,10 +64,16 @@ export const getYarnVersion = async (): Promise<string> => {
   return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
 }
 
+export const getPnpmVersion = async (): Promise<string> => {
+  const { stdout } = await execa('pnpm', ['--version'], cliOptions)
+
+  return stdout.match(/\d+(\.\d+)*/)?.[0] || ''
+}
+
 export const installSdk = async (name: string, options?: Omit<IInstallOptions, 'dev'>) => {
   const {
     outputStream = process.stdout,
-    errorStream = process.stderr
+    errorStream = process.stderr,
   } = options || {}
   const subProcess = execa('yarn', ['dlx', '@yarnpkg/sdks', name], cliOptions)
 

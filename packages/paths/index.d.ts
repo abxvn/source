@@ -1,4 +1,4 @@
-declare module '@abux/paths/index' {
+declare module '@abxvn/paths/index' {
   export interface IPathResolver {
     rootPath: string;
     resolve: (...paths: string[]) => string;
@@ -21,13 +21,13 @@ declare module '@abux/paths/index' {
   }
   export const normalize: (path: string) => string;
   export const getDir: (path: string) => string;
-  export const getName: (path: string) => any;
+  export const getName: (path: string) => string;
   export const resolver: (rootPath: string) => IPathResolver;
   export const resolve: (path: string) => string;
   export const merge: (...paths: string[]) => string;
   export const removeExt: (path: string) => string;
   export const getLocalPackagePath: (relativePath: string) => string;
 }
-declare module '@abux/paths' {
-  export * from '@abux/paths/index'
+declare module '@abxvn/paths' {
+  export * from '@abxvn/paths/index'
 }

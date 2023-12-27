@@ -7,5 +7,5 @@ export {
   writeJSON,
   type WriteStream,
   createWriteStream,
-  mkdirp
+  mkdirp,
 } from 'fs-extra'

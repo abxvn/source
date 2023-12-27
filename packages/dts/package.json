@@ -1,15 +1,15 @@
 {
-  "name": "@abux/dts",
+  "name": "@abxvn/dts",
   "description": "Simple and fast typescript declaration (dts) file generator",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abuxvn/source.git",
+    "url": "git+https://github.com/abxvn/source.git",
     "directory": "packages/dts"
   },
   "keywords": [
-    "abux",
+    "abx",
     "typescript",
     "declaration",
     "dts",
@@ -23,15 +23,17 @@
     "email": "hungluu2106@gmail.com"
   },
   "bugs": {
-    "url": "https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Adts%22"
+    "url": "https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Adts%22"
   },
-  "homepage": "https://github.com/abuxvn/source/tree/main/packages/dts#readme",
+  "homepage": "https://github.com/abxvn/source/tree/main/packages/dts#readme",
   "files": [
-    "./index.js",
-    "./index.d.ts"
+    "index.js",
+    "index.d.ts",
+    "README.md",
+    "LICENSE"
   ],
   "dependencies": {
-    "@abux/paths": "workspace:^",
+    "@abxvn/paths": "workspace:^",
     "fs-extra": "^11.1.1",
     "minimatch": "^9.0.2",
     "typescript": "^5.0.2"

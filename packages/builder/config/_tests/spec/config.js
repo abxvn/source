@@ -1,16 +1,28 @@
-const { resolve } = require('path')
+import { resolve, dirname } from 'path'
+import { fileURLToPath } from 'url'
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 /** @type {import('ts-jest').JestConfigWithTsJest} */
-module.exports = {
+export default {
   rootDir: resolve(__dirname, '../..'),
   setupFilesAfterEnv: [
-    '<rootDir>/tests/spec/setup.js'
+    '<rootDir>/tests/spec/setup.mjs'
   ],
-  testRegex: '.+/*\\.spec\\.(ts|tsx)$',
-  preset: 'ts-jest',
+  testRegex: '.+/*\\.(test|spec)\\.(ts|tsx)$',
+  // preset: 'ts-jest',
+  // transform: {
+  //   '^.+\\.tsx?$': [
+  //     'ts-jest'
+  //     // { tsconfig: require('@abxvn/resolve').resolve('./custom.config.json') }
+  //   ]
+  // },
+  extensionsToTreatAsEsm: ['.ts'],
+  // verbose: true,
+  // preset: 'ts-jest/presets/default-esm',
+  testEnvironment: 'node',
   transform: {
-    '^.+\\.tsx?$': [
-      'ts-jest'
-    ]
+    '^.+\\.(ts|tsx)?$': ['ts-jest', { useESM: true }]
   }
 }

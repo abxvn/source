@@ -6,7 +6,7 @@ import type { IDevServerOptions, IFilter, IWebpackConfig, IWebpackConfigs } from
 const devServer: IFilter = async ({ editor }) => {
   if (!process.env.WEBPACK_SERVE || editor.options.envName !== 'development') {
     return {
-      configs: await removeUnusedDevEntries(editor.configs)
+      configs: await removeUnusedDevEntries(editor.configs),
     }
   }
 
@@ -51,14 +51,14 @@ const devServer: IFilter = async ({ editor }) => {
         static: devDirPath.replace(/([A-Z]+):/, (_, d: string) => `/${d.toLowerCase()}`),
         hot: true,
         devMiddleware: {
-          publicPath: '/'
-        }
+          publicPath: '/',
+        },
       }
       const devOptions = devs.reduce<IDevServerOptions>((resultOptions, { pattern, options }) => {
         if (matchPattern(entry.import, pattern)) {
           return {
             ...resultOptions,
-            ...options
+            ...options,
           }
         } else {
           return resultOptions
@@ -72,14 +72,14 @@ const devServer: IFilter = async ({ editor }) => {
           ...config.plugins,
           new HtmlWebpackPlugin({
             inject: true,
-            template: devDivIndex
-          })
+            template: devDivIndex,
+          }),
         ],
         entry: {
-          [entryName]: entry
+          [entryName]: entry,
         },
         watch: false,
-        devServer: devOptions
+        devServer: devOptions,
       })
     }
 
@@ -87,14 +87,14 @@ const devServer: IFilter = async ({ editor }) => {
   })
 
   return {
-    configs: [...filteredConfigs, ...newDevConfigs]
+    configs: [...filteredConfigs, ...newDevConfigs],
   }
 }
 
 const removeUnusedDevEntries = async (configs: IWebpackConfigs): Promise<IWebpackConfigs> =>
   await map(configs, async config => ({
     ...config,
-    entry: await filter(config.entry, async entry => !getDevDirPath(entry))
+    entry: await filter(config.entry, async entry => !getDevDirPath(entry)),
   }))
 
 const getDevDirPath = (entry: any): string => extractMatch(entry.import, /\/dev\//)

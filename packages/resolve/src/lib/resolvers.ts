@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IMaybePromise, IResolveOptions, IResolveTrace } from './interfaces'
 import {
   isLocalMatch,
@@ -8,7 +7,7 @@ import {
   isBuiltin,
   resolvePnpPackage,
   getCallerPath,
-  isPnpEnabled
+  isPnpEnabled,
 } from './helpers'
 
 export const resolveRequest = (

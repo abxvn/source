@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IModifierName, IFormatState, IStyledCssLog, IStyles, IFormatStateKey, IUnstyler, ILogStyler } from './interfaces'
 import { Modifiers } from './interfaces'
 
@@ -34,7 +33,7 @@ const Colors = {
   bgCyan: '#0AA', // 46
   bgCyanBright: '#0DD', // 106
   bgMagenta: '#A0A', // 45
-  bgMagentaBright: '#D0D' // 105
+  bgMagentaBright: '#D0D', // 105
 }
 
 type IColorName = keyof typeof Colors
@@ -46,7 +45,7 @@ export const STYLE_REGEX_PATTERN = [
   SPACE,
   '([biu]+|)?',
   '([\\dA-F]{3}|)?',
-  '([\\dA-F]{3}|)?'
+  '([\\dA-F]{3}|)?',
 ].join('#') + SPACE
 export const STYLE_DIVIDER_REGEX = new RegExp([STYLE_REGEX_PATTERN, DIVIDER].join('|'), 'g')
 
@@ -58,7 +57,7 @@ const defaultFormatState: IFormatState = {
   underline: false,
   italic: false,
   color: '',
-  bgColor: ''
+  bgColor: '',
 }
 
 // example: bold to #b##
@@ -66,7 +65,7 @@ const convertStateToFormat = (state: IFormatState): string => {
   const modifierFormat = [
     state.bold && Modifiers.bold,
     state.italic && Modifiers.italic,
-    state.underline && Modifiers.underline
+    state.underline && Modifiers.underline,
   ].filter(Boolean).join('')
 
   return `${SPACE}#${[modifierFormat, state.bgColor, state.color].join('#')}${SPACE}`
@@ -82,7 +81,7 @@ const convertStateToCss = (state: IFormatState, baseState?: IFormatState): strin
     (state.italic || baseState?.italic) && 'font-style:italic',
     (state.underline || baseState?.underline) && 'text-decoration:underline',
     bgColor && `background-color:#${bgColor}`,
-    color && `color:#${color}`
+    color && `color:#${color}`,
   ].filter(Boolean).join(';')
 }
 
@@ -93,7 +92,7 @@ const revertStateToCss = (state: IFormatState, baseState?: IFormatState): string
     baseState?.italic ? 'font-style:italic' : (state.italic && 'font-style:inherit'),
     baseState?.underline ? 'text-decoration:underline' : (state.underline && 'text-decoration:inherit'),
     baseState?.bgColor ? `background-color:#${baseState?.bgColor}` : (state.bgColor && 'background-color:inherit'),
-    baseState?.color ? `color:#${baseState?.color}` : state.color && 'color:inherit'
+    baseState?.color ? `color:#${baseState?.color}` : state.color && 'color:inherit',
   ].filter(Boolean).join(';')
 }
 
@@ -115,7 +114,7 @@ Reflect.defineProperty(styler, 'state', {
   },
   get () {
     return this._state
-  }
+  },
 })
 
 // define chained state editor
@@ -135,7 +134,7 @@ const defineStyleStateEditor = (
       state.modified = true
 
       return chainedStyle
-    }
+    },
   })
 }
 
@@ -162,7 +161,7 @@ interface ILogFormatState extends IFormatState {
 export const styleLog: ILogStyler = formatedText => {
   const styledLog: IStyledCssLog = {
     text: '',
-    css: []
+    css: [],
   }
   const logFormats: ILogFormatState[] = []
 
@@ -184,7 +183,7 @@ export const styleLog: ILogStyler = formatedText => {
     const baseFormat = logFormats[logFormats.length - 1]
     const format: ILogFormatState = {
       ...defaultFormatState,
-      base: baseFormat ? { ...baseFormat, ...baseFormat.base } : undefined
+      base: baseFormat ? { ...baseFormat, ...baseFormat.base } : undefined,
     }
 
     if (modifiers?.includes(Modifiers.bold)) {

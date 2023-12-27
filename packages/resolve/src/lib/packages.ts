@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { npm, yarn } from 'global-dirs'
 import { isAbsolute } from 'path'
 

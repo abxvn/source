@@ -1,11 +1,10 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import WebpackDevServer from 'webpack-dev-server'
 import webpack from 'webpack'
 import type { Configuration, MultiCompiler } from 'webpack'
 import { getConfigs } from '../configs'
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 import { path } from './options'
-import { type ICollapsible, collapsible } from '@abux/logger/cli'
+import { type ICollapsible, collapsible } from '@abxvn/logger/cli'
 
 const { info, badge } = loggers
 
@@ -55,6 +54,6 @@ export default {
   description: 'Run dev servers for testing apps on browser',
   action: dev,
   options: [
-    path
-  ]
+    path,
+  ],
 }

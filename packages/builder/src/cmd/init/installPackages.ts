@@ -1,20 +1,19 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import { collapsible } from '@abux/logger/cli'
+import { collapsible } from '@abxvn/logger/cli'
 import type { IApp, IConfigDeps } from '../../interfaces'
 import { install, installSdk } from '../../lib/packages'
 import {
   type IComponentAnswer,
   components,
-  type ISdkAnswer
+  type ISdkAnswer,
 } from '../questions'
 import { logProgress, logStep } from './loggers'
 
 interface IInstallPackagesParams {
-  answers: { components: IComponentAnswer, sdk: ISdkAnswer }
+  answers: { components: IComponentAnswer, sdk?: ISdkAnswer }
   deps: IConfigDeps
 }
 export const installPackages = async ({ answers, deps }: IInstallPackagesParams, app: IApp) => {
-  deps.set('@abux/builder', { version: app.appVersion || '*' })
+  deps.set('@abxvn/builder', { version: app.appVersion || '*' })
   components.choices?.forEach(name => {
     if (!answers.components?.includes(name)) {
       deps.unset(name)

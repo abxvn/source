@@ -12,7 +12,7 @@ const initConfigs: IFilter = async ({ editor }) => {
       const entries = targetedEntries[target]
 
       return await getConfig(target as IBuildTarget, entries, editor)
-    })
+    }),
   }
 }
 
@@ -33,10 +33,10 @@ export const getConfig = async (
       path: editor.path.rootPath,
       filename: data => {
         return data.chunk?.name?.replace(/\.tsx?$/, '.js') as string // change index.ts to index.js
-      }
+      },
     },
     resolve: {
-      extensions: ['.ts', '.js', '.tsx']
+      extensions: ['.ts', '.js', '.tsx'],
     },
     module: {
       rules: [
@@ -46,23 +46,23 @@ export const getConfig = async (
             {
               loader: path,
               options: {
-                configFile: editor.path.resolve('tsconfig.json')
-              }
-            }
+                configFile: editor.path.resolve('tsconfig.json'),
+              },
+            },
           ],
-          exclude: /node_modules|yarn/
+          exclude: /node_modules|yarn/,
         })),
         await resolveOptions<RuleSetRule>('html-loader', path => ({
           test: /\.html$/i,
-          loader: path
-        }))
-      ].filter(Boolean) as RuleSetRule[]
+          loader: path,
+        })),
+      ].filter(Boolean) as RuleSetRule[],
     },
     externals: [],
     plugins: [],
     stats: 'normal',
     watch: envName === 'development',
-    devtool: envName === 'development' && 'inline-source-map'
+    devtool: envName === 'development' && 'inline-source-map',
   }
 
   return target === 'node'
@@ -76,15 +76,15 @@ export const setNodePackageConfig = (config: IWebpackConfig): IWebpackConfig => 
     target: 'node',
     output: {
       ...config.output,
-      libraryTarget: 'commonjs2'
+      libraryTarget: 'commonjs2',
       // library: {
       //   type: 'commonjs2'
       // }
     },
     externalsPresets: {
       ...config.externalsPresets,
-      node: true
-    }
+      node: true,
+    },
   }
 }
 
@@ -94,7 +94,7 @@ export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
     ...config,
     target: 'web',
     output: {
-      ...config.output
+      ...config.output,
       // libraryTarget: 'var'
       // library: {
       //   type: 'var'
@@ -102,7 +102,7 @@ export const setWebPackageConfig = (config: IWebpackConfig): IWebpackConfig => {
     },
     externalsPresets: {
       ...config.externalsPresets,
-      node: false
-    }
+      node: false,
+    },
   }
 }

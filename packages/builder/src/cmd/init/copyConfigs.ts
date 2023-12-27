@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { copy, pathExists } from '../../lib/vendors'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { resolver } from '../../lib/paths'
@@ -16,12 +15,12 @@ export const copyConfigs = async ({ answers, deps, editor }: ICopyConfigsParams)
   const hasPackagesFolder = await pathExists(editor.path.resolve('packages'))
   const copies: string[] = [
     '.vscode',
+    'pnpm-workspace.yaml',
     !hasPackagesFolder ? 'packages/dummy/package.json' : '',
     !hasPackagesFolder ? 'packages/dummy/cli/_index.ts' : '',
-    '_.yarnrc.yml',
     deps.requires('typescript') ? '_tsconfig.json' : '',
     deps.requires('jest') ? '_tests' : '',
-    deps.requires('eslint') ? '_.eslintrc.js' : ''
+    deps.requires('eslint') ? '_.eslintrc.js' : '',
   ].filter(Boolean)
 
   if (answers.editorConfigs) {

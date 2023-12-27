@@ -1,19 +1,18 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import {
   forEachChild,
   SyntaxKind,
   createCompilerHost,
   createProgram,
   createSourceFile,
-  ScriptTarget
+  ScriptTarget,
 } from 'typescript'
 import type {
   SourceFile,
   Node,
   CompilerOptions,
-  LiteralExpression
+  LiteralExpression,
 } from 'typescript'
-import { type IPathResolver, resolver, normalize, resolve, merge, getDir } from '@abux/paths'
+import { type IPathResolver, resolver, normalize, resolve, merge, getDir } from '@abxvn/paths'
 import EventEmitter from 'events'
 import { type WriteStream, createWriteStream } from './fs'
 import { minimatch } from 'minimatch'
@@ -37,9 +36,11 @@ export class DtsWriter extends EventEmitter {
       references: [],
       excludedPatterns: [
         '**/node_modules/**/*.d.ts',
-        '**/.yarn/**/*.d.ts'
+        '**/.yarn/**/*.d.ts',
+        '**/*.test.ts',
+        '**/*.spec.ts',
       ],
-      ...options
+      ...options,
     }
 
     if (!this.options.main) {
@@ -99,7 +100,7 @@ export class DtsWriter extends EventEmitter {
       }
 
       const resolvedModuleId = this.resolveModule({
-        currentModule: inDir.relative(removeExtension(filePath))
+        currentModule: inDir.relative(removeExtension(filePath)),
       })
 
       // We can optionally output the main module if there's something to export.
@@ -160,7 +161,7 @@ export class DtsWriter extends EventEmitter {
     } else {
       this.emit('log:verbose', [
         '[dtsw] list externals:',
-        ...this.externalModules.map(name => `  - ${name}`)
+        ...this.externalModules.map(name => `  - ${name}`),
       ].join('\n'))
     }
   }
@@ -278,7 +279,7 @@ export class DtsWriter extends EventEmitter {
         // convert both relative and non-relative module names in import = require(...)
         const resolvedImportedModule: string = this.resolveImport({
           importedModule: expression.text,
-          currentModule
+          currentModule,
         })
 
         this.emit('log:verbose', `[dtsw] declare:external ${resolvedModuleId}: require ${resolvedImportedModule}`)
@@ -296,7 +297,7 @@ export class DtsWriter extends EventEmitter {
         const text = node.text
         const resolvedImportedModule: string = this.resolveImport({
           importedModule: text,
-          currentModule
+          currentModule,
         })
 
         if (resolvedImportedModule) {
@@ -378,7 +379,7 @@ export class DtsWriter extends EventEmitter {
       resolvedId = this.options.resolvedImport({
         currentModule: resolution.currentModule,
         importedModule,
-        isExternal
+        isExternal,
       }) || resolvedId
     } else {
       resolvedId = this.resolveModuleDefault(resolvedId)

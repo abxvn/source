@@ -8,28 +8,28 @@ export const components: CheckBoxOptions = {
   message: 'Select components to install',
   type: 'checkbox',
   choices: ['webpack', 'typescript', 'eslint', 'jest'],
-  default: ['webpack', 'typescript', 'eslint', 'jest']
+  default: ['webpack', 'typescript', 'eslint', 'jest'],
 }
 export type IComponentAnswer = string[]
 
 export const sdk: ConfirmQuestionOptions = {
   message: 'Install VSCode Yarn SDK?',
   type: 'confirm',
-  default: true
+  default: true,
 }
 export type ISdkAnswer = boolean
 
 export const editorConfigs: ConfirmQuestionOptions = {
   message: 'Copy editconfig, git config files?',
   type: 'confirm',
-  default: true
+  default: true,
 }
 export type IEditorConfigsAnswer = boolean
 
 const allQuestions: any = {
   components,
   sdk,
-  editorConfigs
+  editorConfigs,
 }
 
 type IAskQuestionName = keyof typeof allQuestions
@@ -38,7 +38,7 @@ export const ask = async <T>(questions: IAskQuestions): Promise<T> => {
   const answers = await inquirer.prompt(
     Object.keys(questions).map(name => ({
       ...allQuestions[name],
-      name
+      name,
     }))
   )
 

@@ -1,8 +1,7 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import webpack from 'webpack'
 import type { Configuration } from 'webpack'
 import { getConfigs } from '../configs'
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 import { logEntries } from '../lib/entries'
 import ProgressReportPlugin from '../plugins/ProgressReportPlugin'
 import { nodeEnv, path, production } from './options'
@@ -36,7 +35,7 @@ const build = async (options: IBuildOptions): Promise<void> => {
         } else {
           loggers.log(stats?.toString({
             chunks: false, // Removes chunk information
-            colors: true // Enables colorful output
+            colors: true, // Enables colorful output
           }))
 
           if (stats?.hasErrors()) {
@@ -60,6 +59,6 @@ export default {
   options: [
     path,
     nodeEnv,
-    production
-  ]
+    production,
+  ],
 }

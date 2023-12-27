@@ -1,8 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import { loggers, styles } from '@abux/logger/cli'
+import { loggers, styles } from '@abxvn/logger/cli'
 import { type IConfigEditor, type IConfigDeps } from '../../interfaces'
 import { pathExists, readJSON, writeJSON } from '../../lib/vendors'
 import { logProgress, logStep, logWarn } from './loggers'
+import { YARN_ENABLED } from '../../lib/packages'
 
 const { italic, bold } = styles
 const { info } = loggers
@@ -70,9 +70,9 @@ export const updatePackageJson = async ({ modify = true, deps, editor }: IUpdate
   await writeJSON(packagePath, {
     ...json,
     scripts,
-    workspaces
+    ...YARN_ENABLED ? workspaces : undefined,
   }, {
-    spaces: 2
+    spaces: 2,
   })
 
   logStep('config done')

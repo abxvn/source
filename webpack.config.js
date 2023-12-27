@@ -4,7 +4,7 @@ const { WebpackPnpExternals } = require('webpack-pnp-externals')
 const { resolve } = require('path')
 
 const TerserPlugin = require('terser-webpack-plugin')
-const { WebpackDtsPlugin } = require('@abux/webpack-dts')
+const { WebpackDtsPlugin } = require('@abxvn/webpack-dts')
 const { default: replaceVars } = require('./packages/builder/src/filters/replaceVars')
 
 const rootPath = __dirname.replace(/\\/g, '/')
@@ -54,6 +54,7 @@ exports = module.exports = async () => {
       }
     },
     resolve: {
+      symlinks: true,
       extensions: [
         '.ts',
         '.js',
@@ -76,13 +77,17 @@ exports = module.exports = async () => {
             }
           ],
           exclude: /node_modules|\.yarn/
-        }
+        },
+        {
+          test: /.node$/,
+          loader: 'node-loader',
+        },
       ]
     },
     plugins: [
       new BannerPlugin({
         banner: ({ filename }) => {
-          const license = '/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */\n'
+          const license = '/*! Copyright (c) 2023 ABx. Under MIT license found in the LICENSE file */\n'
 
           if (/(builder|resolve)\/cli\//.test(filename)) {
             return ['#!/usr/bin/env node', license].join('\n')

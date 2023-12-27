@@ -1,9 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { Command, type Option } from 'commander'
 import dev from './cmd/dev'
 import init from './cmd/init'
 import build from './cmd/build'
-import { loggers, styles } from '@abux/logger/cli'
+import { loggers, styles } from '@abxvn/logger/cli'
 import { type IApp } from './interfaces'
 
 interface ICommand {
@@ -35,7 +34,7 @@ export default class App extends Command implements IApp {
     this.registerCommands({
       dev,
       build,
-      init
+      init,
     })
   }
 

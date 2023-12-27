@@ -1,9 +1,8 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type { IBuildEnvironment, IBuilderCustomOptions, IConfigDeps, IConfigEditor, IWebpackConfig } from './interfaces'
 
 import ConfigEditor from './ConfigEditor'
 import { pathExists } from './lib/vendors'
-import { styles } from '@abux/logger/cli'
+import { styles } from '@abxvn/logger/cli'
 import ConfigDeps from './ConfigDeps'
 import { moduleFromFile } from './lib/packages'
 
@@ -22,7 +21,7 @@ export const getConfigs = async (
 }> => {
   const deps = new ConfigDeps()
   const editor = new ConfigEditor({ envName, rootPath, deps })
-  const customizerFile = editor.path.resolve('abux.config.js')
+  const customizerFile = editor.path.resolve('abx.config.js')
 
   addDefaultDeps(deps)
 
@@ -56,35 +55,37 @@ export const getConfigs = async (
     configs: configs.map(config => ({
       ...config,
       name: styles.bold.underline.greenBright(config.name),
-      plugins: config.plugins.filter(Boolean)
-    }))
+      plugins: config.plugins.filter(Boolean),
+    })),
   }
 }
 
 const addDefaultDeps = (deps: IConfigDeps) => {
-  deps.set('typescript', { version: '^5.0.4' })
-  deps.set('webpack', { version: '^5.80.0' })
+  deps.set('cross-env', { version: '^7.0.3' })
+  deps.set('typescript', { version: '~5.0.4' })
+  deps.set('webpack', { version: '^5.89.0' })
   deps.set('eslint', {
-    version: '^8.39.0',
+    version: '^8.56.0',
     dev: true,
     dependencies: [
-      { name: '@typescript-eslint/eslint-plugin', version: '^5.59.1' },
-      { name: '@typescript-eslint/parser', version: '^5.59.1' },
-      { name: 'eslint', version: '^8.39.0' },
-      { name: 'eslint-config-standard', version: '^17.0.0' },
-      { name: 'eslint-config-standard-with-typescript', version: '^34.0.1' },
-      { name: 'eslint-plugin-import', version: '^2.27.5' },
-      { name: 'eslint-plugin-jest', version: '^27.2.1' },
-      { name: 'eslint-plugin-n', version: '^15.7.0' },
-      { name: 'eslint-plugin-promise', version: '^6.1.1' }
-    ]
+      { name: '@typescript-eslint/eslint-plugin', version: '^6.16.0' },
+      { name: '@typescript-eslint/parser', version: '^6.16.0' },
+      { name: 'eslint-config-standard', version: '^17.1.0' },
+      { name: 'eslint-config-standard-jsx', version: '^11.0.0' },
+      { name: 'eslint-config-standard-with-typescript', version: '^40.0.0' },
+      { name: 'eslint-plugin-import', version: '^2.29.1' },
+      { name: 'eslint-plugin-jest', version: '^27.6.0' },
+      { name: 'eslint-plugin-n', version: '^16.5.0' },
+      { name: 'eslint-plugin-promise', version: '^6.1.1' },
+    ],
   })
   deps.set('jest', {
-    version: '^29.5.0',
+    version: '^29.7.0',
     dev: true,
     dependencies: [
-      { name: 'ts-jest', version: '^29.1.0' },
-      { name: '@types/jest', version: '^29.5.1' }
-    ]
+      { name: '@jest/globals', version: '^29.7.0' },
+      { name: '@types/jest', version: '^29.5.11' },
+      { name: 'ts-jest', version: '^29.1.1' },
+    ],
   })
 }

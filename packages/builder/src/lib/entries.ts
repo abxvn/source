@@ -1,15 +1,14 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import glob from 'fast-glob'
-import { loggers, styles } from '@abux/logger/cli'
+import { loggers, styles } from '@abxvn/logger/cli'
 import type {
   ITargetedExpandedEntries,
   IPathResolver,
   IWebpackConfig,
-  IFileFilter
+  IFileFilter,
 } from '../interfaces'
 import { resolve as resolvePath } from './paths'
 import { minimatch } from 'minimatch'
-import { resolve } from '@abux/resolve'
+import { resolve } from '@abxvn/resolve'
 
 const { info, log } = loggers
 const { bold, italic } = styles
@@ -39,9 +38,9 @@ export const expandEntries = async (
         [target]: {
           ...targetedEntries[target],
           [relativePath]: {
-            import: fullPath
-          }
-        }
+            import: fullPath,
+          },
+        },
       }
     },
     {}

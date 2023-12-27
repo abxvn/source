@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { createReadStream, lstat, realpath, pathExists } from 'fs-extra'
 import { createInterface as createLineInterface } from 'readline'
 import { resolve as resolvedPath } from 'path'
@@ -83,7 +82,7 @@ export const getFsPathType = async (
 
   return {
     path,
-    type
+    type,
   }
 }
 
@@ -92,7 +91,7 @@ export const getJsonData = async (jsonFilePath: string, key: string) => {
   const readStream = createReadStream(jsonFilePath)
   const lines = createLineInterface({
     input: readStream,
-    crlfDelay: Infinity // recognize all instances of CR LF
+    crlfDelay: Infinity, // recognize all instances of CR LF
   })
 
   for await (const line of lines) {

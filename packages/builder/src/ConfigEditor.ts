@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import type {
   IBuilderCustomOptions,
   IBuilderOptions,
@@ -10,7 +9,7 @@ import type {
   IFilter,
   IPathResolver,
   ITargetedExpandedEntries,
-  IWebpackConfigs
+  IWebpackConfigs,
 } from './interfaces'
 import initConfigs from './filters/initConfigs'
 import unbundleExternals from './filters/unbundleExternals'
@@ -27,7 +26,7 @@ const defaultFilters = {
   replaceVars,
   replaceImports,
   generateDts,
-  devServer // should always placed last
+  devServer, // should always placed last
 }
 
 export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
@@ -44,7 +43,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
     envName,
     rootPath,
     filters = defaultFilters,
-    deps
+    deps,
   }: IConfigEditorParams) {
     this.path = resolver(rootPath)
     this._options = {
@@ -55,10 +54,10 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
       replacements: [
         {
           map: { react: 'preact/compat', 'react-dom': 'preact/compat' },
-          pattern: /preact/
-        }
+          pattern: /preact/,
+        },
       ],
-      ignores: [/node_modules/, /\.yarn/]
+      ignores: [/node_modules/, /\.yarn/],
     }
     this.filters = filters
     this.deps = deps || new ConfigDeps()
@@ -87,7 +86,7 @@ export default class ConfigEditor implements IConfigCustomizer, IConfigEditor {
   updateOptions (customOptions: IBuilderCustomOptions) {
     this._options = {
       ...this._options,
-      ...customOptions
+      ...customOptions,
     }
   }
 

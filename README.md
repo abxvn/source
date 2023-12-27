@@ -7,19 +7,19 @@ Some handy tools for your next projects
 Tool List:
 -----
 
-**`@abux/resolve`** [[npm]][npm_resolve][[changelog]][changelog_resolve] 
+**`@abxvn/resolve`** [[npm]][npm_resolve][[changelog]][changelog_resolve] 
 
 Provide an performant async [`require.resolve`](https://nodejs.org/api/modules.html#modules_all_together) function with pnp supports
 
-**`@abux/builder`** [[npm]][npm_builder][[changelog]][changelog_builder] 
+**`@abxvn/builder`** [[npm]][npm_builder][[changelog]][changelog_builder] 
 
 Quick scaffolding code base to build web apps and games
 
-**`@abux/tasks`** [[npm]][npm_tasks][[changelog]][changelog_tasks] 
+**`@abxvn/tasks`** [[npm]][npm_tasks][[changelog]][changelog_tasks] 
   
 A priority based task runner which is type safed, extremely fast, light-weight with no dependencies
 
-**`@abux/logger`** [[npm]][npm_logger][[changelog]][changelog_logger] 
+**`@abxvn/logger`** [[npm]][npm_logger][[changelog]][changelog_logger] 
 
 An utility logger for CLI and web, supports colors and collapsible logs
 
@@ -47,16 +47,16 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[issues]: https://github.com/abuxvn/source/issues
-[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
+[issues]: https://github.com/abxvn/source/issues
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
 
-[npm_builder]: https://www.npmjs.com/package/@abux/builder
-[npm_tasks]: https://www.npmjs.com/package/@abux/tasks
-[npm_resolve]: https://www.npmjs.com/package/@abux/resolve
-[npm_logger]: https://www.npmjs.com/package/@abux/logger
+[npm_builder]: https://www.npmjs.com/package/@abxvn/builder
+[npm_tasks]: https://www.npmjs.com/package/@abxvn/tasks
+[npm_resolve]: https://www.npmjs.com/package/@abxvn/resolve
+[npm_logger]: https://www.npmjs.com/package/@abxvn/logger
 
-[changelog_builder]: https://github.com/abuxvn/source/blob/main/packages/builder/CHANGELOG.md
-[changelog_tasks]: https://github.com/abuxvn/source/blob/main/packages/tasks/CHANGELOG.md
-[changelog_resolve]: https://github.com/abuxvn/source/blob/main/packages/resolve/CHANGELOG.md
-[changelog_logger]: https://github.com/abuxvn/source/blob/main/packages/logger/CHANGELOG.md
+[changelog_builder]: https://github.com/abxvn/source/blob/main/packages/builder/CHANGELOG.md
+[changelog_tasks]: https://github.com/abxvn/source/blob/main/packages/tasks/CHANGELOG.md
+[changelog_resolve]: https://github.com/abxvn/source/blob/main/packages/resolve/CHANGELOG.md
+[changelog_logger]: https://github.com/abxvn/source/blob/main/packages/logger/CHANGELOG.md

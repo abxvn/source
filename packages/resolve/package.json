@@ -1,6 +1,6 @@
 {
-  "name": "@abux/resolve",
-  "version": "1.1.2",
+  "name": "@abxvn/resolve",
+  "version": "2.0.1",
   "description": "Async resolve with pnp supports",
   "license": "MIT",
   "main": "index.js",
@@ -8,11 +8,11 @@
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abuxvn/source.git",
+    "url": "git+https://github.com/abxvn/source.git",
     "directory": "packages/resolve"
   },
   "keywords": [
-    "abux",
+    "abx",
     "source",
     "resolve",
     "async",
@@ -24,10 +24,11 @@
     "email": "hungluu2106@gmail.com"
   },
   "bugs": {
-    "url": "https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Aresolve%22"
+    "url": "https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Aresolve%22"
   },
-  "homepage": "https://github.com/abuxvn/source/tree/main/packages/resolve#readme",
+  "homepage": "https://github.com/abxvn/source/tree/main/packages/resolve#readme",
   "dependencies": {
+    "@abxvn/resolve": "workspace:^",
     "commander": "^10.0.1",
     "fs-extra": "^11.1.1",
     "global-dirs": "^3.0.1"
@@ -38,9 +39,9 @@
     "@types/node": "^18.16.0"
   },
   "files": [
-    "./index.js",
-    "./index.d.ts",
-    "./cli/index.js",
+    "index.js",
+    "index.d.ts",
+    "cli/index.js",
     "README.md",
     "LICENSE"
   ]

@@ -1,4 +1,4 @@
-@abux/tasks
+@abxvn/tasks
 =====
 [![build][badge-build]][changelog]
 [![version][npm-version-badge]][npm-url]
@@ -22,13 +22,11 @@ A priority based task runner which is:
 
 Installation
 -----
-Install using `yarn` or `npm`:
+Pick **one of** these commands to install:
 ```
-yarn add @abux/tasks
-```
-
-```
-npm add @abux/tasks
+pnpm add @abxvn/tasks
+yarn add @abxvn/tasks
+npm install --save @abxvn/tasks
 ```
 
 Usage
@@ -39,7 +37,7 @@ Usage
 Tasks can be provided with optional `id` and `context`, can be add to the task registry like this:
 
 ```typescript
-import { TaskEmitter, TaskPriority } from '@abux/tasks'
+import { TaskEmitter, TaskPriority } from '@abxvn/tasks'
 
 const tasks = new TaskEmitter()
 
@@ -89,7 +87,7 @@ tasks.next() // console.log 'Hello'
 You can customize task type, or its context and priority types too:
 
 ```typescript
-import { ITask, EventEmitter } from '@abux/tasks`
+import { ITask, EventEmitter } from '@abxvn/tasks`
 
 type ICustomContextType = {...} | undefined
 type ICustomPriorityType = {...}
@@ -131,11 +129,11 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abuxvn/source/blob/main/packages/tasks/CHANGELOG.md
-[issues]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Atasks
-[good-first]: https://github.com/abuxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abuxvn/source/actions/workflows/build.yaml/badge.svg
-[npm-url]: https://www.npmjs.com/package/@abux/tasks
-[npm-downloads-badge]: https://img.shields.io/npm/dw/@abux/tasks
-[npm-version-badge]: https://img.shields.io/npm/v/@abux/tasks
+[changelog]: https://github.com/abxvn/source/blob/main/packages/tasks/CHANGELOG.md
+[issues]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Atasks
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
+[npm-url]: https://www.npmjs.com/package/@abxvn/tasks
+[npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/tasks
+[npm-version-badge]: https://img.shields.io/npm/v/@abxvn/tasks
 

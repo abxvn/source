@@ -1,5 +1,4 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
-import { loggers } from '@abux/logger/cli'
+import { loggers } from '@abxvn/logger/cli'
 import { path } from './options'
 import { getConfigs } from '../configs'
 import {
@@ -9,9 +8,9 @@ import {
   type ISdkAnswer,
   sdk,
   type IEditorConfigsAnswer,
-  editorConfigs
+  editorConfigs,
 } from './questions'
-import { getYarnVersion } from '../lib/packages'
+import { YARN_ENABLED, getPnpmVersion } from '../lib/packages'
 import { installPackages } from './init/installPackages'
 import { copyConfigs } from './init/copyConfigs'
 import { updatePackageJson } from './init/updatePackageJson'
@@ -20,7 +19,7 @@ import { logSuccess } from './init/loggers'
 
 interface IAnswers {
   components: IComponentAnswer
-  sdk: ISdkAnswer
+  sdk?: ISdkAnswer
   editorConfigs: IEditorConfigsAnswer
 }
 
@@ -28,16 +27,16 @@ const init = async function (this: IApp, options: any) {
   const envName = 'development'
   const { editor, deps } = await getConfigs(options.path, envName, {
     options: {
-      entryPatterns: []
-    }
+      entryPatterns: [],
+    },
   })
 
   await checkVersion()
 
   const answers = await ask<IAnswers>({
     components,
-    sdk,
-    editorConfigs
+    editorConfigs,
+    ...YARN_ENABLED ? { sdk } : undefined,
   })
 
   await installPackages({ answers, deps }, this)
@@ -54,20 +53,12 @@ export default {
   description: 'Init config folder',
   action: init,
   options: [
-    path
-  ]
+    path,
+  ],
 }
 
 const checkVersion = async () => {
-  const yarnVersion = await getYarnVersion()
+  const pnpmVersion = await getPnpmVersion()
 
-  loggers.info('Versions:', 'node', process.versions.node, 'yarn', yarnVersion)
-
-  if (!/^3/.test(yarnVersion)) {
-    loggers.error(`
-      Please check if Yarn Berry was set up correctly.
-      Usually it will be all good by running this command:
-      yarn init -2
-    `)
-  }
+  loggers.info('Versions:', 'node', process.versions.node, 'pnpm', pnpmVersion)
 }

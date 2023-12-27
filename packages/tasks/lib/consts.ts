@@ -3,7 +3,7 @@ export const TaskPriority = {
   HIGH: 2,
   NORMAL: 3,
   LOW: 4,
-  IDLE: 5
+  IDLE: 5,
 } as const
 
 export const TaskStatus = {
@@ -11,7 +11,7 @@ export const TaskStatus = {
   WORKING: 2,
   RETRYING: 3,
   DONE: 4,
-  ERROR: 5
+  ERROR: 5,
 } as const
 
 // Max 31 bit integer. The max integer size in V8 for 32-bit systems.

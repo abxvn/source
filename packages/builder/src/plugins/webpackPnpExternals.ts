@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { isAbsolute } from 'path'
 
 type IImporTypeFn = (request: string, resolution: string) => string
@@ -34,7 +33,7 @@ export default function webpackPnpExternals (options: WebpackPnpExternalsOptions
 
     try {
       resolution = pnpApi.resolveRequest(request, context, {
-        considerBuiltins: false
+        considerBuiltins: false,
       })
     } catch (err: any) {
       if (err.code === 'MODULE_NOT_FOUND') { return callback() }

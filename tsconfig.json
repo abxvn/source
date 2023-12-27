@@ -8,7 +8,9 @@
   "exclude": [
     ".yarn",
     "node_modules",
-    "**/*.js"
+    "**/*.js",
+    "**/*.spec.ts",
+    "**/*.test.ts",
   ],
   "compilerOptions": {
     // "declaration": true,

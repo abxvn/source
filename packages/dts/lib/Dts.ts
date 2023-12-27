@@ -1,8 +1,7 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { ScriptTarget } from 'typescript'
 import type { CompilerOptions } from 'typescript'
 import EventEmitter from 'events'
-import { getDir, resolver } from '@abux/paths'
+import { getDir, resolver } from '@abxvn/paths'
 import { pathExists, mkdirp } from './fs'
 import type { IGenerateOptions } from './interfaces'
 import { parseTsConfig } from './helpers'
@@ -17,7 +16,7 @@ export class Dts extends EventEmitter {
     outputPath,
     files = [],
     references = [],
-    filePatterns = []
+    filePatterns = [],
   }: IGenerateOptions) {
     let compilerOptions: CompilerOptions = {}
     const inDir = resolver(inputDir)
@@ -65,7 +64,7 @@ export class Dts extends EventEmitter {
       `rootDir = ${compilerOptions.rootDir || ''}`,
       `moduleResolution = ${compilerOptions.moduleResolution?.toString() || ''}`,
       'files =',
-      ...generatedFiles.map(file => `  ${file}`)
+      ...generatedFiles.map(file => `  ${file}`),
     ]
 
     this.emit(
@@ -78,9 +77,9 @@ export class Dts extends EventEmitter {
       outputPath,
       name,
       main,
-      references
+      references,
     }, {
-      filePatterns
+      filePatterns,
     })
 
     writer.on('log', msg => this.emit('log', msg))
@@ -98,7 +97,7 @@ export class Dts extends EventEmitter {
     const tsconfigFiles = [
       projectPath && resolver(projectPath).resolve('tsconfig.json'),
       projectPath, // if projectPath is location of tsconfig.json
-      inDir.resolve('tsconfig.json')
+      inDir.resolve('tsconfig.json'),
     ].filter(Boolean) as string[]
 
     for await (const tsconfigFile of tsconfigFiles) {

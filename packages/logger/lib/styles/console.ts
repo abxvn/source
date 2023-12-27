@@ -34,7 +34,7 @@ import {
   bgCyan,
   bgCyanBright,
   bgMagenta,
-  bgMagentaBright
+  bgMagentaBright,
 } from 'ansi-colors'
 import type { IStyles } from './interfaces'
 
@@ -75,5 +75,5 @@ export const styles: IStyles = {
   bgCyan,
   bgCyanBright,
   bgMagenta,
-  bgMagentaBright
+  bgMagentaBright,
 } as unknown as IStyles

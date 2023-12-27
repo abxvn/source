@@ -1,4 +1,23 @@
-# @abux/resolve
+# @abxvn/resolve
+
+## 2.0.1
+
+### Patch Changes
+
+- Update docs
+- Updated dependencies
+  - @abxvn/resolve@2.0.1
+
+## 2.0.0
+
+### Major Changes
+
+- Migrate scope, supports pnpm by default, rebuild
+
+### Patch Changes
+
+- Updated dependencies
+  - @abxvn/resolve@2.0.0
 
 ## 1.1.2
 

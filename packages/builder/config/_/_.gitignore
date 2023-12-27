@@ -104,8 +104,8 @@ dist
 .tern-port
 
 # Yarn
-.yarnrc
-.yarnrc.*
+# .yarnrc
+# .yarnrc.*
 .yarn/*
 !.yarn/releases
 !.yarn/patches
@@ -123,3 +123,10 @@ dist
 
 tmp/
 **/tmp
+
+**/index.css
+**/index.min.css
+**/preflight.css
+**/preflight.min.css
+**/preview.css
+**/preview.min.css

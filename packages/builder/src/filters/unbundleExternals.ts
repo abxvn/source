@@ -15,10 +15,10 @@ const unbundleExternals: IFilter = async ({ editor }) => {
         externals: [
           ...(config.externals as any),
           webpackNodeExternals(),
-          webpackPnpExternals()
-        ]
+          webpackPnpExternals(),
+        ],
       }
-    })
+    }),
   }
 }
 

@@ -1,4 +1,3 @@
-/*! Copyright (c) 2023 ABux. Under MIT license found in the LICENSE file */
 import { minimatch } from 'minimatch'
 import { DtsWriter } from './DtsWriter'
 import { removeExtension, EOL } from './helpers'
@@ -77,7 +76,7 @@ export class DtsFilterWriter extends DtsWriter {
     const output = [
       `declare module '${moduleId}' {`,
       this.deduplicateLines(lines).join(EOL),
-      '}'
+      '}',
     ].join(EOL)
 
     if (this.filters.filePatterns?.length) {
