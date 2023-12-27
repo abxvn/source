@@ -37,6 +37,8 @@ export class DtsWriter extends EventEmitter {
       excludedPatterns: [
         '**/node_modules/**/*.d.ts',
         '**/.yarn/**/*.d.ts',
+        '**/*.test.ts',
+        '**/*.spec.ts',
       ],
       ...options,
     }

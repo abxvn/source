@@ -1,5 +1,13 @@
 # @abxvn/resolve
 
+## 2.0.1
+
+### Patch Changes
+
+- Update docs
+- Updated dependencies
+  - @abxvn/resolve@2.0.1
+
 ## 2.0.0
 
 ### Major Changes

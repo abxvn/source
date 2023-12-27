@@ -1,13 +1,13 @@
 {
   "name": "@abxvn/tasks",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Light-weight and fast priority based task runner",
   "license": "MIT",
   "main": "./index.js",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abxvnvn/source.git",
+    "url": "git+https://github.com/abxvn/source.git",
     "directory": "packages/tasks"
   },
   "keywords": [
@@ -21,9 +21,9 @@
     "email": "hungluu2106@gmail.com"
   },
   "bugs": {
-    "url": "https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Atasks%22"
+    "url": "https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Atasks%22"
   },
-  "homepage": "https://github.com/abxvnvn/source/tree/main/packages/tasks#readme",
+  "homepage": "https://github.com/abxvn/source/tree/main/packages/tasks#readme",
   "files": [
     "cli/index.js",
     "index.d.ts",

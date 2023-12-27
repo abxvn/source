@@ -1,5 +1,11 @@
 # @abxvn/paths
 
+## 1.0.1
+
+### Patch Changes
+
+- Update docs
+
 ## 1.0.0
 
 ### Major Changes

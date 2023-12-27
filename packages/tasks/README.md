@@ -22,13 +22,11 @@ A priority based task runner which is:
 
 Installation
 -----
-Install using `yarn` or `npm`:
+Pick **one of** these commands to install:
 ```
+pnpm add @abxvn/tasks
 yarn add @abxvn/tasks
-```
-
-```
-npm add @abxvn/tasks
+npm install --save @abxvn/tasks
 ```
 
 Usage
@@ -131,10 +129,10 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abxvnvn/source/blob/main/packages/tasks/CHANGELOG.md
-[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Atasks
-[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[changelog]: https://github.com/abxvn/source/blob/main/packages/tasks/CHANGELOG.md
+[issues]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Atasks
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abxvn/tasks
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/tasks
 [npm-version-badge]: https://img.shields.io/npm/v/@abxvn/tasks

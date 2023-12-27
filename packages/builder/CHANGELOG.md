@@ -1,5 +1,15 @@
 # @abxvn/builder
 
+## 1.0.1
+
+### Patch Changes
+
+- Update docs
+- Updated dependencies
+  - @abxvn/webpack-dts@1.0.1
+  - @abxvn/resolve@2.0.1
+  - @abxvn/logger@2.0.1
+
 ## 1.0.0
 
 ### Major Changes

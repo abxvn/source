@@ -26,13 +26,13 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-          cache: 'yarn'
+          cache: 'pnpm'
       - name: Install packages
         run: |
-          yarn install
+          pnpm install
       - name: Lint
         run: |
-          yarn lint
+          pnpm lint
       - name: Test
         run: |
-          yarn test
+          pnpm test

@@ -47,16 +47,16 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[issues]: https://github.com/abxvnvn/source/issues
-[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[issues]: https://github.com/abxvn/source/issues
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
 
 [npm_builder]: https://www.npmjs.com/package/@abxvn/builder
 [npm_tasks]: https://www.npmjs.com/package/@abxvn/tasks
 [npm_resolve]: https://www.npmjs.com/package/@abxvn/resolve
 [npm_logger]: https://www.npmjs.com/package/@abxvn/logger
 
-[changelog_builder]: https://github.com/abxvnvn/source/blob/main/packages/builder/CHANGELOG.md
-[changelog_tasks]: https://github.com/abxvnvn/source/blob/main/packages/tasks/CHANGELOG.md
-[changelog_resolve]: https://github.com/abxvnvn/source/blob/main/packages/resolve/CHANGELOG.md
-[changelog_logger]: https://github.com/abxvnvn/source/blob/main/packages/logger/CHANGELOG.md
+[changelog_builder]: https://github.com/abxvn/source/blob/main/packages/builder/CHANGELOG.md
+[changelog_tasks]: https://github.com/abxvn/source/blob/main/packages/tasks/CHANGELOG.md
+[changelog_resolve]: https://github.com/abxvn/source/blob/main/packages/resolve/CHANGELOG.md
+[changelog_logger]: https://github.com/abxvn/source/blob/main/packages/logger/CHANGELOG.md

@@ -26,13 +26,11 @@ Provide an async [`node require.resolve algorithmn`](https://nodejs.org/api/modu
 
 Installation
 -----
-Install using `yarn` or `npm`:
+Pick **one of** these commands to install:
 ```
+pnpm add @abxvn/resolve
 yarn add @abxvn/resolve
-```
-
-```
-npm add @abxvn/resolve
+npm install --save @abxvn/resolve
 ```
 
 Usage
@@ -180,10 +178,10 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abxvnvn/source/blob/main/packages/resolve/CHANGELOG.md
-[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Aresolve
-[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[changelog]: https://github.com/abxvn/source/blob/main/packages/resolve/CHANGELOG.md
+[issues]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Aresolve
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abxvn/resolve
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/resolve
 [npm-version-badge]: https://img.shields.io/npm/v/@abxvn/resolve

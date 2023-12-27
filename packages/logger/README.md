@@ -107,8 +107,8 @@ Feel free to clone this project, make changes that your feel necessary and pull 
 
 Install dependencies and run development build:
 ```
-yarn install
-yarn start
+pnpm install
+pnpm start
 ```
 
 **Working on your first Pull Request?**
@@ -120,10 +120,10 @@ To help you get your feet wet and get you familiar with our contribution process
 -----
 Cheers 🍻
 
-[changelog]: https://github.com/abxvnvn/source/blob/main/packages/logger/CHANGELOG.md
-[issues]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Alogger
-[good-first]: https://github.com/abxvnvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
-[badge-build]: https://github.com/abxvnvn/source/actions/workflows/build.yaml/badge.svg
+[changelog]: https://github.com/abxvn/source/blob/main/packages/logger/CHANGELOG.md
+[issues]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Apackage%3Alogger
+[good-first]: https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3Aflag%3Agood-first
+[badge-build]: https://github.com/abxvn/source/actions/workflows/build.yaml/badge.svg
 [npm-url]: https://www.npmjs.com/package/@abxvn/logger
 [npm-downloads-badge]: https://img.shields.io/npm/dw/@abxvn/logger
 [npm-version-badge]: https://img.shields.io/npm/v/@abxvn/logger
