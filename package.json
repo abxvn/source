@@ -2,15 +2,15 @@
   "name": "source",
   "private": true,
   "scripts": {
-    "start": "rimraf packages/resolve/index.js && webpack",
-    "build": "rimraf packages/resolve/index.js && webpack --node-env production",
-    "components": "webpack -c webpack.components.config.js",
+    "start": "tsup --watch",
+    "build": "tsup --env.NODE_ENV=production",
     "test": "jest -c tests/spec/config.js",
     "lint": "eslint packages --ext ts",
     "resolve": "pnpm --filter resolve",
     "builder": "pnpm --filter builder"
   },
   "dependencies": {
+    "tsup": "^8.0.1",
     "@abxvn/webpack-dts": "workspace:^",
     "@changesets/cli": "^2.27.1",
     "typescript": "~5.0.4",

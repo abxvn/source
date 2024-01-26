@@ -2,7 +2,6 @@
   "name": "@abxvn/dts",
   "description": "Simple and fast typescript declaration (dts) file generator",
   "version": "1.0.1",
-  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abxvn/source.git",
@@ -26,12 +25,6 @@
     "url": "https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Adts%22"
   },
   "homepage": "https://github.com/abxvn/source/tree/main/packages/dts#readme",
-  "files": [
-    "index.js",
-    "index.d.ts",
-    "README.md",
-    "LICENSE"
-  ],
   "dependencies": {
     "@abxvn/paths": "workspace:^",
     "fs-extra": "^11.1.1",
@@ -40,5 +33,19 @@
   },
   "devDependencies": {
     "@types/fs-extra": "^11.0.1"
-  }
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "README.md",
+    "LICENSE",
+    "dist"
+  ]
 }

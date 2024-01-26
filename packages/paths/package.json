@@ -2,7 +2,6 @@
   "name": "@abxvn/paths",
   "version": "1.0.1",
   "description": "A cross-platform path resolving utility",
-  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abxvn/source.git",
@@ -21,10 +20,18 @@
     "url": "https://github.com/abxvn/source/issues?q=is%3Aopen+is%3Aissue+label%3A%22package%3Apaths%22"
   },
   "homepage": "https://github.com/abxvn/source/tree/main/packages/paths#readme",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
   "files": [
-    "index.js",
-    "index.d.ts",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "dist"
   ]
 }
