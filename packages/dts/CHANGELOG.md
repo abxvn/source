@@ -1,5 +1,16 @@
 # @abxvn/dts
 
+## 1.1.0
+
+### Minor Changes
+
+- Update builder
+
+### Patch Changes
+
+- Updated dependencies
+  - @abxvn/paths@1.1.0
+
 ## 1.0.1
 
 ### Patch Changes
