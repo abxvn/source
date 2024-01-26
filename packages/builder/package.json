@@ -1,11 +1,8 @@
 {
   "name": "@abxvn/builder",
-  "version": "1.1.1",
+  "version": "1.2.0",
   "description": "Quick scaffolding code base to build web apps and games",
   "license": "MIT",
-  "main": "./cli/index.js",
-  "bin": "./cli/index.js",
-  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abxvn/source.git",
@@ -54,12 +51,12 @@
     "@types/webpack": "^5.28.0",
     "@types/webpack-node-externals": "^3.0.0"
   },
+  "bin": "./dist/index.js",
+  "main": "./dist/cli/index.js",
   "files": [
-    "cli/index.js",
-    "src/**/index.js",
-    "index.d.ts",
     "config",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "dist"
   ]
 }

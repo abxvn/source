@@ -26,7 +26,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor, pm }: IUp
 
     if (useEslint) {
       info(`Essential config for linting command:
-      ${italic('"lint": "eslint packages --ext ts"')}`)
+      ${italic('"lint": "eslint packages --ext ts --ext tsx"')}`)
     }
 
     if (useJest) {
@@ -56,7 +56,7 @@ export const updatePackageJson = async ({ modify = true, deps, editor, pm }: IUp
 
   if (useEslint) {
     logProgress('config script "lint"')
-    scripts.lint = 'eslint packages/**/*.{ts,tsx}'
+    scripts.lint = 'eslint packages --ext ts --ext tsx'
   }
   if (useJest) {
     logProgress('config script "test"')

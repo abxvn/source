@@ -4,13 +4,13 @@ const { resolve } = require('path')
 module.exports = {
   rootDir: resolve(__dirname, '../..'),
   setupFilesAfterEnv: [
-    '<rootDir>/tests/spec/setup.js'
+    '<rootDir>/tests/spec/setup.js',
   ],
   testRegex: '.+/*\\.spec\\.(ts|tsx)$',
   preset: 'ts-jest',
   transform: {
     '^.+\\.tsx?$': [
-      'ts-jest'
-    ]
-  }
+      'ts-jest',
+    ],
+  },
 }

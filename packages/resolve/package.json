@@ -1,11 +1,8 @@
 {
   "name": "@abxvn/resolve",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Async resolve with pnp supports",
   "license": "MIT",
-  "main": "index.js",
-  "bin": "./cli/index.js",
-  "types": "index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/abxvn/source.git",
@@ -38,11 +35,22 @@
     "@types/jest": "^29.5.1",
     "@types/node": "^18.16.0"
   },
+  "bin": "./dist/cli/index.js",
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./cli": {
+      "require": "./dist/cli/index.js"
+    }
+  },
   "files": [
-    "index.js",
-    "index.d.ts",
-    "cli/index.js",
     "README.md",
-    "LICENSE"
+    "LICENSE",
+    "dist"
   ]
 }

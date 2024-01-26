@@ -1,5 +1,11 @@
 # @abxvn/logger
 
+## 2.1.0
+
+### Minor Changes
+
+- Update builder
+
 ## 2.0.1
 
 ### Patch Changes

@@ -1,5 +1,18 @@
 # @abxvn/webpack-dts
 
+## 1.1.0
+
+### Minor Changes
+
+- Update builder
+
+### Patch Changes
+
+- Updated dependencies
+  - @abxvn/logger@2.1.0
+  - @abxvn/paths@1.1.0
+  - @abxvn/dts@1.1.0
+
 ## 1.0.1
 
 ### Patch Changes
