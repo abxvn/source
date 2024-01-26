@@ -1,5 +1,11 @@
 # @abxvn/tasks
 
+## 1.1.1
+
+### Patch Changes
+
+- Fix ts confusing types
+
 ## 1.1.0
 
 ### Minor Changes
