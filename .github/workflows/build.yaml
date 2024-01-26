@@ -14,7 +14,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node-version: [ 18 ]
+        node-version: [ 20 ]
     steps:
       - name: Running on ref
         run: echo ${{ github.ref }}
@@ -38,6 +38,9 @@ jobs:
       - name: Lint
         run: |
           pnpm lint
+      - name: Build
+        run: |
+          pnpm build
       - name: Test
         run: |
           pnpm test
