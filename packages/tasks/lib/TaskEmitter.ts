@@ -7,11 +7,11 @@ import {
   TaskPriority,
   TaskStatus,
 } from './consts'
-import type { ITaskEmitter, ITask, ITaskPriority, ITaskStatus, ITaskEmitterOptions } from './interfaces'
+import type { ITaskEmitter, ITask, ITaskStatus, ITaskEmitterOptions } from './interfaces'
 import { MinHeap } from './storage/MinHeap'
 
 export class TaskEmitter<
-  TTask extends ITask<any | undefined, number> = ITask<any | undefined, ITaskPriority>
+  TTask extends ITask = ITask
 > implements ITaskEmitter<TTask> {
   protected readonly options: ITaskEmitterOptions<TTask>
   protected readonly items = new MinHeap<TTask>()
@@ -33,23 +33,15 @@ export class TaskEmitter<
   }
 
   next () {
-    if (this.options.concurrency <= this.runningCount) {
-      return
-    }
+    if (this.options.concurrency <= this.runningCount) return
 
     let nextItem
 
     while (!nextItem) { // seeking next task
       nextItem = this.items.shift()
-
-      if (!nextItem) {
-        return // no next tasks found
-      }
-
+      if (!nextItem) return // no next tasks found
       // ensure task data is provided
-      if (!nextItem.data) {
-        continue // empty task data, seek more
-      }
+      if (!nextItem.data) continue // empty task data, seek more
     }
 
     void this.execute(nextItem.data as TTask)

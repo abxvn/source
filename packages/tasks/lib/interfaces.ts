@@ -6,12 +6,19 @@ import {
 export type ITaskPriority = typeof TaskPriority[keyof typeof TaskPriority]
 export type ITaskStatus = typeof TaskStatus[keyof typeof TaskStatus]
 
+export interface ITaskExecute<TContext extends any | undefined> {
+  (context: TContext): Promise<any>
+  (context: TContext): any
+  (): Promise<any>
+  (): any
+}
+
 export interface ITask<
-  TTaskContext extends any | undefined,
+  TTaskContext extends any | undefined = any,
   TPriority extends number = ITaskPriority
 > {
   status: ITaskStatus
-  execute: ((context: TTaskContext) => Promise<any> | any) | ((context: TTaskContext) => void)
+  execute: ITaskExecute<TTaskContext>
   context: TTaskContext
   id?: string
   priority?: TPriority
@@ -23,7 +30,7 @@ export interface ITaskEmitterOptions<TTask> {
   onItemError?: (item: TTask, error: Error) => void
 }
 
-export interface ITaskEmitter<TTask extends ITask<any, number> = ITask<any, ITaskPriority>> {
+export interface ITaskEmitter<TTask extends ITask = ITask> {
   readonly count: number
   readonly pendingCount: number
 
