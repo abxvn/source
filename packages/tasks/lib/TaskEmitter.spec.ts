@@ -2,7 +2,7 @@ import { TaskEmitter } from './TaskEmitter'
 import { TaskPriority } from './consts'
 
 describe('TaskEmitter', () => {
-  it('should pick tasks to process based on their priorities', () => {
+  it('picks tasks to process based on their priorities', () => {
     const tasks = new TaskEmitter()
     const mockExecute = jest.fn()
 
@@ -25,12 +25,12 @@ describe('TaskEmitter', () => {
 
     tasks.next()
     expect(mockExecute).toHaveBeenCalledTimes(3)
-    expect(mockExecute).toHaveBeenNthCalledWith(1, expect.objectContaining({ name: 'high-priority' }))
-    expect(mockExecute).toHaveBeenNthCalledWith(2, expect.objectContaining({ name: 'normal-priority' }))
-    expect(mockExecute).toHaveBeenNthCalledWith(3, expect.objectContaining({ name: 'low-priority' }))
+    expect(mockExecute).toHaveBeenNthCalledWith(1, expect.objectContaining({ name: 'high-priority' }), tasks)
+    expect(mockExecute).toHaveBeenNthCalledWith(2, expect.objectContaining({ name: 'normal-priority' }), tasks)
+    expect(mockExecute).toHaveBeenNthCalledWith(3, expect.objectContaining({ name: 'low-priority' }), tasks)
   })
 
-  it('should report if tasks done or get errors', () => {
+  it('reports if tasks done or get errors', () => {
     const onItemDone = jest.fn()
     const onItemError = jest.fn()
     const tasks = new TaskEmitter({ onItemDone, onItemError })
@@ -52,7 +52,7 @@ describe('TaskEmitter', () => {
     )
   })
 
-  it('should allow concurrency for processing tasks', async () => {
+  it('allows concurrency for processing tasks', async () => {
     const onItemDone = jest.fn()
     const tasks = new TaskEmitter({ onItemDone, concurrency: 2 })
     const mockExecute = jest.fn()

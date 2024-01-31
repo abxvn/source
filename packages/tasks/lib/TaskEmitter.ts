@@ -11,17 +11,21 @@ import type { ITaskEmitter, ITask, ITaskStatus, ITaskEmitterOptions } from './in
 import { MinHeap } from './storage/MinHeap'
 
 export class TaskEmitter<
-  TTask extends ITask = ITask
+  TTask extends ITask<any, number> = ITask
 > implements ITaskEmitter<TTask> {
   protected readonly options: ITaskEmitterOptions<TTask>
   protected readonly items = new MinHeap<TTask>()
-  protected runningCount = 0
+  protected _runningCount = 0
 
   constructor (options?: Partial<ITaskEmitterOptions<TTask>>) {
     this.options = {
       concurrency: 1,
       ...options,
     }
+  }
+
+  get runningCount () {
+    return this._runningCount
   }
 
   get pendingCount () {
@@ -72,9 +76,9 @@ export class TaskEmitter<
 
     try {
       item.status = TaskStatus.WORKING
-      this.runningCount++
+      this._runningCount++
 
-      const output = item.execute(item.context)
+      const output = item.execute(item.context, this as ITaskEmitter<ITask<any, number>>)
 
       if (output instanceof Promise) {
         // in case `execute` is async function
@@ -91,7 +95,7 @@ export class TaskEmitter<
         onItemError(item, err)
       }
     } finally {
-      this.runningCount--
+      this._runningCount--
       this.next()
     }
   }

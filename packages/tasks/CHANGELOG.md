@@ -1,5 +1,12 @@
 # @abxvn/tasks
 
+## 1.1.3
+
+### Patch Changes
+
+- pass task emitter into execute
+- espose `running count`
+
 ## 1.1.2
 
 ### Patch Changes

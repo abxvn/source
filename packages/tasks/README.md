@@ -101,6 +101,24 @@ const tasks2 = new EventEmitter<ICustomTaskType2>()
 const tasks2 = new EventEmitter<ICustomTaskType3>()
 ```
 
+### Introduce sub task after task
+
+New sub tasks can be added into queue inside a task execution
+
+```typescript
+// `execute` is example function
+const subtaskExecute = () => console.log('subtask')
+const taskExecute = (_, tasks) => {
+  console.log('task')
+  tasks.add({ execute: subtaskExecute })
+}
+
+tasks.add({ execute: taskExecute })
+tasks.next()
+// console.log 'task'
+// console.log 'subtask'
+```
+
 Changelog
 -----
 See [CHANGELOG.md][changelog]
