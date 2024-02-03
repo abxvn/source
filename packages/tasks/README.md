@@ -108,15 +108,32 @@ New sub tasks can be added into queue inside a task execution
 ```typescript
 // `execute` is example function
 const subtaskExecute = () => console.log('subtask')
-const taskExecute = (_, tasks) => {
+// current task emitter can be accessed here too
+const taskExecute = (_, taskEmitter) => {
   console.log('task')
-  tasks.add({ execute: subtaskExecute })
+  taskEmitter.add({ execute: subtaskExecute })
 }
 
 tasks.add({ execute: taskExecute })
 tasks.next()
 // console.log 'task'
 // console.log 'subtask'
+```
+
+### Retry a failed task
+
+A failed task can be retried by catching failed tasks. You can implement that logic freely on the way you desire. Here is an example:
+
+```typescript
+const tasks = new TaskEmitter({
+  onItemError: (task, error) => {
+    if (shouldRetry(task)) {
+      // retry task by re-pushing it back to queue
+      // with lower priority
+      tasks.add({ ...task, priority: TaskPriority.LOW })
+    }
+  }
+})
 ```
 
 Changelog
@@ -134,8 +151,8 @@ Feel free to clone this project, make changes that your feel necessary and pull 
 
 Install dependencies and run development build:
 ```
-yarn install
-yarn start
+pnpm install
+pnpm start
 ```
 
 **Working on your first Pull Request?**

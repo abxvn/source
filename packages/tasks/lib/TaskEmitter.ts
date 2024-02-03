@@ -16,6 +16,7 @@ export class TaskEmitter<
   protected readonly options: ITaskEmitterOptions<TTask>
   protected readonly items = new MinHeap<TTask>()
   protected _runningCount = 0
+  protected _isStopped = false
 
   constructor (options?: Partial<ITaskEmitterOptions<TTask>>) {
     this.options = {
@@ -37,6 +38,7 @@ export class TaskEmitter<
   }
 
   next () {
+    if (this._isStopped) return // prevent new tasks from executing
     if (this.options.concurrency <= this.runningCount) return
 
     let nextItem
@@ -68,6 +70,20 @@ export class TaskEmitter<
       sortId: this.getItemSortId(task),
       data: task,
     })
+  }
+
+  start () { // more like restarting after stopped
+    this._isStopped = false
+    this.next()
+  }
+
+  stop () {
+    this._isStopped = true
+  }
+
+  dispose () {
+    this.stop()
+    this.items.length = 0 // clean up items
   }
 
   protected async execute (item: TTask) {

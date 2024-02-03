@@ -1,5 +1,11 @@
 # @abxvn/tasks
 
+## 1.2.0
+
+### Minor Changes
+
+- Introduce task controls like start, stop, dispose
+
 ## 1.1.3
 
 ### Patch Changes
